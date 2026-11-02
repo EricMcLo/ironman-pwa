@@ -287,6 +287,12 @@ main {
   gap: 6px;
   margin-top: 14px;
 }
+.hero-note {
+  margin: 8px 0 4px;
+  font-size: .85rem;
+  color: var(--text-mid);
+  font-style: italic;
+}
 .chip {
   display: inline-flex;
   align-items: center;

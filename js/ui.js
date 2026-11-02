@@ -307,10 +307,19 @@ const UI = (() => {
       chips.push(el('span', { class: 'chip strong', text: 'Race complete' }));
     }
     if (week.recoveryWeek) chips.push(el('span', { class: 'chip', text: 'Recovery week' }));
+    if (Store.isWeekSkipped(week.weekNumber)) {
+      chips.push(el('span', { class: 'chip strong', text: 'Skipped' }));
+    }
     chips.push(el('span', {
       class: 'chip',
       text: `${fmtHours(hrs.doneHours)} / ${fmtHours(hrs.target)} h this week`
     }));
+
+    const note = Store.getWeekNote(week.weekNumber);
+    const noteEl = note ? el('p', {
+      class: 'hero-note',
+      text: note
+    }) : null;
 
     return el('div', { class: 'hero' }, [
       el('p', {
@@ -323,6 +332,7 @@ const UI = (() => {
         text: phase.nameLabel || week.phaseName || week.phase
       }),
       el('p', { class: 'hero-focus', text: week.focus || '' }),
+      noteEl,
       el('div', { class: 'hero-chips' }, chips)
     ]);
   }

@@ -170,6 +170,19 @@
         }, ['Today']),
         UI.el('button', {
           class: 'linkbtn', type: 'button',
+          onclick: () => {
+            const wk = Plan.weekFor(state.weekNumber);
+            const isSkipped = Store.isWeekSkipped(wk.weekNumber);
+            Store.setWeekSkip(wk.weekNumber, !isSkipped);
+            toast(isSkipped ? 'Week unskipped' : 'Week skipped', null);
+          }
+        }, [Store.isWeekSkipped(week.weekNumber) ? 'Unskip week' : 'Skip week']),
+        UI.el('button', {
+          class: 'linkbtn', type: 'button',
+          onclick: openEditNoteSheet
+        }, ['Week note']),
+        UI.el('button', {
+          class: 'linkbtn', type: 'button',
           onclick: openScaleSheet
         }, ['Adjust week']),
         UI.el('button', {
@@ -652,6 +665,49 @@
           }, ['Reset this week'])
         ])
       );
+      return wrap;
+    });
+  }
+
+  /* ---- week note ---- */
+  function openEditNoteSheet() {
+    const week = Plan.weekFor(state.weekNumber);
+    const current = Store.getWeekNote(week.weekNumber);
+
+    openSheet(() => {
+      const wrap = document.createDocumentFragment();
+      const textarea = UI.el('textarea', {
+        rows: '4',
+        placeholder: 'How did this week go? e.g. felt great, had a cold, work travel',
+        value: current
+      });
+
+      wrap.append(
+        sheetHead(`Week ${week.weekNumber}`, 'Week note', true),
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Note' }),
+          UI.el('div', { class: 'field' }, [textarea])
+        ]),
+        UI.el('div', { class: 'btnrow' }, [
+          UI.el('button', {
+            class: 'btn primary block', type: 'button',
+            onclick: () => {
+              Store.setWeekNote(week.weekNumber, textarea.value);
+              closeSheet();
+              toast('Week note saved', null);
+            }
+          }, ['Save']),
+          UI.el('button', {
+            class: 'btn ghost block', type: 'button',
+            onclick: () => {
+              Store.setWeekNote(week.weekNumber, '');
+              closeSheet();
+              toast('Week note cleared', null);
+            }
+          }, ['Clear'])
+        ])
+      );
+
       return wrap;
     });
   }

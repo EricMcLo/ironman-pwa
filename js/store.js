@@ -24,6 +24,8 @@ const Store = (() => {
       log: {},           // "sessionId|athlete" -> {done, at, actualMin, rpe, note}
       overrides: {},     // sessionId -> {date?, duration?, intensity?, sets?, notes?, eric:{}, ella:{}}
       weekScale: {},     // weekNumber -> factor (0.8 = 80%)
+      skippedWeeks: [],  // weekNumbers the user has marked as skipped
+      weekNotes: {},     // weekNumber (string) -> free-text note
       extras: [],        // added sessions: {id, date, athlete, discipline, duration, ...}
       meta: { by: null, at: null }
     };
@@ -150,6 +152,36 @@ const Store = (() => {
       api.update(s => {
         if (factor === 1) delete s.weekScale[weekNumber];
         else s.weekScale[weekNumber] = factor;
+      });
+    },
+
+    /* ---- week skipping -------------------------------------------- */
+    isWeekSkipped(weekNumber) {
+      return (state.skippedWeeks || []).includes(weekNumber);
+    },
+
+    setWeekSkip(weekNumber, skipped) {
+      api.update(s => {
+        if (skipped) {
+          if (!s.skippedWeeks.includes(weekNumber)) s.skippedWeeks.push(weekNumber);
+        } else {
+          s.skippedWeeks = s.skippedWeeks.filter(w => w !== weekNumber);
+        }
+      });
+    },
+
+    /* ---- week notes ----------------------------------------------- */
+    getWeekNote(weekNumber) {
+      return (state.weekNotes || {})[String(weekNumber)] || '';
+    },
+
+    setWeekNote(weekNumber, note) {
+      api.update(s => {
+        if (note && note.trim()) {
+          s.weekNotes[String(weekNumber)] = note.trim();
+        } else {
+          delete s.weekNotes[String(weekNumber)];
+        }
       });
     },
 

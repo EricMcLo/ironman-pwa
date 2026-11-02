@@ -237,10 +237,12 @@ const Plan = (() => {
   function weeksAsPlanned(athlete, threshold) {
     const t = threshold == null ? 0.8 : threshold;
     const today = todayISO();
+    const skipped = Store.state.skippedWeeks || [];
     let done = 0, elapsed = 0;
 
     for (const w of plan.weeks) {
       if (w.endDate >= today) break;
+      if (skipped.includes(w.weekNumber)) continue;
       elapsed += 1;
       const h = weekHours(w.weekNumber, athlete);
       if (h.total && h.complete / h.total >= t) done += 1;
