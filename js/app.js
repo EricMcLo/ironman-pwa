@@ -744,6 +744,24 @@
         ]),
 
         UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Calendar' }),
+          UI.el('p', { class: 'sh-text', text: 'Download race and milestone events as an .ics file, then import into Google Calendar or Apple Calendar.' }),
+          UI.el('div', { class: 'btnrow' }, [
+            UI.el('button', {
+              class: 'btn', type: 'button',
+              onclick: () => {
+                try {
+                  Cal.exportCalendar(Plan.data);
+                  toast('Calendar file downloaded', null);
+                } catch (err) {
+                  toast(err.message || 'Export failed', null);
+                }
+              }
+            }, ['Export to Calendar'])
+          ])
+        ]),
+
+        UI.el('div', { class: 'sh-section' }, [
           UI.el('div', { class: 'sh-label', text: 'Danger zone' }),
           UI.el('div', { class: 'btnrow' }, [
             UI.el('button', {
