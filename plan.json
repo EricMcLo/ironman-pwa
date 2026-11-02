@@ -159,7 +159,8 @@
     "eric",
     "ella"
    ],
-   "description": "Finish comfortably — no time goal."
+   "description": "Finish comfortably — no time goal.",
+   "type": "race"
   }
  ],
  "phases": [

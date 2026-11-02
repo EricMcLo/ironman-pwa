@@ -453,6 +453,18 @@ const UI = (() => {
 
     const currentWeek = Plan.weekOf(Plan.todayISO()).weekNumber;
 
+    // Collect all race dates from plan events
+    const raceDates = new Set((Plan.data.events || [])
+      .filter(e => e.type === 'race' && e.date)
+      .map(e => e.date));
+
+    function weekContainsRace(week) {
+      for (let i = 0; i < 7; i++) {
+        if (raceDates.has(Plan.addDays(week.startDate, i))) return true;
+      }
+      return false;
+    }
+
     weeks.forEach((w, i) => {
       const hrs = Plan.weekHours(w.weekNumber, athlete === 'both' ? 'eric' : athlete);
       const x = LEFT + i * GROUP;
@@ -461,7 +473,7 @@ const UI = (() => {
       const doneH = Math.max(0, (Math.min(hrs.doneHours, maxH) / maxH) * (H - TOP));
 
       const isNow = w.weekNumber === currentWeek;
-      const isRace = w.weekNumber === weeks.length;
+      const isRace = weekContainsRace(w);
       const baseY = TOP + (H - TOP) - plannedH;
 
       if (isNow) {

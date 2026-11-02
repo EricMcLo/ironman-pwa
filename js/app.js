@@ -694,6 +694,10 @@
         onchange: (e) => {
           const file = e.target.files[0];
           if (!file) return;
+          if (!confirm('Importing will overwrite all checkmarks, edits, and settings on this phone. Continue?')) {
+            e.target.value = '';
+            return;
+          }
           const reader = new FileReader();
           reader.onload = () => {
             try {
