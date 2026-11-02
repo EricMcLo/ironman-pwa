@@ -64,8 +64,12 @@
     $('#main').innerHTML =
       '<div class="empty"><h3>Could not load the plan</h3>' +
       '<p>' + String(err.message || err) + '</p>' +
-      '<p style="margin-top:12px">If you opened this file directly, start a local server:<br>' +
-      '<code>python3 -m http.server 8080</code></p></div>';
+      '<p style="margin-top:12px">Open this page over HTTP, not directly as a file:<br>' +
+      '<code>python3 -m http.server 8080</code><br>' +
+      'then visit <code>http://localhost:8080</code> (or your Mac’s LAN address).</p>' +
+      '<p style="margin-top:14px"><button class="btn" id="retryBtn">Try again</button></p>' +
+      '</div>';
+    $('#retryBtn').addEventListener('click', () => boot());
   }
 
   /* ------------------------------------------------------------ theme */
@@ -181,6 +185,11 @@
         }, ['›'])
       ])
     );
+
+    $('#weekHead').after(UI.todayStrip((iso) => {
+      state.weekNumber = Plan.weekNumberFor(iso);
+      render();
+    }));
 
     const list = document.createDocumentFragment();
     for (let i = 0; i < 7; i++) {

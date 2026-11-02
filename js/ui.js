@@ -299,6 +299,32 @@ const UI = (() => {
     ]);
   }
 
+  /* ---------------------------------------------------------- today strip */
+  function todayStrip(onPick) {
+    const today = Plan.todayISO();
+    const weekStart = Plan.startOfWeek(today);
+
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+      const iso = Plan.addDays(weekStart, i);
+      const dd = Plan.parseISO(iso);
+      const isToday = iso === today;
+      const weekend = dd.getDay() === 6 || dd.getDay() === 0;
+      days.push(el('button', {
+        class: 'tstrip-day' + (isToday ? ' tstrip-today' : '') +
+          (weekend ? ' tstrip-weekend' : ''),
+        type: 'button',
+        'aria-pressed': isToday ? 'true' : 'false',
+        onclick: () => { onPick(iso); }
+      }, [
+        el('span', { class: 'tstrip-name', text: Plan.dayShort(iso) }),
+        el('span', { class: 'tstrip-num', text: dd.getDate() })
+      ]));
+    }
+
+    return el('div', { class: 'tstrip' }, days);
+  }
+
   /* ------------------------------------------------------ month grid */
   function monthGrid(year, month, athlete, onPick) {
     const grid = document.createDocumentFragment();
@@ -630,7 +656,7 @@ const UI = (() => {
 
   return {
     el, icon, fmtDur, fmtHours, LABELS, ICONS,
-    sessionCard, dayBlock, banner, monthGrid, legend, chart, stats,
+    sessionCard, dayBlock, banner, todayStrip, monthGrid, legend, chart, stats,
     phaseList, daySheetBody, sessionSheetBody, detailBlock
   };
 })();

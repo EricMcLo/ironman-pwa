@@ -140,6 +140,7 @@ body {
     radial-gradient(40rem 26rem at -10% 40%, rgba(150, 165, 152, .16), transparent 60%);
   background-attachment: fixed;
   min-height: 100vh;
+  min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
@@ -401,6 +402,46 @@ main {
   padding: 2px 7px;
   border-radius: var(--r-full);
 }
+
+/* ---------------------------------------------------------- today strip */
+.tstrip {
+  display: flex;
+  gap: 0;
+  padding: 4px 0 10px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.tstrip::-webkit-scrollbar { display: none; }
+.tstrip-day {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 7px 4px 4px;
+  border: 0;
+  background: transparent;
+  color: var(--text-soft);
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+.tstrip-day.tstrip-weekend { color: var(--text-soft); opacity: .85; }
+.tstrip-day .tstrip-name { font-size: .68rem; }
+.tstrip-day .tstrip-num { font-size: .8rem; font-variant-numeric: tabular-nums; }
+.tstrip-day.tstrip-today {
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+  border-radius: var(--r-md);
+  margin: 0 6px;
+}
+.tstrip-day.tstrip-today.tstrip-weekend { color: var(--accent-ink); }
 
 /* ---------------------------------------------------------------- session */
 .sessions { display: flex; flex-direction: column; }
