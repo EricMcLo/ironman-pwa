@@ -323,7 +323,7 @@ const UI = (() => {
       text: note
     }) : null;
 
-    return el('div', { class: 'hero' }, [
+    return el('div', { class: 'hero phase-' + week.phase }, [
       el('p', {
         class: 'hero-eyebrow',
         text: `Week ${week.weekNumber} of ${Plan.data.weeks.length} · ` +
@@ -544,7 +544,22 @@ const UI = (() => {
     const rc = Plan.raceCountdown();
     const planned = Plan.weeksAsPlanned(a);
 
+    // streak: consecutive days (going back from today) with at least one done session
+    let streak = 0;
+    let check = today;
+    while (true) {
+      const daySessions = athlete === 'both'
+        ? Plan.togetherOn(check)
+        : Plan.sessionsOn(check, a);
+      const real = daySessions.filter(s => s.discipline !== 'rest');
+      const allDone = real.length > 0 && real.every(s => athlete === 'both' ? (s.ericDone && s.ellaDone) : s.done);
+      if (allDone) { streak += 1; check = Plan.addDays(check, -1); }
+      else break;
+      if (streak > 60) break;
+    }
+
     return [
+      stat('Streak', String(streak), streak > 0 ? 'days in a row' : ''),
       stat('Days to race', rc.days > 0 ? String(rc.days) : '—', rc.days > 0 ? 'days' : ''),
       stat('This week', `${hrs.complete}<small>/${hrs.total}</small>`, 'sessions'),
       stat('Hours this week', fmtHours(hrs.doneHours), `of ${fmtHours(hrs.target)}`),

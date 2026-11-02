@@ -255,6 +255,20 @@ main {
   background: radial-gradient(120% 130% at 82% -20%, rgba(255,255,255,.22), transparent 58%);
   pointer-events: none;
 }
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; bottom: 0; width: 6px;
+  border-radius: var(--r-md) 0 0 var(--r-md);
+  pointer-events: none;
+}
+.hero.phase-base::before { background: var(--swim); }
+.hero.phase-marathon_block::before { background: var(--run); }
+.hero.phase-marathon_taper_race_recovery::before { background: var(--race); }
+.hero.phase-70.3_build::before { background: var(--bike); }
+.hero.phase-peak::before { background: var(--brick); }
+.hero.phase-taper_2wk::before { background: var(--strength); }
+.hero.phase-race_week::before { background: var(--accent); }
 .hero-eyebrow {
   position: relative;
   font-size: .66rem;
@@ -349,15 +363,20 @@ main {
   border: 1px solid var(--line);
   box-shadow: var(--sh-1);
   overflow: hidden;
+  transition: transform var(--fast), box-shadow var(--fast), border-color var(--fast);
 }
-.day.is-today { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--sh-2); }
+.day:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sh-2);
+}
+.day.is-today { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent), var(--sh-2); }
 .day.is-rest .day-name { color: var(--text-soft); }
 
 .day-head {
   display: flex;
   align-items: baseline;
   gap: 8px;
-  padding: 11px 14px 9px;
+  padding: 12px 14px 10px;
   border-bottom: 1px solid var(--line);
   background: var(--surface-2);
 }
@@ -377,17 +396,18 @@ main {
   margin-left: auto;
   font-size: .72rem;
   font-weight: 600;
-  color: var(--text-soft);
+  color: var(--text-mid);
   font-variant-numeric: tabular-nums;
 }
+.day.is-today .day-total { color: var(--accent); }
 .day-add {
   appearance: none;
   border: 1px solid var(--line);
   background: var(--surface);
   color: var(--text-soft);
-  width: 22px; height: 22px;
+  width: 24px; height: 24px;
   border-radius: 50%;
-  font-size: .86rem;
+  font-size: .9rem;
   line-height: 1;
   display: grid; place-items: center;
   cursor: pointer;
@@ -395,9 +415,9 @@ main {
   flex: none;
   margin-left: 8px;
   -webkit-tap-highlight-color: transparent;
-  transition: color var(--fast), border-color var(--fast);
+  transition: all var(--fast);
 }
-.day-add:hover { color: var(--text); border-color: var(--line-strong); }
+.day-add:hover { color: var(--accent); border-color: var(--accent); background: var(--surface-2); }
 .day-today-pill {
   font-size: .62rem;
   font-weight: 700;
@@ -452,15 +472,37 @@ main {
 /* ---------------------------------------------------------------- session */
 .sessions { display: flex; flex-direction: column; }
 .session {
-  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
   backdrop-filter: blur(14px) saturate(160%);
   -webkit-backdrop-filter: blur(14px) saturate(160%);
   border: 1px solid var(--line);
   border-radius: var(--r-md);
   box-shadow: var(--sh-1);
   overflow: hidden;
+  transition: transform var(--fast), box-shadow var(--fast), border-color var(--fast);
 }
 .session + .session { border-top: 1px solid var(--line); }
+.session:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sh-2);
+  border-color: var(--line-strong);
+}
+.session.is-today {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.session.s-done {
+  opacity: 0.75;
+  filter: grayscale(0.2);
+}
+.session.s-done .check {
+  animation: checkpop 400ms cubic-bezier(.34, 1.56, .64, 1);
+}
+@keyframes checkpop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
 
 .session-row {
   display: flex;
@@ -487,21 +529,23 @@ main {
 .session-main:active { background: var(--bg-soft); }
 
 .disc {
-  width: 30px; height: 30px; flex: none;
-  border-radius: 9px;
+  width: 34px; height: 34px; flex: none;
+  border-radius: 10px;
   display: grid; place-items: center;
   background: var(--rest-bg);
   color: var(--rest);
+  border: 1px solid color-mix(in srgb, var(--rest) 30%, var(--line));
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--rest) 20%, transparent);
 }
-.disc svg { width: 17px; height: 17px; }
-.disc.swim { background: var(--swim-bg); color: var(--swim); }
-.disc.open-water-swim { background: var(--swim-bg); color: var(--ows); }
-.disc.bike { background: var(--bike-bg); color: var(--bike); }
-.disc.run { background: var(--run-bg); color: var(--run); }
-.disc.brick { background: var(--brick-bg); color: var(--brick); }
-.disc.strength { background: var(--strength-bg); color: var(--strength); }
-.disc.rest { background: var(--rest-bg); color: var(--rest); }
-.disc.race { background: var(--race-bg); color: var(--race); }
+.disc svg { width: 18px; height: 18px; }
+.disc.swim { background: var(--swim-bg); color: var(--swim); border-color: color-mix(in srgb, var(--swim) 30%, var(--line)); }
+.disc.open-water-swim { background: var(--swim-bg); color: var(--ows); border-color: color-mix(in srgb, var(--ows) 30%, var(--line)); }
+.disc.bike { background: var(--bike-bg); color: var(--bike); border-color: color-mix(in srgb, var(--bike) 30%, var(--line)); }
+.disc.run { background: var(--run-bg); color: var(--run); border-color: color-mix(in srgb, var(--run) 30%, var(--line)); }
+.disc.brick { background: var(--brick-bg); color: var(--brick); border-color: color-mix(in srgb, var(--brick) 30%, var(--line)); }
+.disc.strength { background: var(--strength-bg); color: var(--strength); border-color: color-mix(in srgb, var(--strength) 30%, var(--line)); }
+.disc.rest { background: var(--rest-bg); color: var(--rest); border-color: color-mix(in srgb, var(--rest) 30%, var(--line)); }
+.disc.race { background: var(--race-bg); color: var(--race); border-color: color-mix(in srgb, var(--race) 30%, var(--line)); }
 
 .s-body { min-width: 0; flex: 1 1 auto; }
 .s-line1 {
@@ -565,6 +609,7 @@ main {
   background: var(--ok);
   border-color: var(--ok);
   color: #fff;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 30%, transparent);
 }
 .check.tiny {
   width: 26px; height: 26px;
@@ -722,23 +767,37 @@ main {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: var(--r-md);
-  padding: 13px 14px;
+  padding: 14px 16px;
   box-shadow: var(--sh-1);
+  position: relative;
+  overflow: hidden;
+}
+.stat::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--swim), var(--bike), var(--run));
+  opacity: 0.6;
 }
 .stat .k {
   font-size: .66rem;
   text-transform: uppercase;
   letter-spacing: .1em;
   color: var(--text-soft);
-  margin-bottom: 3px;
+  margin-bottom: 6px;
+  position: relative;
+  z-index: 1;
 }
 .stat .v {
   font-family: var(--serif);
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   line-height: 1.1;
   letter-spacing: -.02em;
+  color: var(--text);
+  position: relative;
+  z-index: 1;
 }
-.stat .v small { font-family: var(--font); font-size: .74rem; color: var(--text-soft); letter-spacing: 0; }
+.stat .v small { font-family: var(--font); font-size: .74rem; color: var(--text-soft); letter-spacing: 0; position: relative; z-index: 1; }
 
 .card {
   background: var(--surface);
@@ -807,15 +866,19 @@ main {
   flex: 1 1 0;
   max-width: 150px;
   display: flex; flex-direction: column; align-items: center; gap: 3px;
-  padding: 6px 4px;
+  padding: 8px 4px;
   border-radius: var(--r-sm);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: color var(--fast), background var(--fast);
+  transition: all var(--fast);
+  position: relative;
 }
 .tab svg { width: 20px; height: 20px; }
 .tab span { font-size: .66rem; font-weight: 600; letter-spacing: .02em; }
-.tab[aria-selected="true"] { color: var(--accent); }
+.tab[aria-selected="true"] {
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+}
 .tab[aria-selected="true"] svg { stroke-width: 2.1; }
 
 /* ---------------------------------------------------------------- sheets */
@@ -942,11 +1005,16 @@ main {
 }
 .btn:active { transform: scale(.985); }
 .btn.primary {
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 80%, var(--swim)));
   border-color: var(--accent);
   color: #fff;
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--accent) 35%, transparent);
 }
-.btn.primary:hover { filter: brightness(1.06); }
+.btn.primary:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 45%, transparent);
+}
+.btn.primary:active { transform: scale(.985); box-shadow: 0 2px 6px color-mix(in srgb, var(--accent) 35%, transparent); }
 .btn.ghost { background: transparent; color: var(--text-mid); }
 .btn.danger { color: var(--race); border-color: color-mix(in srgb, var(--race) 35%, var(--line)); }
 .btn.block { width: 100%; }
