@@ -13,6 +13,7 @@
 const Store = (() => {
   const KEY = 'ironman703.v1';
   const listeners = new Set();
+  let idCounter = 0;  // monotonic counter so extra session IDs never collide
 
   function defaults() {
     return {
@@ -155,8 +156,9 @@ const Store = (() => {
     /* ---- extras (sessions you add yourself) ------------------------ */
     addExtra(session) {
       api.update(s => {
+        idCounter += 1;
         s.extras.push(Object.assign({
-          id: 'x' + Date.now().toString(36),
+          id: 'x' + idCounter,
           createdAt: new Date().toISOString()
         }, session));
       });
@@ -179,7 +181,10 @@ const Store = (() => {
     importJSON(text) {
       const parsed = JSON.parse(text);
       if (!parsed || typeof parsed !== 'object') throw new Error('Not a data file');
+      if (!parsed.version) throw new Error('Missing version field');
+      if (parsed.weeks && !Array.isArray(parsed.weeks)) throw new Error('Invalid weeks data');
       state = Object.assign(defaults(), parsed);
+      idCounter = state.extras ? state.extras.length : 0;
       save();
     }
   };

@@ -812,7 +812,22 @@
   function registerServiceWorker() {
     if (!('serviceWorker' in navigator)) return;
     if (location.protocol === 'file:') return;
-    navigator.serviceWorker.register('sw.js').catch(() => {});
+    navigator.serviceWorker.register('sw.js').then((reg) => {
+      reg.addEventListener('updatefound', () => {
+        const installingWorker = reg.installing;
+        if (!installingWorker) return;
+        installingWorker.addEventListener('statechange', () => {
+          if (
+            installingWorker.state === 'installed' &&
+            navigator.serviceWorker.controller
+          ) {
+            toast('App updated — refresh to get the latest version', 'Refresh', () => {
+              window.location.reload();
+            });
+          }
+        });
+      });
+    }).catch(() => {});
   }
 
   /* ------------------------------------------------------------ init */
