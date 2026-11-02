@@ -1155,3 +1155,46 @@ main {
 @media (min-width: 640px) {
   .statgrid { grid-template-columns: repeat(4, 1fr); }
 }
+
+/* ---------------------------------------------------------- vibrant theme */
+:root[data-theme="vibrant"] {
+  --bg: #0a0a0c;
+  --bg-soft: #141418;
+  --surface: #1c1c22;
+  --surface-2: #24242c;
+  --text: #f5f5f5;
+  --text-mid: #b0b0b8;
+  --text-soft: #7a7a82;
+  --line: #2a2a32;
+  --line-strong: #3a3a42;
+
+  --accent: #0297de;      /* Electric Blue */
+  --accent-soft: rgba(2, 151, 222, 0.15);
+  --accent-ink: #0297de;
+
+  --swim: #0297de;
+  --swim-bg: rgba(2, 151, 222, 0.15);
+  --ows: #0297de;
+  --bike: #fcae4d;
+  --bike-bg: rgba(252, 174, 77, 0.15);
+  --run: #0297de;
+  --run-bg: rgba(2, 151, 222, 0.15);
+  --brick: #fc734d;       /* Cantaloupe Orange */
+  --brick-bg: rgba(252, 115, 77, 0.15);
+  --strength: #e8b47a;
+  --strength-bg: rgba(232, 180, 122, 0.15);
+  --rest: #8a8a92;
+  --rest-bg: rgba(138, 138, 146, 0.15);
+  --race: #fc734d;
+  --race-bg: rgba(252, 115, 77, 0.15);
+
+  --ok: #0297de;
+  --ok-bg: rgba(2, 151, 222, 0.15);
+
+  --eric: #7fb6d6;
+  --ella: #d991ab;
+
+  --sh-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --sh-2: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --sh-3: 0 20px 40px rgba(0, 0, 0, 0.6);
+}

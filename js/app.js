@@ -80,7 +80,7 @@
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) {
       meta.setAttribute('content',
-        t === 'dark' ? '#131512' : '#faf9f6');
+        t === 'dark' ? '#131512' : t === 'vibrant' ? '#0a0a0c' : '#faf9f6');
     }
   }
 
@@ -661,7 +661,7 @@
       const wrap = document.createDocumentFragment();
 
       const themeRow = UI.el('div', { class: 'segmented' });
-      for (const [val, label] of [['auto', 'Auto'], ['light', 'Light'], ['dark', 'Dark']]) {
+      for (const [val, label] of [['auto', 'Auto'], ['light', 'Light'], ['dark', 'Dark'], ['vibrant', 'Vibrant']]) {
         themeRow.append(UI.el('button', {
           type: 'button',
           'aria-pressed': String(Store.state.theme === val),
