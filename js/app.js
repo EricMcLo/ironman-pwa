@@ -169,6 +169,10 @@
           onclick: () => { state.weekNumber = Plan.weekNumberFor(today); render(); }
         }, ['Today']),
         UI.el('button', {
+          class: 'linkbtn', type: 'button',
+          onclick: openTemplateEditor
+        }, ['Template']),
+        UI.el('button', {
           class: 'icon-btn small', type: 'button', 'aria-label': 'Week options',
           onclick: openWeekOptionsSheet
         }, ['···']),
@@ -928,6 +932,124 @@
               onclick: () => { closeSheet(); openScaleSheet(); }
             }, ['Scale volume'])
           ])
+        ])
+      );
+
+      return wrap;
+    });
+  }
+
+  /* ---- weekly template editor ---- */
+  function openTemplateEditor() {
+    const week = Plan.weekFor(state.weekNumber);
+    const existing = Store.getWeekTemplate(week.weekNumber) || { days: {}, scope: 'both' };
+    const days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+    const dayLabels = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    const disciplines = [
+      ['rest', 'Rest'],
+      ['swim', 'Swim'],
+      ['bike', 'Bike'],
+      ['run', 'Run'],
+      ['brick', 'Brick'],
+      ['strength', 'Mobility'],
+      ['open-water-swim', 'Open Water']
+    ];
+
+    let scope = existing.scope || 'both';
+    const dayValues = { ...existing.days };
+
+    openSheet(() => {
+      const wrap = document.createDocumentFragment();
+
+      // Scope picker
+      const scopeRow = UI.el('div', { class: 'segmented' });
+      const scopes = [['both','Both'],['eric','Eric'],['ella','Ella']];
+      for (const [v, l] of scopes) {
+        scopeRow.append(UI.el('button', {
+          type: 'button',
+          'aria-pressed': String(scope === v),
+          class: 'scopebtn',
+          onclick: () => {
+            scope = v;
+            scopeRow.querySelectorAll('button').forEach(b =>
+              b.setAttribute('aria-pressed', String(b.textContent === l)));
+          }
+        }, [l]));
+      }
+
+      // Day pickers
+      const dayRows = days.map((dayKey, i) => {
+        const val = dayValues[dayKey] || 'rest';
+        const row = UI.el('div', { class: 'tpl-day-row' });
+        row.append(UI.el('span', { class: 'tpl-day-label', text: dayLabels[i] }));
+        disciplines.forEach(([d, label]) => {
+          row.append(UI.el('button', {
+            type: 'button',
+            'aria-pressed': String(val === d),
+            class: 'tpl-daybtn' + (val === d ? ' sel' : ''),
+            'data-day': dayKey,
+            'data-discipline': d,
+            onclick: (e) => {
+              dayValues[dayKey] = d;
+              // Update all buttons in this row
+              row.querySelectorAll('button').forEach(b =>
+                b.setAttribute('aria-pressed', String(b.dataset.discipline === d)));
+              row.querySelectorAll('button').forEach(b =>
+                b.classList.toggle('sel', b.dataset.discipline === d));
+            }
+          }, [label]));
+        });
+        return row;
+      });
+
+      // Preview
+      const preview = UI.el('div', { class: 'tpl-preview' });
+      const previewHeader = UI.el('div', { class: 'tpl-preview-head', text: 'Preview' });
+      preview.append(previewHeader);
+      days.forEach((dayKey, i) => {
+        const d = dayValues[dayKey] || 'rest';
+        const label = disciplines.find(([k]) => k === d)[1];
+        const color = d === 'rest' ? 'var(--text-soft)' : 'var(--' + d + ')';
+        const p = UI.el('div', { class: 'tpl-preview-day', style: 'color:' + color });
+        p.append(UI.el('span', { class: 'tpl-pv-day', text: dayLabels[i] }));
+        p.append(UI.el('span', { class: 'tpl-pv-disc', text: label }));
+        preview.append(p);
+      });
+
+      wrap.append(
+        sheetHead(`Week ${week.weekNumber}`, 'Weekly Template', true),
+
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Apply to' }),
+          scopeRow
+        ]),
+
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Discipline per day' }),
+          ...dayRows
+        ]),
+
+        preview,
+
+        UI.el('div', { class: 'btnrow' }, [
+          UI.el('button', {
+            class: 'btn primary block', type: 'button',
+            onclick: () => {
+              Store.setWeekTemplate(week.weekNumber, { days: dayValues, scope: scope });
+              closeSheet();
+              toast('Template saved for Week ' + week.weekNumber, null);
+              render();
+            }
+          }, ['Save Template']),
+          UI.el('button', {
+            class: 'btn ghost block', type: 'button',
+            onclick: () => {
+              Store.setWeekTemplate(week.weekNumber, { days: {}, scope: 'both' });
+              closeSheet();
+              toast('Template cleared', null);
+              render();
+            }
+          }, ['Clear'])
         ])
       );
 

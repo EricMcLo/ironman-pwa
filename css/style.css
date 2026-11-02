@@ -881,6 +881,70 @@ main {
 }
 .tab[aria-selected="true"] svg { stroke-width: 2.1; }
 
+/* ---------------------------------------------------------- template editor */
+.tpl-day-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  margin-bottom: 6px;
+}
+.tpl-day-label {
+  width: 52px;
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--text-mid);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.tpl-daybtn {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text-soft);
+  font-size: .72rem;
+  font-weight: 600;
+  padding: 6px 8px;
+  border-radius: var(--r-sm);
+  flex: none;
+  cursor: pointer;
+  transition: all var(--fast);
+}
+.tpl-daybtn.sel {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.tpl-preview {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 10px 12px;
+  margin-top: 10px;
+}
+.tpl-preview-head {
+  font-size: .66rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--text-soft);
+  margin-bottom: 8px;
+}
+.tpl-preview-day {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 8px;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 50%, transparent);
+  font-size: .8rem;
+}
+.tpl-preview-day:last-child { border-bottom: none; }
+.tpl-pv-day { font-weight: 600; color: var(--text-mid); }
+.tpl-pv-disc { color: var(--text); }
+
 /* ---------------------------------------------------------------- sheets */
 .scrim {
   position: fixed; inset: 0; z-index: 60;

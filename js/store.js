@@ -461,6 +461,26 @@ const Store = (() => {
       });
     },
 
+    /* ---- weekly templates ----------------------------------------- */
+    /* template = { days: { 'monday': 'swim', 'tuesday': 'bike', ... }, scope: 'both' | 'eric' | 'ella' } */
+    getWeekTemplate(weekNumber) {
+      return (state.weeklyTemplates || {})[String(weekNumber)] || null;
+    },
+
+    setWeekTemplate(weekNumber, template) {
+      api.update(s => {
+        if (!template || Object.values(template.days || {}).every(d => d === 'rest' || !d)) {
+          delete s.weeklyTemplates[String(weekNumber)];
+        } else {
+          s.weeklyTemplates[String(weekNumber)] = template;
+        }
+      });
+    },
+
+    clearWeekTemplates() {
+      api.update(s => { s.weeklyTemplates = {}; });
+    },
+
     /* ---- week notes ----------------------------------------------- */
     getWeekNote(weekNumber) {
       return (state.weekNotes || {})[String(weekNumber)] || '';

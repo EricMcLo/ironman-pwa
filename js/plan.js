@@ -151,18 +151,41 @@ const Plan = (() => {
     return out;
   }
 
-  /* Every session for one athlete on one date, sorted by discipline order. */
+  /* Get the day-of-week name (monday, tuesday, ...) for an ISO date. */
+  function dayOfWeekName(iso) {
+    const d = parseISO(iso);
+    const idx = (d.getDay() + 6) % 7; // 0=Monday
+    return ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'][idx];
+  }
+
+  /* Get template discipline for a date, or null if no override. */
+  function templateDisciplineFor(iso) {
+    const template = Store.getWeekTemplate(weekNumberFor(iso));
+    if (!template || !template.days) return null;
+    return template.days[dayOfWeekName(iso)] || null;
+  }
+
+  /* Every session for one athlete on one date, sorted by discipline order.
+     If a weekly template exists for this date's week, sessions are filtered
+     to match the template's discipline for that day (rest = no sessions). */
   function sessionsOn(iso, athlete) {
     const order = { swim: 0, 'open-water-swim': 1, bike: 2, brick: 3, run: 4, strength: 5, rest: 6, race: 7 };
+    const td = templateDisciplineFor(iso);
     const list = (byDate.get(iso) || [])
       .filter(e => e.session.athletes.includes(athlete))
-      .map(e => resolve(e, athlete));
+      .map(e => resolve(e, athlete))
+      .filter(s => {
+        if (!td) return true;
+        if (td === 'rest') return false;
+        return s.discipline === td;
+      });
     return list.sort((a, b) => (order[a.discipline] ?? 9) - (order[b.discipline] ?? 9));
   }
 
   /* Sessions both people do side by side. Returns both Eric's and Ella's
      resolved variants so "Both" view can show per-person details. */
   function togetherOn(iso) {
+    const td = templateDisciplineFor(iso);
     return (byDate.get(iso) || [])
       .filter(e => e.session.together)
       .map(e => {
@@ -173,6 +196,11 @@ const Plan = (() => {
           ellaDone: Store.isDone(e.session.id, 'ella'),
           ericDone: Store.isDone(e.session.id, 'eric')
         });
+      })
+      .filter(s => {
+        if (!td) return true;
+        if (td === 'rest') return false;
+        return s.discipline === td;
       });
   }
 
@@ -261,6 +289,6 @@ const Plan = (() => {
     phaseForDate, phaseMeta, weekHours, weeksAsPlanned, raceCountdown,
 
     parseISO, toISO, isoOf, addDays, todayISO, dayName, dayShort, prettyDate,
-    monthLabel, daysBetween, startOfWeek, MONTHS
+    monthLabel, daysBetween, startOfWeek, MONTHS, dayOfWeekName
   };
 })();
