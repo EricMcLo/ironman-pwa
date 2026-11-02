@@ -1,19 +1,23 @@
 /* ==========================================================================
    store.js — everything that persists lives here.
 
-   This is the ONE file to change when you move from localStorage to a shared
-   backend (Turso, Supabase, whatever). The rest of the app only ever calls
-   Store.* -- it never touches localStorage directly.
+   Architecture: localStorage is the fast, synchronous source of truth for
+   reads. Every write goes to localStorage AND is queued to Turso (async,
+   fire-and-forget). On boot, we pull from Turso and merge into localStorage.
 
-   To swap in a server later, rewrite load()/save() and keep the same shape.
-   Every record already carries an id + timestamp, which is what a sync
-   backend needs.
+   If Turso is unavailable, everything works fine with localStorage only.
+   To use Turso, set window.TURSO_AUTH_TOKEN in index.html.
    ========================================================================== */
 
 const Store = (() => {
   const KEY = 'ironman703.v1';
   const listeners = new Set();
-  let idCounter = 0;  // monotonic counter so extra session IDs never collide
+
+  let tursoClient = null;
+  let tursoReady = false;
+  let tursoError = null;
+  let tursoPendingWrites = [];   // queue of write operations
+  let tursoFlushing = false;
 
   function defaults() {
     return {
@@ -31,8 +35,6 @@ const Store = (() => {
     };
   }
 
-  let state = load();
-
   function load() {
     try {
       const raw = localStorage.getItem(KEY);
@@ -45,7 +47,7 @@ const Store = (() => {
     }
   }
 
-  function save() {
+  function save(state) {
     try {
       localStorage.setItem(KEY, JSON.stringify(state));
     } catch (err) {
@@ -55,8 +57,267 @@ const Store = (() => {
   }
 
   /* Stamp every write so a future sync layer can resolve conflicts. */
-  function touch() {
+  function touch(state) {
     state.meta = { by: state.me, at: new Date().toISOString() };
+  }
+
+  /* ---------------------------------------------------------------- turso */
+
+  async function initTurso() {
+    if (tursoReady || tursoError) return;
+    try {
+      const createClient = window.libsql?.createClient;
+      if (!createClient) {
+        tursoError = 'libsql client not loaded';
+        console.warn(tursoError);
+        return;
+      }
+      const url = window.TURSO_DATABASE_URL || '';
+      const token = window.TURSO_AUTH_TOKEN || '';
+      if (!url || !token) {
+        tursoError = 'Turso not configured (missing URL or token)';
+        console.warn(tursoError);
+        return;
+      }
+      tursoClient = createClient({ url, authToken: token });
+      // Test connection
+      await tursoClient.execute('SELECT 1');
+      tursoReady = true;
+      console.log('Turso connected');
+
+      // Pull from Turso and merge into localStorage
+      await pullFromTurso();
+
+      // If sync_state has no record, this is the first sync — seed Turso from localStorage
+      const ss = await tursoClient.execute('SELECT * FROM sync_state WHERE id = 1');
+      if (ss.rows.length === 0) {
+        await pushFullStateToTurso(load());
+        await tursoClient.execute(
+          'INSERT INTO sync_state (id, last_synced_at, device_id) VALUES (1, ?, ?)',
+          [new Date().toISOString(), load().meta.by || 'unknown']
+        );
+      }
+
+      // Flush any pending writes that came in during init
+      await flushTursoWrites();
+    } catch (err) {
+      tursoError = err.message;
+      console.warn('Turso init failed, using localStorage only:', err.message);
+    }
+  }
+
+  /* Pull all data from Turso and merge into localStorage. Turso wins conflicts. */
+  async function pullFromTurso() {
+    if (!tursoClient) return;
+    try {
+      const current = load();
+
+      // --- completions -> log ---
+      const compRes = await tursoClient.execute('SELECT session_id, athlete, done, at, actual_min, rpe, note FROM completions');
+      const log = { ...current.log };
+      for (const row of compRes.rows) {
+        const key = `${row.session_id}|${row.athlete}`;
+        log[key] = {
+          done: Boolean(row.done),
+          at: row.at,
+          actualMin: row.actual_min,
+          rpe: row.rpe,
+          note: row.note
+        };
+      }
+
+      // --- overrides -> overrides ---
+      const ovRes = await tursoClient.execute('SELECT session_id, scope, field, value FROM overrides');
+      const overrides = {};
+      for (const row of ovRes.rows) {
+        if (!overrides[row.session_id]) overrides[row.session_id] = {};
+        if (row.scope === 'both') {
+          overrides[row.session_id][row.field] = row.value;
+        } else {
+          if (!overrides[row.session_id][row.scope]) overrides[row.session_id][row.scope] = {};
+          overrides[row.session_id][row.scope][row.field] = row.value;
+        }
+      }
+
+      // --- week_scales ---
+      const wsRes = await tursoClient.execute('SELECT week_number, factor FROM week_scales');
+      const weekScale = {};
+      for (const row of wsRes.rows) {
+        weekScale[row.week_number] = row.factor;
+      }
+
+      // --- skipped_weeks ---
+      const swRes = await tursoClient.execute('SELECT week_number FROM skipped_weeks');
+      const skippedWeeks = swRes.rows.map(r => r.week_number);
+
+      // --- week_notes ---
+      const wnRes = await tursoClient.execute('SELECT week_number, note FROM week_notes');
+      const weekNotes = {};
+      for (const row of wnRes.rows) {
+        weekNotes[row.week_number] = row.note;
+      }
+
+      // --- extras ---
+      const exRes = await tursoClient.execute('SELECT id, date, athletes, discipline, duration, intensity, sets, notes, together FROM extras');
+      const extras = exRes.rows.map(r => ({
+        id: r.id,
+        date: r.date,
+        athletes: JSON.parse(r.athletes || '[]'),
+        discipline: r.discipline,
+        duration: r.duration,
+        intensity: r.intensity,
+        sets: r.sets,
+        notes: r.notes,
+        together: Boolean(r.together)
+      }));
+
+      // --- meta ---
+      const metaRes = await tursoClient.execute('SELECT key, value FROM meta');
+      const meta = { by: null, at: null };
+      for (const row of metaRes.rows) {
+        if (row.key === 'theme') meta.theme = row.value;
+        if (row.key === 'view') meta.view = row.value;
+        if (row.key === 'me') meta.me = row.value;
+      }
+
+      const merged = Object.assign({}, current, {
+        log,
+        overrides,
+        weekScale,
+        skippedWeeks,
+        weekNotes,
+        extras,
+        meta: Object.assign({}, current.meta, meta)
+      });
+
+      save(merged);
+    } catch (err) {
+      console.warn('Turso pull failed:', err.message);
+    }
+  }
+
+  /* Push the entire current state to Turso (full reseed, simple and correct). */
+  async function pushFullStateToTurso(state) {
+    if (!tursoClient) return;
+    try {
+      // Clear existing data
+      await tursoClient.execute('DELETE FROM completions');
+      await tursoClient.execute('DELETE FROM overrides');
+      await tursoClient.execute('DELETE FROM week_scales');
+      await tursoClient.execute('DELETE FROM skipped_weeks');
+      await tursoClient.execute('DELETE FROM week_notes');
+      await tursoClient.execute('DELETE FROM extras');
+      await tursoClient.execute('DELETE FROM meta');
+
+      // Insert completions
+      for (const [key, val] of Object.entries(state.log || {})) {
+        const [sessionId, athlete] = key.split('|');
+        await tursoClient.execute(
+          `INSERT INTO completions (id, session_id, athlete, done, at, actual_min, rpe, note) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          [`c-${sessionId}-${athlete}`, sessionId, athlete, val.done ? 1 : 0, val.at || null, val.actualMin || null, val.rpe || null, val.note || null]
+        );
+      }
+
+      // Insert overrides (flatten nested structure)
+      for (const [sessionId, ov] of Object.entries(state.overrides || {})) {
+        // Top-level fields (scope = 'both')
+        for (const field of ['date', 'duration', 'intensity', 'sets', 'notes']) {
+          if (ov[field] !== undefined) {
+            await tursoClient.execute(
+              `INSERT INTO overrides (id, session_id, scope, field, value) VALUES (?, ?, ?, ?, ?)`,
+              [`ov-${sessionId}-both-${field}`, sessionId, 'both', field, String(ov[field])]
+            );
+          }
+        }
+        // Per-athlete fields
+        for (const athlete of ['eric', 'ella']) {
+          if (ov[athlete]) {
+            for (const field of ['date', 'duration', 'intensity', 'sets', 'notes']) {
+              if (ov[athlete][field] !== undefined) {
+                await tursoClient.execute(
+                  `INSERT INTO overrides (id, session_id, scope, field, value) VALUES (?, ?, ?, ?, ?)`,
+                  [`ov-${sessionId}-${athlete}-${field}`, sessionId, athlete, field, String(ov[athlete][field])]
+                );
+              }
+            }
+          }
+        }
+      }
+
+      // Insert week_scales
+      for (const [weekNum, factor] of Object.entries(state.weekScale || {})) {
+        await tursoClient.execute(
+          'INSERT INTO week_scales (week_number, factor) VALUES (?, ?)',
+          [Number(weekNum), factor]
+        );
+      }
+
+      // Insert skipped_weeks
+      for (const w of state.skippedWeeks || []) {
+        await tursoClient.execute('INSERT INTO skipped_weeks (week_number) VALUES (?)', [w]);
+      }
+
+      // Insert week_notes
+      for (const [weekNum, note] of Object.entries(state.weekNotes || {})) {
+        await tursoClient.execute(
+          'INSERT INTO week_notes (week_number, note) VALUES (?, ?)',
+          [Number(weekNum), note]
+        );
+      }
+
+      // Insert extras
+      for (const e of state.extras || []) {
+        await tursoClient.execute(
+          `INSERT INTO extras (id, date, athletes, discipline, duration, intensity, sets, notes, together) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          [e.id, e.date, JSON.stringify(e.athletes), e.discipline, e.duration, e.intensity, e.sets, e.notes, e.together ? 1 : 0]
+        );
+      }
+
+      // Insert meta
+      await tursoClient.execute(
+        'INSERT INTO meta (key, value) VALUES (?, ?)',
+        ['theme', state.meta.theme || 'auto']
+      );
+      await tursoClient.execute(
+        'INSERT INTO meta (key, value) VALUES (?, ?)',
+        ['view', state.meta.view || 'week']
+      );
+      await tursoClient.execute(
+        'INSERT INTO meta (key, value) VALUES (?, ?)',
+        ['me', state.meta.me || 'eric']
+      );
+    } catch (err) {
+      console.warn('Turso push failed:', err.message);
+    }
+  }
+
+  /* Queue a write to Turso (fire-and-forget). */
+  function enqueueTursoWrite() {
+    tursoPendingWrites.push(load()); // snapshot current state
+    if (!tursoFlushing && tursoReady) {
+      tursoFlushing = true;
+      flushTursoWrites();
+    }
+  }
+
+  async function flushTursoWrites() {
+    if (!tursoReady || !tursoClient) {
+      tursoFlushing = false;
+      return;
+    }
+    do {
+      while (tursoPendingWrites.length > 0) {
+        const stateSnapshot = tursoPendingWrites.shift();
+        try {
+          await pushFullStateToTurso(stateSnapshot);
+        } catch (err) {
+          console.warn('Turso write failed:', err.message);
+          tursoPendingWrites.push(stateSnapshot);
+          break;
+        }
+      }
+    } while (tursoPendingWrites.length > 0);
+    tursoFlushing = false;
   }
 
   /* ---------------------------------------------------------------- api */
@@ -69,11 +330,13 @@ const Store = (() => {
       return () => listeners.delete(fn);
     },
 
-    /* Run a mutation, persist, notify. */
+    /* Run a mutation, persist to localStorage, queue to Turso. */
     update(fn) {
       fn(state);
-      touch();
-      save();
+      touch(state);
+      save(state);
+      listeners.forEach(listener => listener(state));
+      enqueueTursoWrite();
     },
 
     set(key, value) {
@@ -155,6 +418,21 @@ const Store = (() => {
       });
     },
 
+    /* ---- extras (sessions you add yourself) ------------------------ */
+    addExtra(session) {
+      api.update(s => {
+        const id = 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+        s.extras.push(Object.assign({
+          id,
+          createdAt: new Date().toISOString()
+        }, session));
+      });
+    },
+
+    removeExtra(id) {
+      api.update(s => { s.extras = s.extras.filter(e => e.id !== id); });
+    },
+
     /* ---- week skipping -------------------------------------------- */
     isWeekSkipped(weekNumber) {
       return (state.skippedWeeks || []).includes(weekNumber);
@@ -185,25 +463,12 @@ const Store = (() => {
       });
     },
 
-    /* ---- extras (sessions you add yourself) ------------------------ */
-    addExtra(session) {
-      api.update(s => {
-        idCounter += 1;
-        s.extras.push(Object.assign({
-          id: 'x' + idCounter,
-          createdAt: new Date().toISOString()
-        }, session));
-      });
-    },
-
-    removeExtra(id) {
-      api.update(s => { s.extras = s.extras.filter(e => e.id !== id); });
-    },
-
     /* ---- bulk ----------------------------------------------------- */
     resetAll() {
       state = defaults();
-      save();
+      save(state);
+      listeners.forEach(listener => listener(state));
+      enqueueTursoWrite();
     },
 
     exportJSON() {
@@ -216,10 +481,21 @@ const Store = (() => {
       if (!parsed.version) throw new Error('Missing version field');
       if (parsed.weeks && !Array.isArray(parsed.weeks)) throw new Error('Invalid weeks data');
       state = Object.assign(defaults(), parsed);
-      idCounter = state.extras ? state.extras.length : 0;
-      save();
+      save(state);
+      listeners.forEach(listener => listener(state));
+      enqueueTursoWrite();
+    },
+
+    /* Expose turso status for debugging */
+    get tursoStatus() {
+      return { ready: tursoReady, error: tursoError };
     }
   };
+
+  let state = load();
+
+  /* Initialize Turso in the background (doesn't block app boot). */
+  initTurso();
 
   return api;
 })();
