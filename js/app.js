@@ -183,6 +183,10 @@
         }, ['Week note']),
         UI.el('button', {
           class: 'linkbtn', type: 'button',
+          onclick: openBulkAddSheet
+        }, ['Bulk add']),
+        UI.el('button', {
+          class: 'linkbtn', type: 'button',
           onclick: openScaleSheet
         }, ['Adjust week']),
         UI.el('button', {
@@ -665,6 +669,120 @@
           }, ['Reset this week'])
         ])
       );
+      return wrap;
+    });
+  }
+
+  /* ---- bulk add ---- */
+  function openBulkAddSheet() {
+    let discipline = 'run';
+    let duration = 60;
+    let weeks = 4;
+    const daySelection = { monday: false, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: true, sunday: false };
+    const startDate = Plan.todayISO();
+
+    openSheet(() => {
+      const wrap = document.createDocumentFragment();
+
+      const discRow = UI.el('div', { class: 'segmented' });
+      const discs = [['run', 'Run'], ['bike', 'Bike'], ['swim', 'Swim'], ['strength', 'Mobility'], ['rest', 'Rest']];
+      for (const [val, label] of discs) {
+        discRow.append(UI.el('button', {
+          type: 'button',
+          'aria-pressed': String(val === discipline),
+          onclick: () => {
+            discipline = val;
+            discRow.querySelectorAll('button').forEach(b =>
+              b.setAttribute('aria-pressed', String(b.textContent === label)));
+          }
+        }, [label]));
+      }
+
+      const durInput = UI.el('input', {
+        type: 'number', min: '5', max: '600', step: '5', value: String(duration),
+        oninput: (e) => { duration = Number(e.target.value) || 0; }
+      });
+
+      const weeksInput = UI.el('input', {
+        type: 'number', min: '1', max: '52', step: '1', value: String(weeks),
+        oninput: (e) => { weeks = Number(e.target.value) || 1; }
+      });
+
+      const dayRow = UI.el('div', { class: 'day-picker' });
+      const dayLabels = [['monday', 'Mon'], ['tuesday', 'Tue'], ['wednesday', 'Wed'], ['thursday', 'Thu'], ['friday', 'Fri'], ['saturday', 'Sat'], ['sunday', 'Sun']];
+      for (const [key, label] of dayLabels) {
+        const btn = UI.el('button', {
+          type: 'button',
+          'aria-pressed': String(daySelection[key]),
+          class: 'daybtn' + (daySelection[key] ? ' sel' : ''),
+          onclick: () => {
+            daySelection[key] = !daySelection[key];
+            btn.setAttribute('aria-pressed', String(daySelection[key]));
+            btn.classList.toggle('sel', daySelection[key]);
+          }
+        }, [label]);
+        dayRow.append(btn);
+      }
+
+      const selectedDays = Object.keys(daySelection).filter(k => daySelection[k]);
+      const info = el('p', { class: 'sh-text', text: `Will add ${selectedDays.length} session(s) per week for ${weeks} week(s). Starting ${Plan.prettyDate(startDate)}.` });
+
+      wrap.append(
+        sheetHead('Bulk Add', 'Add multiple sessions', true),
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Discipline' }), discRow
+        ]),
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Minutes per session' }),
+          UI.el('div', { class: 'field' }, [durInput])
+        ]),
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Number of weeks' }),
+          UI.el('div', { class: 'field' }, [weeksInput])
+        ]),
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Days of week' }),
+          dayRow
+        ]),
+        info,
+        UI.el('div', { class: 'btnrow' }, [
+          UI.el('button', {
+            class: 'btn primary block', type: 'button',
+            onclick: () => {
+              if (selectedDays.length === 0) {
+                toast('Pick at least one day', null);
+                return;
+              }
+              let added = 0;
+              let current = Plan.parseISO(startDate);
+              for (let w = 0; w < weeks; w++) {
+                const weekStart = new Date(current.getFullYear(), current.getMonth(), current.getDate() - ((current.getDay() + 6) % 7));
+                for (const dayKey of selectedDays) {
+                  const dayOffset = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'].indexOf(dayKey);
+                  const d = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + dayOffset);
+                  const iso = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+                  Store.addExtra({
+                    date: iso,
+                    athletes: ['eric', 'ella'],
+                    discipline,
+                    title: UI.LABELS[discipline],
+                    duration,
+                    intensity: 'Z2',
+                    sets: '',
+                    notes: '',
+                    together: true
+                  });
+                  added++;
+                }
+                current = new Date(weekStart.getFullYear(), weekStart.getMonth(), weekStart.getDate() + 7);
+              }
+              closeSheet();
+              toast(`Added ${added} session(s)`, null);
+            }
+          }, ['Add them all'])
+        ])
+      );
+
       return wrap;
     });
   }

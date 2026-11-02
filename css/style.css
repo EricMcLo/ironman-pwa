@@ -1076,6 +1076,31 @@ main {
   box-shadow: var(--sh-1);
 }
 
+.day-picker {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  flex-wrap: wrap;
+}
+.daybtn {
+  appearance: none; border: 0; background: transparent;
+  font: inherit; font-size: .75rem; font-weight: 600;
+  color: var(--text-mid);
+  padding: 8px 6px;
+  border-radius: calc(var(--r-sm) - 1px);
+  flex: 1 1 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.daybtn.sel {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--sh-1);
+}
+
 .note-line {
   font-size: .74rem;
   color: var(--text-soft);
