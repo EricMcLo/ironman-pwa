@@ -186,6 +186,7 @@
       ])
     );
 
+    document.querySelectorAll('.tstrip').forEach(el => el.remove());
     $('#weekHead').after(UI.todayStrip((iso) => {
       state.weekNumber = Plan.weekNumberFor(iso);
       render();

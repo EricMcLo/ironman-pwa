@@ -160,14 +160,20 @@ const Plan = (() => {
     return list.sort((a, b) => (order[a.discipline] ?? 9) - (order[b.discipline] ?? 9));
   }
 
-  /* Sessions both people do side by side. */
+  /* Sessions both people do side by side. Returns both Eric's and Ella's
+     resolved variants so "Both" view can show per-person details. */
   function togetherOn(iso) {
     return (byDate.get(iso) || [])
       .filter(e => e.session.together)
-      .map(e => Object.assign(resolve(e, 'eric'), {
-        ellaDone: Store.isDone(e.session.id, 'ella'),
-        ericDone: Store.isDone(e.session.id, 'eric')
-      }));
+      .map(e => {
+        const eric = resolve(e, 'eric');
+        const ella = resolve(e, 'ella');
+        return Object.assign({}, eric, {
+          ella: ella,
+          ellaDone: Store.isDone(e.session.id, 'ella'),
+          ericDone: Store.isDone(e.session.id, 'eric')
+        });
+      });
   }
 
   function weekNumberFor(iso) {
@@ -218,8 +224,12 @@ const Plan = (() => {
   }
 
   function raceCountdown() {
-    const days = daysBetween(todayISO(), plan.raceDate);
-    return days;
+    const today = todayISO();
+    const races = (plan.events || [])
+      .filter(e => e.type === 'race' && e.date >= today);
+    if (races.length === 0) return { days: -1, name: '' };
+    const next = races.sort((a, b) => a.date.localeCompare(b.date))[0];
+    return { days: daysBetween(today, next.date), name: next.name };
   }
 
   /* How many *finished* weeks hit at least `threshold` of their sessions.

@@ -102,9 +102,13 @@ const UI = (() => {
 
     const disc = el('span', { class: 'disc ' + s.discipline, 'aria-hidden': 'true' }, [icon(s.discipline)]);
 
+    let durText = fmtDur(s.duration);
+    if (mode === 'both' && s.ella && s.ella.duration !== s.duration) {
+      durText = `E:${fmtDur(s.duration)} / L:${fmtDur(s.ella.duration)}`;
+    }
     const line1 = el('div', { class: 's-line1' }, [
       el('span', { class: 's-title', text: s.title || LABELS[s.discipline] || s.discipline }),
-      el('span', { class: 's-dur', text: fmtDur(s.duration) }),
+      el('span', { class: 's-dur', text: durText }),
       s.intensity ? el('span', { class: zoneClass(s.intensity), text: s.intensity }) : null
     ]);
 
@@ -121,10 +125,22 @@ const UI = (() => {
     const checks = el('div', { class: 'checks' });
 
     if (mode === 'both') {
-      checks.append(
-        athleteCheck('Er', 'eric', s.ericDone, () => opts.onCheck && opts.onCheck(s, 'eric')),
-        athleteCheck('El', 'ella', s.ellaDone, () => opts.onCheck && opts.onCheck(s, 'ella'))
-      );
+      if (s._separate) {
+        const label = s._athlete === 'eric' ? 'Er' : 'El';
+        checks.append(el('button', {
+          class: 'check tiny ' + s._athlete,
+          type: 'button',
+          role: 'checkbox',
+          'aria-checked': s.done ? 'true' : 'false',
+          'aria-label': s._athlete + (s.done ? ' done' : ' not done'),
+          onclick: (e) => { e.stopPropagation(); opts.onCheck && opts.onCheck(s, s._athlete); }
+        }, [label]));
+      } else {
+        checks.append(
+          athleteCheck('Er', 'eric', s.ericDone, () => opts.onCheck && opts.onCheck(s, 'eric')),
+          athleteCheck('El', 'ella', s.ellaDone, () => opts.onCheck && opts.onCheck(s, 'ella'))
+        );
+      }
     } else {
       checks.append(el('button', {
         class: 'check',
@@ -198,9 +214,21 @@ const UI = (() => {
   /* ------------------------------------------------------------ day */
   function dayBlock(iso, athlete, opts) {
     const today = Plan.todayISO();
-    const sessions = athlete === 'both'
-      ? Plan.togetherOn(iso)
-      : Plan.sessionsOn(iso, athlete);
+    let sessions;
+    if (athlete === 'both') {
+      const together = Plan.togetherOn(iso);
+      const ericSeparate = Plan.sessionsOn(iso, 'eric').filter(s => !s.together);
+      const ellaSeparate = Plan.sessionsOn(iso, 'ella').filter(s => !s.together);
+      sessions = [
+        ...together.map(s => ({ ...s, _separate: false })),
+        ...ericSeparate.map(s => ({ ...s, _separate: true, _athlete: 'eric' })),
+        ...ellaSeparate.map(s => ({ ...s, _separate: true, _athlete: 'ella' }))
+      ];
+      const order = { swim: 0, 'open-water-swim': 1, bike: 2, brick: 3, run: 4, strength: 5, rest: 6, race: 7 };
+      sessions.sort((a, b) => (order[a.discipline] ?? 9) - (order[b.discipline] ?? 9));
+    } else {
+      sessions = Plan.sessionsOn(iso, athlete);
+    }
 
     const total = sessions.reduce((sum, s) => sum + (s.duration || 0), 0);
     const allRest = sessions.length === 0 ||
@@ -267,13 +295,13 @@ const UI = (() => {
     const today = Plan.todayISO();
     const week = Plan.weekFor(weekNumber || Plan.weekNumberFor(today));
     const phase = Plan.phaseMeta(week.phase);
-    const days = Plan.raceCountdown();
+    const rc = Plan.raceCountdown();
     const hrs = Plan.weekHours(week.weekNumber, athlete === 'both' ? 'eric' : athlete);
 
     const chips = [];
-    if (days > 0) {
-      chips.push(el('span', { class: 'chip strong', text: days + ' days to Utah' }));
-    } else if (days === 0) {
+    if (rc.days > 0) {
+      chips.push(el('span', { class: 'chip strong', text: rc.days + ' days to ' + rc.name }));
+    } else if (rc.days === 0) {
       chips.push(el('span', { class: 'chip strong', text: 'Race day' }));
     } else {
       chips.push(el('span', { class: 'chip strong', text: 'Race complete' }));
@@ -489,11 +517,11 @@ const UI = (() => {
     const today = Plan.todayISO();
     const week = Plan.weekOf(today);
     const hrs = Plan.weekHours(week.weekNumber, a);
-    const days = Plan.raceCountdown();
+    const rc = Plan.raceCountdown();
     const planned = Plan.weeksAsPlanned(a);
 
     return [
-      stat('Days to race', days > 0 ? String(days) : '—', days > 0 ? 'days' : ''),
+      stat('Days to race', rc.days > 0 ? String(rc.days) : '—', rc.days > 0 ? 'days' : ''),
       stat('This week', `${hrs.complete}<small>/${hrs.total}</small>`, 'sessions'),
       stat('Hours this week', fmtHours(hrs.doneHours), `of ${fmtHours(hrs.target)}`),
       stat('Weeks as planned',
@@ -530,9 +558,21 @@ const UI = (() => {
   /* ------------------------------------------------------- day sheet */
   function daySheetBody(iso, athlete, handlers) {
     const frag = document.createDocumentFragment();
-    const sessions = athlete === 'both'
-      ? Plan.togetherOn(iso)
-      : Plan.sessionsOn(iso, athlete);
+    let sessions;
+    if (athlete === 'both') {
+      const together = Plan.togetherOn(iso);
+      const ericSeparate = Plan.sessionsOn(iso, 'eric').filter(s => !s.together);
+      const ellaSeparate = Plan.sessionsOn(iso, 'ella').filter(s => !s.together);
+      sessions = [
+        ...together.map(s => ({ ...s, _separate: false })),
+        ...ericSeparate.map(s => ({ ...s, _separate: true, _athlete: 'eric' })),
+        ...ellaSeparate.map(s => ({ ...s, _separate: true, _athlete: 'ella' }))
+      ];
+      const order = { swim: 0, 'open-water-swim': 1, bike: 2, brick: 3, run: 4, strength: 5, rest: 6, race: 7 };
+      sessions.sort((a, b) => (order[a.discipline] ?? 9) - (order[b.discipline] ?? 9));
+    } else {
+      sessions = Plan.sessionsOn(iso, athlete);
+    }
 
     frag.append(el('div', { class: 'sh-head' }, [
       el('p', { class: 'sh-eyebrow', text: Plan.dayName(iso) + ' · ' + Plan.prettyDate(iso, true) }),
