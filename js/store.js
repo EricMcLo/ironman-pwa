@@ -366,6 +366,19 @@ const Store = (() => {
       });
     },
 
+    setDoneWithActuals(id, athlete, actualMin, rpe, note) {
+      api.update(s => {
+        const k = api.key(id, athlete);
+        s.log[k] = {
+          done: true,
+          at: new Date().toISOString(),
+          actualMin: actualMin || null,
+          rpe: rpe || null,
+          note: note || null
+        };
+      });
+    },
+
     toggleDone(id, athlete) {
       api.setDone(id, athlete, !api.isDone(id, athlete));
     },

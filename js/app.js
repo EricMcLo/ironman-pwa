@@ -169,26 +169,9 @@
           onclick: () => { state.weekNumber = Plan.weekNumberFor(today); render(); }
         }, ['Today']),
         UI.el('button', {
-          class: 'linkbtn', type: 'button',
-          onclick: () => {
-            const wk = Plan.weekFor(state.weekNumber);
-            const isSkipped = Store.isWeekSkipped(wk.weekNumber);
-            Store.setWeekSkip(wk.weekNumber, !isSkipped);
-            toast(isSkipped ? 'Week unskipped' : 'Week skipped', null);
-          }
-        }, [Store.isWeekSkipped(week.weekNumber) ? 'Unskip week' : 'Skip week']),
-        UI.el('button', {
-          class: 'linkbtn', type: 'button',
-          onclick: openEditNoteSheet
-        }, ['Week note']),
-        UI.el('button', {
-          class: 'linkbtn', type: 'button',
-          onclick: openBulkAddSheet
-        }, ['Bulk add']),
-        UI.el('button', {
-          class: 'linkbtn', type: 'button',
-          onclick: openScaleSheet
-        }, ['Adjust week']),
+          class: 'icon-btn small', type: 'button', 'aria-label': 'Week options',
+          onclick: openWeekOptionsSheet
+        }, ['···']),
         UI.el('button', {
           class: 'icon-btn small', type: 'button', 'aria-label': 'Previous week',
           onclick: () => { state.weekNumber = Math.max(1, state.weekNumber - 1); render(); }
@@ -266,10 +249,13 @@
   }
 
   function toggleDone(s, athleteOverride) {
-    if (state.athlete === 'both') {
-      Store.toggleDone(s.id, athleteOverride || 'eric');
+    const athlete = athleteOverride || state.athlete;
+    if (!Store.isDone(s.id, athlete)) {
+      // Marking as done → open log actuals sheet
+      openLogActualsSheet(s, athlete);
     } else {
-      Store.toggleDone(s.id, state.athlete);
+      // Already done → uncheck
+      Store.toggleDone(s.id, athlete);
     }
   }
 
@@ -823,6 +809,125 @@
               toast('Week note cleared', null);
             }
           }, ['Clear'])
+        ])
+      );
+
+      return wrap;
+    });
+  }
+
+  /* ---- log actuals ---- */
+  function openLogActualsSheet(s, athlete) {
+    const current = Store.getLog(s.id, athlete) || {};
+
+    openSheet(() => {
+      const wrap = document.createDocumentFragment();
+      const actualMin = UI.el('input', {
+        type: 'number', min: '1', max: '600', step: '5',
+        placeholder: 'e.g. 45',
+        value: current.actualMin || ''
+      });
+      const rpe = UI.el('input', {
+        type: 'number', min: '1', max: '10', step: '1',
+        placeholder: '1-10',
+        value: current.rpe || ''
+      });
+      const note = UI.el('textarea', {
+        rows: '3',
+        placeholder: 'How did it feel? e.g. sore calf, felt strong',
+        value: current.note || ''
+      });
+
+      wrap.append(
+        sheetHead(Plan.prettyDate(s.date, true), 'Log workout', true),
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Actual minutes' }),
+          UI.el('div', { class: 'field' }, [actualMin])
+        ]),
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Effort (RPE 1-10)' }),
+          UI.el('div', { class: 'field' }, [rpe])
+        ]),
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Notes' }),
+          UI.el('div', { class: 'field' }, [note])
+        ]),
+        UI.el('div', { class: 'btnrow' }, [
+          UI.el('button', {
+            class: 'btn primary block', type: 'button',
+            onclick: () => {
+              Store.setDoneWithActuals(s.id, athlete,
+                Number(actualMin.value) || null,
+                Number(rpe.value) || null,
+                note.value.trim() || null);
+              closeSheet();
+              toast('Logged', null);
+            }
+          }, ['Save']),
+          UI.el('button', {
+            class: 'btn ghost block', type: 'button',
+            onclick: () => closeSheet()
+          }, ['Skip'])
+        ])
+      );
+
+      return wrap;
+    });
+  }
+
+  /* ---- week options ---- */
+  function openWeekOptionsSheet() {
+    const week = Plan.weekFor(state.weekNumber);
+    const isSkipped = Store.isWeekSkipped(week.weekNumber);
+
+    openSheet(() => {
+      const wrap = document.createDocumentFragment();
+
+      wrap.append(
+        sheetHead(`Week ${week.weekNumber}`, 'Week options', true),
+
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Week status' }),
+          UI.el('div', { class: 'btnrow' }, [
+            UI.el('button', {
+              class: 'btn block', type: 'button',
+              onclick: () => {
+                Store.setWeekSkip(week.weekNumber, !isSkipped);
+                closeSheet();
+                toast(isSkipped ? 'Week unskipped' : 'Week skipped', null);
+              }
+            }, [isSkipped ? 'Unskip week' : 'Skip week'])
+          ])
+        ]),
+
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Week note' }),
+          UI.el('div', { class: 'btnrow' }, [
+            UI.el('button', {
+              class: 'btn block', type: 'button',
+              onclick: () => { closeSheet(); openEditNoteSheet(); }
+            }, ['Edit note'])
+          ])
+        ]),
+
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Add sessions' }),
+          UI.el('div', { class: 'btnrow' }, [
+            UI.el('button', {
+              class: 'btn block', type: 'button',
+              onclick: () => { closeSheet(); openBulkAddSheet(); }
+            }, ['Bulk add'])
+          ])
+        ]),
+
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Adjust week' }),
+          UI.el('div', { class: 'btnrow' }, [
+            UI.el('button', {
+              class: 'btn block', type: 'button',
+              onclick: () => { closeSheet(); openScaleSheet(); }
+            }, ['Scale volume'])
+          ])
         ])
       );
 

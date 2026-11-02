@@ -182,8 +182,14 @@ const UI = (() => {
     if (s.fueling) {
       wrap.append(el('div', { class: 'fuel' }, ['⚡', s.fueling]));
     }
-    if (s.log && s.log.note) {
-      wrap.append(el('p', { class: 'note-line', text: 'Your note: ' + s.log.note }));
+    if (s.log) {
+      const logBits = [];
+      if (s.log.actualMin) logBits.push(`${s.log.actualMin} min`);
+      if (s.log.rpe) logBits.push(`RPE ${s.log.rpe}`);
+      if (s.log.note) logBits.push(s.log.note);
+      if (logBits.length) {
+        wrap.append(el('p', { class: 'note-line', text: 'Logged: ' + logBits.join(' · ') }));
+      }
     }
     if (s.overridden) {
       wrap.append(el('p', {
@@ -193,10 +199,6 @@ const UI = (() => {
     }
 
     const actions = el('div', { class: 's-actions' }, [
-      el('button', {
-        class: 'mini', type: 'button',
-        onclick: (e) => { e.stopPropagation(); opts.onOpen && opts.onOpen(s); }
-      }, ['Details']),
       el('button', {
         class: 'mini', type: 'button',
         onclick: (e) => { e.stopPropagation(); opts.onMove && opts.onMove(s); }
