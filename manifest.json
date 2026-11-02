@@ -1,0 +1,16 @@
+{
+  "name": "70.3 Utah — Eric & Ella",
+  "short_name": "70.3 Utah",
+  "description": "42-week training plan for Ironman 70.3 Utah, Aug 21 2027.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#faf9f6",
+  "theme_color": "#55625a",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
