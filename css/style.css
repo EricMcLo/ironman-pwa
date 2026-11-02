@@ -445,6 +445,15 @@ main {
 
 /* ---------------------------------------------------------------- session */
 .sessions { display: flex; flex-direction: column; }
+.session {
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-1);
+  overflow: hidden;
+}
 .session + .session { border-top: 1px solid var(--line); }
 
 .session-row {
