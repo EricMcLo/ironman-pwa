@@ -1,5 +1,5 @@
 {
- "planVersion": "2.0",
+ "planVersion": "2.1",
  "startDate": "2026-11-02",
  "raceDate": "2027-08-21",
  "raceName": "Ironman 70.3 Utah",
@@ -150,6 +150,16 @@
     "ella"
    ],
    "notes": "Finish comfortably."
+  },
+  {
+   "id": "cim_marathon",
+   "date": "2027-10-24",
+   "name": "California International Marathon",
+   "athletes": [
+    "eric",
+    "ella"
+   ],
+   "description": "Finish comfortably — no time goal."
   }
  ],
  "phases": [
@@ -12310,6 +12320,2514 @@
      ]
     }
    ]
+  },
+  {
+   "weekNumber": 43,
+   "startDate": "2027-08-23",
+   "endDate": "2027-08-29",
+   "phase": "marathon_recovery",
+   "phaseName": "Recovery week",
+   "recoveryWeek": true,
+   "focus": "Shake out the 70.3. Easy only — swim, spin, very short run. Nothing hard.",
+   "targetHours": {
+    "eric": 3.5,
+    "ella": 3.5
+   },
+   "days": [
+    {
+     "date": "2027-08-23",
+     "dayOfWeek": "monday",
+     "sessions": [
+      {
+       "id": "w43-mon-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 25,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim — technique focus.",
+       "notes": "Drills and comfort. No intensity.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 25,
+         "sets": "Easy aerobic swim — technique focus.",
+         "notes": "Drills and comfort. No intensity."
+        },
+        "ella": {
+         "duration": 25,
+         "sets": "Easy aerobic swim — hold form through the set.",
+         "notes": "Lane leader. Steady and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-08-24",
+     "dayOfWeek": "tuesday",
+     "sessions": [
+      {
+       "id": "w43-tue-bike1",
+       "discipline": "bike",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 35,
+       "intensity": "Z2",
+       "sets": "Easy recovery spin.",
+       "notes": "Gentle. Legs loose, not tired.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 35,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        },
+        "ella": {
+         "duration": 35,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        }
+       }
+      },
+      {
+       "id": "w43-tue-str1",
+       "discipline": "strength",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 20,
+       "intensity": "RPE3",
+       "sets": "Mobility + bodyweight.",
+       "notes": "Reserved slot. No specific program.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        },
+        "ella": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-08-25",
+     "dayOfWeek": "wednesday",
+     "sessions": [
+      {
+       "id": "w43-wed-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 30,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim.",
+       "notes": "Short and relaxed.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 30,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        },
+        "ella": {
+         "duration": 30,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-08-26",
+     "dayOfWeek": "thursday",
+     "sessions": [
+      {
+       "id": "w43-thu-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 25,
+       "intensity": "Z1-Z2",
+       "sets": "Easy conversational run.",
+       "notes": "Aerobic base. No racing.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 25,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 3.8
+        },
+        "ella": {
+         "duration": 25,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 3.8
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-08-27",
+     "dayOfWeek": "friday",
+     "sessions": [
+      {
+       "id": "w43-fri-rest",
+       "discipline": "rest",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 0,
+       "intensity": "RPE1",
+       "sets": "Rest",
+       "notes": "Rest day. Recover.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        },
+        "ella": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-08-28",
+     "dayOfWeek": "saturday",
+     "sessions": [
+      {
+       "id": "w43-sat-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 40,
+       "intensity": "Z1-Z2",
+       "sets": "Easy long run — own pace, finish feeling good.",
+       "notes": "Marathon long run. Own pace, fueling practice.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 40,
+         "sets": "Easy long run — own pace, finish feeling good.",
+         "notes": "Marathon long run. Own pace, fueling practice.",
+         "distanceKm": 6.2
+        },
+        "ella": {
+         "duration": 40,
+         "sets": "Easy long run — own pace, finish feeling good.",
+         "notes": "Marathon long run. Own pace, fueling practice.",
+         "distanceKm": 6.2
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-08-29",
+     "dayOfWeek": "sunday",
+     "sessions": [
+      {
+       "id": "w43-sun-bike1",
+       "discipline": "bike",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 35,
+       "intensity": "Z2",
+       "sets": "Easy endurance ride.",
+       "notes": "Steady aerobic, no hero efforts.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 35,
+         "sets": "Easy endurance ride.",
+         "notes": "Steady aerobic, no hero efforts."
+        },
+        "ella": {
+         "duration": 35,
+         "sets": "Easy endurance ride.",
+         "notes": "Steady aerobic, no hero efforts."
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "weekNumber": 44,
+   "startDate": "2027-08-30",
+   "endDate": "2027-09-05",
+   "phase": "marathon_build",
+   "phaseName": "Marathon build",
+   "recoveryWeek": false,
+   "focus": "Running becomes the priority. Bike and swim drop to maintenance.",
+   "targetHours": {
+    "eric": 5.0,
+    "ella": 5.0
+   },
+   "days": [
+    {
+     "date": "2027-08-30",
+     "dayOfWeek": "monday",
+     "sessions": [
+      {
+       "id": "w44-mon-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 35,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim — technique focus.",
+       "notes": "Drills and comfort. No intensity.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 35,
+         "sets": "Easy aerobic swim — technique focus.",
+         "notes": "Drills and comfort. No intensity."
+        },
+        "ella": {
+         "duration": 35,
+         "sets": "Easy aerobic swim — hold form through the set.",
+         "notes": "Lane leader. Steady and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-08-31",
+     "dayOfWeek": "tuesday",
+     "sessions": [
+      {
+       "id": "w44-tue-bike1",
+       "discipline": "bike",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 55,
+       "intensity": "Z2",
+       "sets": "Easy recovery spin.",
+       "notes": "Gentle. Legs loose, not tired.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 55,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        },
+        "ella": {
+         "duration": 55,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        }
+       }
+      },
+      {
+       "id": "w44-tue-str1",
+       "discipline": "strength",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 20,
+       "intensity": "RPE3",
+       "sets": "Mobility + bodyweight.",
+       "notes": "Reserved slot. No specific program.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        },
+        "ella": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-01",
+     "dayOfWeek": "wednesday",
+     "sessions": [
+      {
+       "id": "w44-wed-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 35,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim.",
+       "notes": "Short and relaxed.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 35,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        },
+        "ella": {
+         "duration": 35,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-02",
+     "dayOfWeek": "thursday",
+     "sessions": [
+      {
+       "id": "w44-thu-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 30,
+       "intensity": "Z1-Z2",
+       "sets": "Easy conversational run.",
+       "notes": "Aerobic base. No racing.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 30,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 4.6
+        },
+        "ella": {
+         "duration": 30,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 4.6
+        }
+       }
+      },
+      {
+       "id": "w44-thu-str1",
+       "discipline": "strength",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 20,
+       "intensity": "RPE3",
+       "sets": "Mobility + bodyweight.",
+       "notes": "Reserved slot. No specific program.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        },
+        "ella": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-03",
+     "dayOfWeek": "friday",
+     "sessions": [
+      {
+       "id": "w44-fri-rest",
+       "discipline": "rest",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 0,
+       "intensity": "RPE1",
+       "sets": "Rest",
+       "notes": "Rest day. Recover.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        },
+        "ella": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-04",
+     "dayOfWeek": "saturday",
+     "sessions": [
+      {
+       "id": "w44-sat-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 60,
+       "intensity": "Z1-Z2",
+       "sets": "Easy long run — own pace, finish feeling good.",
+       "notes": "Marathon long run. Own pace, fueling practice.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 60,
+         "sets": "Easy long run — own pace, finish feeling good.",
+         "notes": "Marathon long run. Own pace, fueling practice.",
+         "distanceKm": 9.2
+        },
+        "ella": {
+         "duration": 60,
+         "sets": "Easy long run — own pace, finish feeling good.",
+         "notes": "Marathon long run. Own pace, fueling practice.",
+         "distanceKm": 9.2
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-05",
+     "dayOfWeek": "sunday",
+     "sessions": [
+      {
+       "id": "w44-sun-bike1",
+       "discipline": "bike",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 45,
+       "intensity": "Z2",
+       "sets": "Easy endurance ride.",
+       "notes": "Steady aerobic, no hero efforts.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 45,
+         "sets": "Easy endurance ride.",
+         "notes": "Steady aerobic, no hero efforts."
+        },
+        "ella": {
+         "duration": 45,
+         "sets": "Easy endurance ride.",
+         "notes": "Steady aerobic, no hero efforts."
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "weekNumber": 45,
+   "startDate": "2027-09-06",
+   "endDate": "2027-09-12",
+   "phase": "marathon_build",
+   "phaseName": "Marathon build",
+   "recoveryWeek": false,
+   "focus": "Long run nudges up. Everything else stays easy.",
+   "targetHours": {
+    "eric": 5.5,
+    "ella": 5.5
+   },
+   "days": [
+    {
+     "date": "2027-09-06",
+     "dayOfWeek": "monday",
+     "sessions": [
+      {
+       "id": "w45-mon-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 35,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim — technique focus.",
+       "notes": "Drills and comfort. No intensity.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 35,
+         "sets": "Easy aerobic swim — technique focus.",
+         "notes": "Drills and comfort. No intensity."
+        },
+        "ella": {
+         "duration": 35,
+         "sets": "Easy aerobic swim — hold form through the set.",
+         "notes": "Lane leader. Steady and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-07",
+     "dayOfWeek": "tuesday",
+     "sessions": [
+      {
+       "id": "w45-tue-bike1",
+       "discipline": "bike",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 60,
+       "intensity": "Z2",
+       "sets": "Easy recovery spin.",
+       "notes": "Gentle. Legs loose, not tired.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 60,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        },
+        "ella": {
+         "duration": 60,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        }
+       }
+      },
+      {
+       "id": "w45-tue-str1",
+       "discipline": "strength",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 20,
+       "intensity": "RPE3",
+       "sets": "Mobility + bodyweight.",
+       "notes": "Reserved slot. No specific program.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        },
+        "ella": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-08",
+     "dayOfWeek": "wednesday",
+     "sessions": [
+      {
+       "id": "w45-wed-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 35,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim.",
+       "notes": "Short and relaxed.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 35,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        },
+        "ella": {
+         "duration": 35,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-09",
+     "dayOfWeek": "thursday",
+     "sessions": [
+      {
+       "id": "w45-thu-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 35,
+       "intensity": "Z1-Z2",
+       "sets": "Easy conversational run.",
+       "notes": "Aerobic base. No racing.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 35,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 5.4
+        },
+        "ella": {
+         "duration": 35,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 5.4
+        }
+       }
+      },
+      {
+       "id": "w45-thu-str1",
+       "discipline": "strength",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 20,
+       "intensity": "RPE3",
+       "sets": "Mobility + bodyweight.",
+       "notes": "Reserved slot. No specific program.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        },
+        "ella": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-10",
+     "dayOfWeek": "friday",
+     "sessions": [
+      {
+       "id": "w45-fri-rest",
+       "discipline": "rest",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 0,
+       "intensity": "RPE1",
+       "sets": "Rest",
+       "notes": "Rest day. Recover.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        },
+        "ella": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-11",
+     "dayOfWeek": "saturday",
+     "sessions": [
+      {
+       "id": "w45-sat-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 75,
+       "intensity": "Z1-Z2",
+       "sets": "Easy long run — own pace, finish feeling good.",
+       "notes": "Marathon long run. Own pace, fueling practice.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 75,
+         "sets": "Easy long run — own pace, finish feeling good.",
+         "notes": "Marathon long run. Own pace, fueling practice.",
+         "distanceKm": 11.5
+        },
+        "ella": {
+         "duration": 75,
+         "sets": "Easy long run — own pace, finish feeling good.",
+         "notes": "Marathon long run. Own pace, fueling practice.",
+         "distanceKm": 11.5
+        }
+       },
+       "fueling": "Practice 60 g carbs/hr"
+      }
+     ]
+    },
+    {
+     "date": "2027-09-12",
+     "dayOfWeek": "sunday",
+     "sessions": [
+      {
+       "id": "w45-sun-bike1",
+       "discipline": "bike",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 50,
+       "intensity": "Z2",
+       "sets": "Easy endurance ride.",
+       "notes": "Steady aerobic, no hero efforts.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 50,
+         "sets": "Easy endurance ride.",
+         "notes": "Steady aerobic, no hero efforts."
+        },
+        "ella": {
+         "duration": 50,
+         "sets": "Easy endurance ride.",
+         "notes": "Steady aerobic, no hero efforts."
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "weekNumber": 46,
+   "startDate": "2027-09-13",
+   "endDate": "2027-09-19",
+   "phase": "marathon_build",
+   "phaseName": "Marathon build",
+   "recoveryWeek": false,
+   "focus": "Longest long run of the block. Still all easy.",
+   "targetHours": {
+    "eric": 6.0,
+    "ella": 6.0
+   },
+   "days": [
+    {
+     "date": "2027-09-13",
+     "dayOfWeek": "monday",
+     "sessions": [
+      {
+       "id": "w46-mon-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 40,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim — technique focus.",
+       "notes": "Drills and comfort. No intensity.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 40,
+         "sets": "Easy aerobic swim — technique focus.",
+         "notes": "Drills and comfort. No intensity."
+        },
+        "ella": {
+         "duration": 40,
+         "sets": "Easy aerobic swim — hold form through the set.",
+         "notes": "Lane leader. Steady and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-14",
+     "dayOfWeek": "tuesday",
+     "sessions": [
+      {
+       "id": "w46-tue-bike1",
+       "discipline": "bike",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 60,
+       "intensity": "Z2",
+       "sets": "Easy recovery spin.",
+       "notes": "Gentle. Legs loose, not tired.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 60,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        },
+        "ella": {
+         "duration": 60,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        }
+       }
+      },
+      {
+       "id": "w46-tue-str1",
+       "discipline": "strength",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 20,
+       "intensity": "RPE3",
+       "sets": "Mobility + bodyweight.",
+       "notes": "Reserved slot. No specific program.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        },
+        "ella": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-15",
+     "dayOfWeek": "wednesday",
+     "sessions": [
+      {
+       "id": "w46-wed-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 40,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim.",
+       "notes": "Short and relaxed.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 40,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        },
+        "ella": {
+         "duration": 40,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-16",
+     "dayOfWeek": "thursday",
+     "sessions": [
+      {
+       "id": "w46-thu-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 40,
+       "intensity": "Z1-Z2",
+       "sets": "Easy conversational run.",
+       "notes": "Aerobic base. No racing.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 40,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 6.2
+        },
+        "ella": {
+         "duration": 40,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 6.2
+        }
+       }
+      },
+      {
+       "id": "w46-thu-str1",
+       "discipline": "strength",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 20,
+       "intensity": "RPE3",
+       "sets": "Mobility + bodyweight.",
+       "notes": "Reserved slot. No specific program.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        },
+        "ella": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-17",
+     "dayOfWeek": "friday",
+     "sessions": [
+      {
+       "id": "w46-fri-rest",
+       "discipline": "rest",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 0,
+       "intensity": "RPE1",
+       "sets": "Rest",
+       "notes": "Rest day. Recover.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        },
+        "ella": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-18",
+     "dayOfWeek": "saturday",
+     "sessions": [
+      {
+       "id": "w46-sat-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 90,
+       "intensity": "Z1-Z2",
+       "sets": "Easy long run — own pace, finish feeling good.",
+       "notes": "Marathon long run. Own pace, fueling practice.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 90,
+         "sets": "Easy long run — own pace, finish feeling good.",
+         "notes": "Marathon long run. Own pace, fueling practice.",
+         "distanceKm": 13.8
+        },
+        "ella": {
+         "duration": 90,
+         "sets": "Easy long run — own pace, finish feeling good.",
+         "notes": "Marathon long run. Own pace, fueling practice.",
+         "distanceKm": 13.8
+        }
+       },
+       "fueling": "Practice 60 g carbs/hr"
+      }
+     ]
+    },
+    {
+     "date": "2027-09-19",
+     "dayOfWeek": "sunday",
+     "sessions": [
+      {
+       "id": "w46-sun-bike1",
+       "discipline": "bike",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 50,
+       "intensity": "Z2",
+       "sets": "Easy endurance ride.",
+       "notes": "Steady aerobic, no hero efforts.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 50,
+         "sets": "Easy endurance ride.",
+         "notes": "Steady aerobic, no hero efforts."
+        },
+        "ella": {
+         "duration": 50,
+         "sets": "Easy endurance ride.",
+         "notes": "Steady aerobic, no hero efforts."
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "weekNumber": 47,
+   "startDate": "2027-09-20",
+   "endDate": "2027-09-26",
+   "phase": "marathon_build",
+   "phaseName": "Marathon build",
+   "recoveryWeek": false,
+   "focus": "Peak long run. Trust the work, don't test it.",
+   "targetHours": {
+    "eric": 6.5,
+    "ella": 6.5
+   },
+   "days": [
+    {
+     "date": "2027-09-20",
+     "dayOfWeek": "monday",
+     "sessions": [
+      {
+       "id": "w47-mon-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 40,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim — technique focus.",
+       "notes": "Drills and comfort. No intensity.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 40,
+         "sets": "Easy aerobic swim — technique focus.",
+         "notes": "Drills and comfort. No intensity."
+        },
+        "ella": {
+         "duration": 40,
+         "sets": "Easy aerobic swim — hold form through the set.",
+         "notes": "Lane leader. Steady and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-21",
+     "dayOfWeek": "tuesday",
+     "sessions": [
+      {
+       "id": "w47-tue-bike1",
+       "discipline": "bike",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 65,
+       "intensity": "Z2",
+       "sets": "Easy recovery spin.",
+       "notes": "Gentle. Legs loose, not tired.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 65,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        },
+        "ella": {
+         "duration": 65,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        }
+       }
+      },
+      {
+       "id": "w47-tue-str1",
+       "discipline": "strength",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 20,
+       "intensity": "RPE3",
+       "sets": "Mobility + bodyweight.",
+       "notes": "Reserved slot. No specific program.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        },
+        "ella": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-22",
+     "dayOfWeek": "wednesday",
+     "sessions": [
+      {
+       "id": "w47-wed-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 40,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim.",
+       "notes": "Short and relaxed.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 40,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        },
+        "ella": {
+         "duration": 40,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-23",
+     "dayOfWeek": "thursday",
+     "sessions": [
+      {
+       "id": "w47-thu-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 45,
+       "intensity": "Z1-Z2",
+       "sets": "Easy conversational run.",
+       "notes": "Aerobic base. No racing.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 45,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 6.9
+        },
+        "ella": {
+         "duration": 45,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 6.9
+        }
+       }
+      },
+      {
+       "id": "w47-thu-str1",
+       "discipline": "strength",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 20,
+       "intensity": "RPE3",
+       "sets": "Mobility + bodyweight.",
+       "notes": "Reserved slot. No specific program.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        },
+        "ella": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-24",
+     "dayOfWeek": "friday",
+     "sessions": [
+      {
+       "id": "w47-fri-rest",
+       "discipline": "rest",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 0,
+       "intensity": "RPE1",
+       "sets": "Rest",
+       "notes": "Rest day. Recover.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        },
+        "ella": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-25",
+     "dayOfWeek": "saturday",
+     "sessions": [
+      {
+       "id": "w47-sat-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 105,
+       "intensity": "Z1-Z2",
+       "sets": "Easy long run — own pace, finish feeling good.",
+       "notes": "Marathon long run. Own pace, fueling practice.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 105,
+         "sets": "Easy long run — own pace, finish feeling good.",
+         "notes": "Marathon long run. Own pace, fueling practice.",
+         "distanceKm": 16.2
+        },
+        "ella": {
+         "duration": 105,
+         "sets": "Easy long run — own pace, finish feeling good.",
+         "notes": "Marathon long run. Own pace, fueling practice.",
+         "distanceKm": 16.2
+        }
+       },
+       "fueling": "Practice 60 g carbs/hr"
+      }
+     ]
+    },
+    {
+     "date": "2027-09-26",
+     "dayOfWeek": "sunday",
+     "sessions": [
+      {
+       "id": "w47-sun-bike1",
+       "discipline": "bike",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 55,
+       "intensity": "Z2",
+       "sets": "Easy endurance ride.",
+       "notes": "Steady aerobic, no hero efforts.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 55,
+         "sets": "Easy endurance ride.",
+         "notes": "Steady aerobic, no hero efforts."
+        },
+        "ella": {
+         "duration": 55,
+         "sets": "Easy endurance ride.",
+         "notes": "Steady aerobic, no hero efforts."
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "weekNumber": 48,
+   "startDate": "2027-09-27",
+   "endDate": "2027-10-03",
+   "phase": "marathon_build",
+   "phaseName": "Marathon build",
+   "recoveryWeek": false,
+   "focus": "Longest long run (~2 hrs). Start trimming midweek volume.",
+   "targetHours": {
+    "eric": 5.5,
+    "ella": 5.5
+   },
+   "days": [
+    {
+     "date": "2027-09-27",
+     "dayOfWeek": "monday",
+     "sessions": [
+      {
+       "id": "w48-mon-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 30,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim — technique focus.",
+       "notes": "Drills and comfort. No intensity.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 30,
+         "sets": "Easy aerobic swim — technique focus.",
+         "notes": "Drills and comfort. No intensity."
+        },
+        "ella": {
+         "duration": 30,
+         "sets": "Easy aerobic swim — hold form through the set.",
+         "notes": "Lane leader. Steady and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-28",
+     "dayOfWeek": "tuesday",
+     "sessions": [
+      {
+       "id": "w48-tue-bike1",
+       "discipline": "bike",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 35,
+       "intensity": "Z2",
+       "sets": "Easy recovery spin.",
+       "notes": "Gentle. Legs loose, not tired.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 35,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        },
+        "ella": {
+         "duration": 35,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        }
+       }
+      },
+      {
+       "id": "w48-tue-str1",
+       "discipline": "strength",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 20,
+       "intensity": "RPE3",
+       "sets": "Mobility + bodyweight.",
+       "notes": "Reserved slot. No specific program.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        },
+        "ella": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-29",
+     "dayOfWeek": "wednesday",
+     "sessions": [
+      {
+       "id": "w48-wed-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 30,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim.",
+       "notes": "Short and relaxed.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 30,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        },
+        "ella": {
+         "duration": 30,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-09-30",
+     "dayOfWeek": "thursday",
+     "sessions": [
+      {
+       "id": "w48-thu-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 35,
+       "intensity": "Z1-Z2",
+       "sets": "Easy conversational run.",
+       "notes": "Aerobic base. No racing.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 35,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 5.4
+        },
+        "ella": {
+         "duration": 35,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 5.4
+        }
+       }
+      },
+      {
+       "id": "w48-thu-str1",
+       "discipline": "strength",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 20,
+       "intensity": "RPE3",
+       "sets": "Mobility + bodyweight.",
+       "notes": "Reserved slot. No specific program.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        },
+        "ella": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-01",
+     "dayOfWeek": "friday",
+     "sessions": [
+      {
+       "id": "w48-fri-rest",
+       "discipline": "rest",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 0,
+       "intensity": "RPE1",
+       "sets": "Rest",
+       "notes": "Rest day. Recover.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        },
+        "ella": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-02",
+     "dayOfWeek": "saturday",
+     "sessions": [
+      {
+       "id": "w48-sat-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 120,
+       "intensity": "Z1-Z2",
+       "sets": "Easy long run — own pace, finish feeling good.",
+       "notes": "Marathon long run. Own pace, fueling practice.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 120,
+         "sets": "Easy long run — own pace, finish feeling good.",
+         "notes": "Marathon long run. Own pace, fueling practice.",
+         "distanceKm": 18.5
+        },
+        "ella": {
+         "duration": 120,
+         "sets": "Easy long run — own pace, finish feeling good.",
+         "notes": "Marathon long run. Own pace, fueling practice.",
+         "distanceKm": 18.5
+        }
+       },
+       "fueling": "Practice 60 g carbs/hr"
+      }
+     ]
+    },
+    {
+     "date": "2027-10-03",
+     "dayOfWeek": "sunday",
+     "sessions": [
+      {
+       "id": "w48-sun-bike1",
+       "discipline": "bike",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 40,
+       "intensity": "Z2",
+       "sets": "Easy endurance ride.",
+       "notes": "Steady aerobic, no hero efforts.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 40,
+         "sets": "Easy endurance ride.",
+         "notes": "Steady aerobic, no hero efforts."
+        },
+        "ella": {
+         "duration": 40,
+         "sets": "Easy endurance ride.",
+         "notes": "Steady aerobic, no hero efforts."
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "weekNumber": 49,
+   "startDate": "2027-10-04",
+   "endDate": "2027-10-10",
+   "phase": "marathon_taper",
+   "phaseName": "Marathon taper",
+   "recoveryWeek": false,
+   "focus": "Cut volume by a third. Keep a little sharpness.",
+   "targetHours": {
+    "eric": 4.5,
+    "ella": 4.5
+   },
+   "days": [
+    {
+     "date": "2027-10-04",
+     "dayOfWeek": "monday",
+     "sessions": [
+      {
+       "id": "w49-mon-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 30,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim — technique focus.",
+       "notes": "Drills and comfort. No intensity.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 30,
+         "sets": "Easy aerobic swim — technique focus.",
+         "notes": "Drills and comfort. No intensity."
+        },
+        "ella": {
+         "duration": 30,
+         "sets": "Easy aerobic swim — hold form through the set.",
+         "notes": "Lane leader. Steady and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-05",
+     "dayOfWeek": "tuesday",
+     "sessions": [
+      {
+       "id": "w49-tue-bike1",
+       "discipline": "bike",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 35,
+       "intensity": "Z2",
+       "sets": "Easy recovery spin.",
+       "notes": "Gentle. Legs loose, not tired.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 35,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        },
+        "ella": {
+         "duration": 35,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        }
+       }
+      },
+      {
+       "id": "w49-tue-str1",
+       "discipline": "strength",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 20,
+       "intensity": "RPE3",
+       "sets": "Mobility + bodyweight.",
+       "notes": "Reserved slot. No specific program.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        },
+        "ella": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-06",
+     "dayOfWeek": "wednesday",
+     "sessions": [
+      {
+       "id": "w49-wed-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 30,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim.",
+       "notes": "Short and relaxed.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 30,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        },
+        "ella": {
+         "duration": 30,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-07",
+     "dayOfWeek": "thursday",
+     "sessions": [
+      {
+       "id": "w49-thu-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 25,
+       "intensity": "Z1-Z2",
+       "sets": "Easy conversational run.",
+       "notes": "Aerobic base. No racing.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 25,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 3.8
+        },
+        "ella": {
+         "duration": 25,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 3.8
+        }
+       }
+      },
+      {
+       "id": "w49-thu-str1",
+       "discipline": "strength",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 20,
+       "intensity": "RPE3",
+       "sets": "Mobility + bodyweight.",
+       "notes": "Reserved slot. No specific program.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        },
+        "ella": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-08",
+     "dayOfWeek": "friday",
+     "sessions": [
+      {
+       "id": "w49-fri-rest",
+       "discipline": "rest",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 0,
+       "intensity": "RPE1",
+       "sets": "Rest",
+       "notes": "Rest day. Recover.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        },
+        "ella": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-09",
+     "dayOfWeek": "saturday",
+     "sessions": [
+      {
+       "id": "w49-sat-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 75,
+       "intensity": "Z1-Z2",
+       "sets": "Easy long run — own pace, finish feeling good.",
+       "notes": "Marathon long run. Own pace, fueling practice.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 75,
+         "sets": "Easy long run — own pace, finish feeling good.",
+         "notes": "Marathon long run. Own pace, fueling practice.",
+         "distanceKm": 11.5
+        },
+        "ella": {
+         "duration": 75,
+         "sets": "Easy long run — own pace, finish feeling good.",
+         "notes": "Marathon long run. Own pace, fueling practice.",
+         "distanceKm": 11.5
+        }
+       },
+       "fueling": "Practice 60 g carbs/hr"
+      }
+     ]
+    },
+    {
+     "date": "2027-10-10",
+     "dayOfWeek": "sunday",
+     "sessions": [
+      {
+       "id": "w49-sun-bike1",
+       "discipline": "bike",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 35,
+       "intensity": "Z2",
+       "sets": "Easy endurance ride.",
+       "notes": "Steady aerobic, no hero efforts.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 35,
+         "sets": "Easy endurance ride.",
+         "notes": "Steady aerobic, no hero efforts."
+        },
+        "ella": {
+         "duration": 35,
+         "sets": "Easy endurance ride.",
+         "notes": "Steady aerobic, no hero efforts."
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "weekNumber": 50,
+   "startDate": "2027-10-11",
+   "endDate": "2027-10-17",
+   "phase": "marathon_taper",
+   "phaseName": "Marathon taper",
+   "recoveryWeek": false,
+   "focus": "Cut volume again. Arrive fresh, not fatigued.",
+   "targetHours": {
+    "eric": 3.5,
+    "ella": 3.5
+   },
+   "days": [
+    {
+     "date": "2027-10-11",
+     "dayOfWeek": "monday",
+     "sessions": [
+      {
+       "id": "w50-mon-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 25,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim — technique focus.",
+       "notes": "Drills and comfort. No intensity.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 25,
+         "sets": "Easy aerobic swim — technique focus.",
+         "notes": "Drills and comfort. No intensity."
+        },
+        "ella": {
+         "duration": 25,
+         "sets": "Easy aerobic swim — hold form through the set.",
+         "notes": "Lane leader. Steady and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-12",
+     "dayOfWeek": "tuesday",
+     "sessions": [
+      {
+       "id": "w50-tue-bike1",
+       "discipline": "bike",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 35,
+       "intensity": "Z2",
+       "sets": "Easy recovery spin.",
+       "notes": "Gentle. Legs loose, not tired.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 35,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        },
+        "ella": {
+         "duration": 35,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        }
+       }
+      },
+      {
+       "id": "w50-tue-str1",
+       "discipline": "strength",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 20,
+       "intensity": "RPE3",
+       "sets": "Mobility + bodyweight.",
+       "notes": "Reserved slot. No specific program.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        },
+        "ella": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-13",
+     "dayOfWeek": "wednesday",
+     "sessions": [
+      {
+       "id": "w50-wed-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 25,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim.",
+       "notes": "Short and relaxed.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 25,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        },
+        "ella": {
+         "duration": 25,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-14",
+     "dayOfWeek": "thursday",
+     "sessions": [
+      {
+       "id": "w50-thu-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 25,
+       "intensity": "Z1-Z2",
+       "sets": "Easy conversational run.",
+       "notes": "Aerobic base. No racing.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 25,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 3.8
+        },
+        "ella": {
+         "duration": 25,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 3.8
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-15",
+     "dayOfWeek": "friday",
+     "sessions": [
+      {
+       "id": "w50-fri-rest",
+       "discipline": "rest",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 0,
+       "intensity": "RPE1",
+       "sets": "Rest",
+       "notes": "Rest day. Recover.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        },
+        "ella": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-16",
+     "dayOfWeek": "saturday",
+     "sessions": [
+      {
+       "id": "w50-sat-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 50,
+       "intensity": "Z1-Z2",
+       "sets": "Easy long run — own pace, finish feeling good.",
+       "notes": "Marathon long run. Own pace, fueling practice.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 50,
+         "sets": "Easy long run — own pace, finish feeling good.",
+         "notes": "Marathon long run. Own pace, fueling practice.",
+         "distanceKm": 7.7
+        },
+        "ella": {
+         "duration": 50,
+         "sets": "Easy long run — own pace, finish feeling good.",
+         "notes": "Marathon long run. Own pace, fueling practice.",
+         "distanceKm": 7.7
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-17",
+     "dayOfWeek": "sunday",
+     "sessions": [
+      {
+       "id": "w50-sun-bike1",
+       "discipline": "bike",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 30,
+       "intensity": "Z2",
+       "sets": "Easy endurance ride.",
+       "notes": "Steady aerobic, no hero efforts.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 30,
+         "sets": "Easy endurance ride.",
+         "notes": "Steady aerobic, no hero efforts."
+        },
+        "ella": {
+         "duration": 30,
+         "sets": "Easy endurance ride.",
+         "notes": "Steady aerobic, no hero efforts."
+        }
+       }
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "weekNumber": 51,
+   "startDate": "2027-10-18",
+   "endDate": "2027-10-24",
+   "phase": "race_week",
+   "phaseName": "Race week",
+   "recoveryWeek": false,
+   "focus": "Short, easy, confident. Nothing to gain this week.",
+   "targetHours": {
+    "eric": 2.5,
+    "ella": 2.5
+   },
+   "days": [
+    {
+     "date": "2027-10-18",
+     "dayOfWeek": "monday",
+     "sessions": [
+      {
+       "id": "w51-mon-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 25,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim — technique focus.",
+       "notes": "Drills and comfort. No intensity.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 25,
+         "sets": "Easy aerobic swim — technique focus.",
+         "notes": "Drills and comfort. No intensity."
+        },
+        "ella": {
+         "duration": 25,
+         "sets": "Easy aerobic swim — hold form through the set.",
+         "notes": "Lane leader. Steady and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-19",
+     "dayOfWeek": "tuesday",
+     "sessions": [
+      {
+       "id": "w51-tue-bike1",
+       "discipline": "bike",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 30,
+       "intensity": "Z2",
+       "sets": "Easy recovery spin.",
+       "notes": "Gentle. Legs loose, not tired.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 30,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        },
+        "ella": {
+         "duration": 30,
+         "sets": "Easy recovery spin.",
+         "notes": "Gentle. Legs loose, not tired."
+        }
+       }
+      },
+      {
+       "id": "w51-tue-str1",
+       "discipline": "strength",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 20,
+       "intensity": "RPE3",
+       "sets": "Mobility + bodyweight.",
+       "notes": "Reserved slot. No specific program.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        },
+        "ella": {
+         "duration": 20,
+         "sets": "Mobility + bodyweight.",
+         "notes": "Reserved slot. No specific program."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-20",
+     "dayOfWeek": "wednesday",
+     "sessions": [
+      {
+       "id": "w51-wed-swim1",
+       "discipline": "swim",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 25,
+       "intensity": "Z1",
+       "sets": "Easy aerobic swim.",
+       "notes": "Short and relaxed.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 25,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        },
+        "ella": {
+         "duration": 25,
+         "sets": "Easy aerobic swim.",
+         "notes": "Short and relaxed."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-21",
+     "dayOfWeek": "thursday",
+     "sessions": [
+      {
+       "id": "w51-thu-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 20,
+       "intensity": "Z1-Z2",
+       "sets": "Easy conversational run.",
+       "notes": "Aerobic base. No racing.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 20,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 3.1
+        },
+        "ella": {
+         "duration": 20,
+         "sets": "Easy conversational run.",
+         "notes": "Aerobic base. No racing.",
+         "distanceKm": 3.1
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-22",
+     "dayOfWeek": "friday",
+     "sessions": [
+      {
+       "id": "w51-fri-rest",
+       "discipline": "rest",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 0,
+       "intensity": "RPE1",
+       "sets": "Rest",
+       "notes": "Rest day. Recover.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        },
+        "ella": {
+         "duration": 0,
+         "sets": "Rest",
+         "notes": "Rest day. Recover."
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-23",
+     "dayOfWeek": "saturday",
+     "sessions": [
+      {
+       "id": "w51-sat-run1",
+       "discipline": "run",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 30,
+       "intensity": "Z1",
+       "sets": "Easy shakeout — legs loose, nothing hard.",
+       "notes": "20 min easy + 5 x 20s relaxed strides.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 30,
+         "sets": "Easy shakeout — legs loose, nothing hard.",
+         "notes": "20 min easy + 5 x 20s relaxed strides.",
+         "distanceKm": 5
+        },
+        "ella": {
+         "duration": 30,
+         "sets": "Easy shakeout — legs loose, nothing hard.",
+         "notes": "20 min easy + 5 x 20s relaxed strides.",
+         "distanceKm": 5
+        }
+       }
+      }
+     ]
+    },
+    {
+     "date": "2027-10-24",
+     "dayOfWeek": "sunday",
+     "sessions": [
+      {
+       "id": "w51-sun-race",
+       "discipline": "race",
+       "athletes": [
+        "eric",
+        "ella"
+       ],
+       "duration": 270,
+       "intensity": "RPE6-7",
+       "sets": "California International Marathon.",
+       "notes": "Even effort. Fuel early. Walk aid stations if needed.",
+       "together": true,
+       "variants": {
+        "eric": {
+         "duration": 240,
+         "sets": "California International Marathon.",
+         "notes": "Even effort. Fuel early. Walk aid stations if needed.",
+         "race": true
+        },
+        "ella": {
+         "duration": 270,
+         "sets": "California International Marathon.",
+         "notes": "Even effort. Fuel early. Walk aid stations if needed.",
+         "race": true
+        }
+       },
+       "race": true
+      }
+     ]
+    }
+   ]
   }
- ]
+ ],
+ "endDate": "2027-10-24"
 }
