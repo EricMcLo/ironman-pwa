@@ -176,15 +176,22 @@ SWIM_ERIC = {
     "base": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
     "build": "10x50 drill/swim (mix) + 300 easy + 4x50 build + 100 cool-down",
     "peak": "12x50 drill/swim (mix) + 300 easy + 6x50 strong + 100 cool-down",
+    "taper": "6x50 build + 200 easy + 100 cool-down",
 }
 SWIM_ELLA = {
     "base": "4x100 aerobic w/ paddles + 200 easy + 4x50 drill + 100 cool-down",
     "build": "6x100 aerobic + 4x50 drill + 300 easy + 100 cool-down",
     "peak": "8x100 aerobic + 6x200 threshold (30s rest) + 200 easy",
+    "taper": "4x100 aerobic + 4x50 build + 200 easy",
 }
 
 SPEC = [("swim1", 30, 60, 0.30), ("swim2", 30, 60, 0.30),
         ("bike", 40, 110, 0.25), ("run", 30, 70, 0.15)]
+
+# Ella is run-led through the marathon block, so her midweek bike is capped
+# and the freed minutes go to running.
+SPEC_MARATHON_ELLA = [("swim1", 30, 60, 0.30), ("swim2", 30, 60, 0.30),
+                      ("bike", 40, 90, 0.15), ("run", 30, 120, 0.25)]
 
 
 def session(sid, discipline, athletes, dur_e, dur_l, intensity, sets_e, sets_l,
@@ -293,15 +300,12 @@ def build_week(week):
     budget_l = max(120, hours_l * 60 - strength - lr_l - lb_l - brick_min)
 
     a_e = allocate(budget_e, SPEC)
-    a_l = allocate(budget_l, SPEC)
+    a_l = allocate(budget_l, SPEC_MARATHON_ELLA if marathon_block else SPEC)
 
     swim_e1, swim_e2 = r5(a_e["swim1"]), r5(a_e["swim2"])
     swim_l1, swim_l2 = r5(a_l["swim1"]), r5(a_l["swim2"])
     bike_e, bike_l = r5(a_e["bike"]), r5(a_l["bike"])
     run_e, run_l = r5(a_e["run"]), r5(a_l["run"])
-
-    if marathon_block and not recovery:
-        run_l = r5(run_l * 1.25)
 
     days = []
     for i, dow in enumerate(DOW):
@@ -356,7 +360,10 @@ def build_week(week):
 
         # ---------------- Monday / Wednesday swim ----------------
         elif dow in ("monday", "wednesday"):
-            bucket = "base" if week <= 26 else ("peak" if week >= 37 else "build")
+            bucket = ("base" if week <= 26
+                      else "taper" if week >= 40
+                      else "peak" if week >= 37
+                      else "build")
             de = swim_e1 if dow == "monday" else swim_e2
             dl = swim_l1 if dow == "monday" else swim_l2
             sessions.append(session(
@@ -399,6 +406,9 @@ def build_week(week):
                                   "Holding run volume while swim and bike build.")
                 sets_l, note_l = ("Steady aerobic run, relaxed",
                                   "Marathon block: aerobic volume, not speed.")
+            elif week >= 40:
+                sets_e = sets_l = "Short easy run + 4x20s relaxed strides"
+                note_e = note_l = "Keep the legs awake. Nothing hard."
             elif quality:
                 q = ("3x8 min at Z3 (RPE 6-7), 2 min easy jog between"
                      if week % 2 == 0 else "20 min continuous Z3 (RPE 6-7)")
@@ -453,10 +463,11 @@ def build_week(week):
     def planned(athlete):
         return planned_minutes({"days": days}, athlete)
 
-    def nudge(athlete, target):
-        order = [("tue-bike1", 35, 130), ("thu-run1", 25, 90),
-                 ("mon-swim1", 25, 70), ("wed-swim1", 25, 70),
-                 ("sun-bike1", 45, 220), ("sat-run1", 40, 180)]
+    def nudge(athlete, target, order=None):
+        if order is None:
+            order = [("tue-bike1", 35, 130), ("thu-run1", 25, 90),
+                     ("mon-swim1", 25, 70), ("wed-swim1", 25, 70),
+                     ("sun-bike1", 45, 220), ("sat-run1", 40, 180)]
         for _ in range(400):
             diff = target - planned(athlete)
             if abs(diff) < 2.5:
@@ -490,10 +501,19 @@ def build_week(week):
                 return
 
     nudge("eric", hours_e * 60)
-    nudge("ella", hours_l * 60)
+
+    # Ella is run-led through the marathon block: give her spare minutes to
+    # running before topping up the bike.
+    if marathon_block:
+        ella_order = [("thu-run1", 25, 120), ("tue-bike1", 35, 90),
+                      ("mon-swim1", 25, 70), ("wed-swim1", 25, 70),
+                      ("sun-bike1", 45, 200), ("sat-run1", 40, 180)]
+    else:
+        ella_order = None
+    nudge("ella", hours_l * 60, ella_order)
 
     focus = PHASE_META[phase][1]
-    if week >= 37:
+    if 37 <= week <= 41:
         focus += (" Heat adaptation: do the long sessions in the warm part of the "
                   "day when you can, and drink to a schedule.")
 

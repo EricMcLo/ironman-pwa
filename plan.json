@@ -2289,7 +2289,7 @@
         "eric",
         "ella"
        ],
-       "duration": 50,
+       "duration": 55,
        "intensity": "Z2",
        "sets": "Steady aerobic spin",
        "notes": "Aerobic base.",
@@ -2301,7 +2301,7 @@
          "notes": "Aerobic base."
         },
         "ella": {
-         "duration": 50,
+         "duration": 55,
          "sets": "Steady aerobic spin",
          "notes": "Aerobic base."
         }
@@ -2376,7 +2376,7 @@
         "eric",
         "ella"
        ],
-       "duration": 55,
+       "duration": 50,
        "intensity": "Z2",
        "sets": "Easy run, conservation mode",
        "notes": "Holding run volume while swim and bike build.",
@@ -2389,10 +2389,10 @@
          "distanceKm": 4.6
         },
         "ella": {
-         "duration": 55,
+         "duration": 50,
          "sets": "Steady aerobic run, relaxed",
          "notes": "Marathon block: aerobic volume, not speed.",
-         "distanceKm": 8.5
+         "distanceKm": 7.7
         }
        },
        "distanceKm": 4.6
@@ -2868,7 +2868,7 @@
         "eric",
         "ella"
        ],
-       "duration": 45,
+       "duration": 55,
        "intensity": "Z2",
        "sets": "Easy recovery spin",
        "notes": "Recovery week -- gentle.",
@@ -2880,7 +2880,7 @@
          "notes": "Recovery week -- gentle."
         },
         "ella": {
-         "duration": 45,
+         "duration": 55,
          "sets": "Easy recovery spin",
          "notes": "Recovery week -- gentle."
         }
@@ -2955,7 +2955,7 @@
         "eric",
         "ella"
        ],
-       "duration": 45,
+       "duration": 35,
        "intensity": "Z2",
        "sets": "Easy recovery run",
        "notes": "Recovery week -- truly easy.",
@@ -2968,10 +2968,10 @@
          "distanceKm": 3.8
         },
         "ella": {
-         "duration": 45,
+         "duration": 35,
          "sets": "Easy recovery run",
          "notes": "Recovery week -- truly easy.",
-         "distanceKm": 6.9
+         "distanceKm": 5.4
         }
        },
        "distanceKm": 3.8
@@ -3446,7 +3446,7 @@
         "eric",
         "ella"
        ],
-       "duration": 75,
+       "duration": 70,
        "intensity": "Z2",
        "sets": "Steady aerobic spin",
        "notes": "Aerobic base.",
@@ -3458,7 +3458,7 @@
          "notes": "Aerobic base."
         },
         "ella": {
-         "duration": 75,
+         "duration": 70,
          "sets": "Steady aerobic spin",
          "notes": "Aerobic base."
         }
@@ -3533,7 +3533,7 @@
         "eric",
         "ella"
        ],
-       "duration": 75,
+       "duration": 80,
        "intensity": "Z2",
        "sets": "Easy run, conservation mode",
        "notes": "Holding run volume while swim and bike build.",
@@ -3546,10 +3546,10 @@
          "distanceKm": 5.4
         },
         "ella": {
-         "duration": 75,
+         "duration": 80,
          "sets": "Steady aerobic run, relaxed",
          "notes": "Marathon block: aerobic volume, not speed.",
-         "distanceKm": 11.5
+         "distanceKm": 12.3
         }
        },
        "distanceKm": 5.4
@@ -3736,7 +3736,7 @@
         "eric",
         "ella"
        ],
-       "duration": 85,
+       "duration": 75,
        "intensity": "Z2",
        "sets": "Steady aerobic spin",
        "notes": "Aerobic base.",
@@ -3748,7 +3748,7 @@
          "notes": "Aerobic base."
         },
         "ella": {
-         "duration": 85,
+         "duration": 75,
          "sets": "Steady aerobic spin",
          "notes": "Aerobic base."
         }
@@ -3823,7 +3823,7 @@
         "eric",
         "ella"
        ],
-       "duration": 80,
+       "duration": 90,
        "intensity": "Z2",
        "sets": "Easy run, conservation mode",
        "notes": "Holding run volume while swim and bike build.",
@@ -3836,10 +3836,10 @@
          "distanceKm": 6.2
         },
         "ella": {
-         "duration": 80,
+         "duration": 90,
          "sets": "Steady aerobic run, relaxed",
          "notes": "Marathon block: aerobic volume, not speed.",
-         "distanceKm": 12.3
+         "distanceKm": 13.8
         }
        },
        "distanceKm": 6.2
@@ -4026,7 +4026,7 @@
         "eric",
         "ella"
        ],
-       "duration": 55,
+       "duration": 60,
        "intensity": "Z2",
        "sets": "Easy recovery spin",
        "notes": "Recovery week -- gentle.",
@@ -4038,7 +4038,7 @@
          "notes": "Recovery week -- gentle."
         },
         "ella": {
-         "duration": 55,
+         "duration": 60,
          "sets": "Easy recovery spin",
          "notes": "Recovery week -- gentle."
         }
@@ -4113,7 +4113,7 @@
         "eric",
         "ella"
        ],
-       "duration": 50,
+       "duration": 45,
        "intensity": "Z2",
        "sets": "Easy recovery run",
        "notes": "Recovery week -- truly easy.",
@@ -4126,10 +4126,10 @@
          "distanceKm": 5.4
         },
         "ella": {
-         "duration": 50,
+         "duration": 45,
          "sets": "Easy recovery run",
          "notes": "Recovery week -- truly easy.",
-         "distanceKm": 7.7
+         "distanceKm": 6.9
         }
        },
        "distanceKm": 5.4
@@ -4315,7 +4315,7 @@
         "eric",
         "ella"
        ],
-       "duration": 75,
+       "duration": 70,
        "intensity": "Z2",
        "sets": "Steady aerobic spin",
        "notes": "Aerobic base.",
@@ -4327,7 +4327,7 @@
          "notes": "Aerobic base."
         },
         "ella": {
-         "duration": 75,
+         "duration": 70,
          "sets": "Steady aerobic spin",
          "notes": "Aerobic base."
         }
@@ -4402,7 +4402,7 @@
         "eric",
         "ella"
        ],
-       "duration": 75,
+       "duration": 80,
        "intensity": "Z2",
        "sets": "Easy run, conservation mode",
        "notes": "Holding run volume while swim and bike build.",
@@ -4415,10 +4415,10 @@
          "distanceKm": 6.2
         },
         "ella": {
-         "duration": 75,
+         "duration": 80,
          "sets": "Steady aerobic run, relaxed",
          "notes": "Marathon block: aerobic volume, not speed.",
-         "distanceKm": 11.5
+         "distanceKm": 12.3
         }
        },
        "distanceKm": 6.2
@@ -4605,7 +4605,7 @@
         "eric",
         "ella"
        ],
-       "duration": 85,
+       "duration": 75,
        "intensity": "Z2",
        "sets": "Steady aerobic spin",
        "notes": "Aerobic base.",
@@ -4617,7 +4617,7 @@
          "notes": "Aerobic base."
         },
         "ella": {
-         "duration": 85,
+         "duration": 75,
          "sets": "Steady aerobic spin",
          "notes": "Aerobic base."
         }
@@ -4692,7 +4692,7 @@
         "eric",
         "ella"
        ],
-       "duration": 80,
+       "duration": 90,
        "intensity": "Z2",
        "sets": "Easy run, conservation mode",
        "notes": "Holding run volume while swim and bike build.",
@@ -4705,10 +4705,10 @@
          "distanceKm": 6.2
         },
         "ella": {
-         "duration": 80,
+         "duration": 90,
          "sets": "Steady aerobic run, relaxed",
          "notes": "Marathon block: aerobic volume, not speed.",
-         "distanceKm": 12.3
+         "distanceKm": 13.8
         }
        },
        "distanceKm": 6.2
@@ -4895,7 +4895,7 @@
         "eric",
         "ella"
        ],
-       "duration": 90,
+       "duration": 80,
        "intensity": "Z2",
        "sets": "Steady aerobic spin",
        "notes": "Aerobic base.",
@@ -4907,7 +4907,7 @@
          "notes": "Aerobic base."
         },
         "ella": {
-         "duration": 90,
+         "duration": 80,
          "sets": "Steady aerobic spin",
          "notes": "Aerobic base."
         }
@@ -4982,7 +4982,7 @@
         "eric",
         "ella"
        ],
-       "duration": 90,
+       "duration": 100,
        "intensity": "Z2",
        "sets": "Easy run, conservation mode",
        "notes": "Holding run volume while swim and bike build.",
@@ -4995,10 +4995,10 @@
          "distanceKm": 6.9
         },
         "ella": {
-         "duration": 90,
+         "duration": 100,
          "sets": "Steady aerobic run, relaxed",
          "notes": "Marathon block: aerobic volume, not speed.",
-         "distanceKm": 13.8
+         "distanceKm": 15.4
         }
        },
        "distanceKm": 6.9
@@ -5185,7 +5185,7 @@
         "eric",
         "ella"
        ],
-       "duration": 75,
+       "duration": 70,
        "intensity": "Z2",
        "sets": "Easy recovery spin",
        "notes": "Recovery week -- gentle.",
@@ -5197,7 +5197,7 @@
          "notes": "Recovery week -- gentle."
         },
         "ella": {
-         "duration": 75,
+         "duration": 70,
          "sets": "Easy recovery spin",
          "notes": "Recovery week -- gentle."
         }
@@ -5272,7 +5272,7 @@
         "eric",
         "ella"
        ],
-       "duration": 60,
+       "duration": 65,
        "intensity": "Z2",
        "sets": "Easy recovery run",
        "notes": "Recovery week -- truly easy.",
@@ -5285,10 +5285,10 @@
          "distanceKm": 6.9
         },
         "ella": {
-         "duration": 60,
+         "duration": 65,
          "sets": "Easy recovery run",
          "notes": "Recovery week -- truly easy.",
-         "distanceKm": 9.2
+         "distanceKm": 10.0
         }
        },
        "distanceKm": 6.9
@@ -5475,7 +5475,7 @@
         "eric",
         "ella"
        ],
-       "duration": 85,
+       "duration": 75,
        "intensity": "Z2",
        "sets": "Steady aerobic spin",
        "notes": "Aerobic base.",
@@ -5487,7 +5487,7 @@
          "notes": "Aerobic base."
         },
         "ella": {
-         "duration": 85,
+         "duration": 75,
          "sets": "Steady aerobic spin",
          "notes": "Aerobic base."
         }
@@ -5562,7 +5562,7 @@
         "eric",
         "ella"
        ],
-       "duration": 80,
+       "duration": 90,
        "intensity": "Z2",
        "sets": "Easy run, conservation mode",
        "notes": "Holding run volume while swim and bike build.",
@@ -5575,10 +5575,10 @@
          "distanceKm": 6.9
         },
         "ella": {
-         "duration": 80,
+         "duration": 90,
          "sets": "Steady aerobic run, relaxed",
          "notes": "Marathon block: aerobic volume, not speed.",
-         "distanceKm": 12.3
+         "distanceKm": 13.8
         }
        },
        "distanceKm": 6.9
@@ -5765,7 +5765,7 @@
         "eric",
         "ella"
        ],
-       "duration": 115,
+       "duration": 90,
        "intensity": "Z2",
        "sets": "Steady aerobic spin",
        "notes": "Aerobic base.",
@@ -5777,7 +5777,7 @@
          "notes": "Aerobic base."
         },
         "ella": {
-         "duration": 115,
+         "duration": 90,
          "sets": "Steady aerobic spin",
          "notes": "Aerobic base."
         }
@@ -5852,7 +5852,7 @@
         "eric",
         "ella"
        ],
-       "duration": 90,
+       "duration": 115,
        "intensity": "Z2",
        "sets": "Easy run, conservation mode",
        "notes": "Holding run volume while swim and bike build.",
@@ -5865,10 +5865,10 @@
          "distanceKm": 8.5
         },
         "ella": {
-         "duration": 90,
+         "duration": 115,
          "sets": "Steady aerobic run, relaxed",
          "notes": "Marathon block: aerobic volume, not speed.",
-         "distanceKm": 13.8
+         "distanceKm": 17.7
         }
        },
        "distanceKm": 8.5
@@ -6055,7 +6055,7 @@
         "eric",
         "ella"
        ],
-       "duration": 130,
+       "duration": 100,
        "intensity": "Z2",
        "sets": "Steady aerobic spin",
        "notes": "Aerobic base.",
@@ -6067,7 +6067,7 @@
          "notes": "Aerobic base."
         },
         "ella": {
-         "duration": 130,
+         "duration": 90,
          "sets": "Steady aerobic spin",
          "notes": "Aerobic base."
         }
@@ -6111,7 +6111,7 @@
         "eric",
         "ella"
        ],
-       "duration": 60,
+       "duration": 70,
        "intensity": "Z1",
        "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
        "notes": "Technique focus: drills, short sets, building comfort.",
@@ -6123,7 +6123,7 @@
          "notes": "Technique focus: drills, short sets, building comfort."
         },
         "ella": {
-         "duration": 60,
+         "duration": 70,
          "sets": "4x100 aerobic w/ paddles + 200 easy + 4x50 drill + 100 cool-down",
          "notes": "Lane leader. Hold form and pace through the set."
         }
@@ -6142,7 +6142,7 @@
         "eric",
         "ella"
        ],
-       "duration": 90,
+       "duration": 120,
        "intensity": "Z2",
        "sets": "Easy run, conservation mode",
        "notes": "Holding run volume while swim and bike build.",
@@ -6155,10 +6155,10 @@
          "distanceKm": 10.8
         },
         "ella": {
-         "duration": 90,
+         "duration": 120,
          "sets": "Steady aerobic run, relaxed",
          "notes": "Marathon block: aerobic volume, not speed.",
-         "distanceKm": 13.8
+         "distanceKm": 18.5
         }
        },
        "distanceKm": 10.8
@@ -6345,7 +6345,7 @@
         "eric",
         "ella"
        ],
-       "duration": 115,
+       "duration": 90,
        "intensity": "Z2",
        "sets": "Easy recovery spin",
        "notes": "Recovery week -- gentle.",
@@ -6357,7 +6357,7 @@
          "notes": "Recovery week -- gentle."
         },
         "ella": {
-         "duration": 115,
+         "duration": 90,
          "sets": "Easy recovery spin",
          "notes": "Recovery week -- gentle."
         }
@@ -6432,7 +6432,7 @@
         "eric",
         "ella"
        ],
-       "duration": 70,
+       "duration": 95,
        "intensity": "Z2",
        "sets": "Easy recovery run",
        "notes": "Recovery week -- truly easy.",
@@ -6445,10 +6445,10 @@
          "distanceKm": 7.7
         },
         "ella": {
-         "duration": 70,
+         "duration": 95,
          "sets": "Easy recovery run",
          "notes": "Recovery week -- truly easy.",
-         "distanceKm": 10.8
+         "distanceKm": 14.6
         }
        },
        "distanceKm": 7.7
@@ -11522,18 +11522,18 @@
        ],
        "duration": 60,
        "intensity": "Z1-Z2",
-       "sets": "12x50 drill/swim (mix) + 300 easy + 6x50 strong + 100 cool-down",
+       "sets": "6x50 build + 200 easy + 100 cool-down",
        "notes": "Technique focus: drills, short sets, building comfort.",
        "together": true,
        "variants": {
         "eric": {
          "duration": 60,
-         "sets": "12x50 drill/swim (mix) + 300 easy + 6x50 strong + 100 cool-down",
+         "sets": "6x50 build + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort."
         },
         "ella": {
          "duration": 60,
-         "sets": "8x100 aerobic + 6x200 threshold (30s rest) + 200 easy",
+         "sets": "4x100 aerobic + 4x50 build + 200 easy",
          "notes": "Lane leader. Hold form and pace through the set."
         }
        }
@@ -11609,18 +11609,18 @@
        ],
        "duration": 60,
        "intensity": "Z1-Z2",
-       "sets": "12x50 drill/swim (mix) + 300 easy + 6x50 strong + 100 cool-down",
+       "sets": "6x50 build + 200 easy + 100 cool-down",
        "notes": "Technique focus: drills, short sets, building comfort.",
        "together": true,
        "variants": {
         "eric": {
          "duration": 60,
-         "sets": "12x50 drill/swim (mix) + 300 easy + 6x50 strong + 100 cool-down",
+         "sets": "6x50 build + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort."
         },
         "ella": {
          "duration": 60,
-         "sets": "8x100 aerobic + 6x200 threshold (30s rest) + 200 easy",
+         "sets": "4x100 aerobic + 4x50 build + 200 easy",
          "notes": "Lane leader. Hold form and pace through the set."
         }
        }
@@ -11640,20 +11640,20 @@
        ],
        "duration": 50,
        "intensity": "Z2",
-       "sets": "Easy conversational run",
-       "notes": "Aerobic base.",
+       "sets": "Short easy run + 4x20s relaxed strides",
+       "notes": "Keep the legs awake. Nothing hard.",
        "together": false,
        "variants": {
         "eric": {
          "duration": 50,
-         "sets": "Easy conversational run",
-         "notes": "Aerobic base.",
+         "sets": "Short easy run + 4x20s relaxed strides",
+         "notes": "Keep the legs awake. Nothing hard.",
          "distanceKm": 7.7
         },
         "ella": {
          "duration": 50,
-         "sets": "Easy conversational run",
-         "notes": "Aerobic base.",
+         "sets": "Short easy run + 4x20s relaxed strides",
+         "notes": "Keep the legs awake. Nothing hard.",
          "distanceKm": 7.7
         }
        },
@@ -11811,18 +11811,18 @@
        ],
        "duration": 25,
        "intensity": "Z1-Z2",
-       "sets": "12x50 drill/swim (mix) + 300 easy + 6x50 strong + 100 cool-down",
+       "sets": "6x50 build + 200 easy + 100 cool-down",
        "notes": "Technique focus: drills, short sets, building comfort.",
        "together": true,
        "variants": {
         "eric": {
          "duration": 25,
-         "sets": "12x50 drill/swim (mix) + 300 easy + 6x50 strong + 100 cool-down",
+         "sets": "6x50 build + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort."
         },
         "ella": {
          "duration": 25,
-         "sets": "8x100 aerobic + 6x200 threshold (30s rest) + 200 easy",
+         "sets": "4x100 aerobic + 4x50 build + 200 easy",
          "notes": "Lane leader. Hold form and pace through the set."
         }
        }
@@ -11898,18 +11898,18 @@
        ],
        "duration": 30,
        "intensity": "Z1-Z2",
-       "sets": "12x50 drill/swim (mix) + 300 easy + 6x50 strong + 100 cool-down",
+       "sets": "6x50 build + 200 easy + 100 cool-down",
        "notes": "Technique focus: drills, short sets, building comfort.",
        "together": true,
        "variants": {
         "eric": {
          "duration": 30,
-         "sets": "12x50 drill/swim (mix) + 300 easy + 6x50 strong + 100 cool-down",
+         "sets": "6x50 build + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort."
         },
         "ella": {
          "duration": 30,
-         "sets": "8x100 aerobic + 6x200 threshold (30s rest) + 200 easy",
+         "sets": "4x100 aerobic + 4x50 build + 200 easy",
          "notes": "Lane leader. Hold form and pace through the set."
         }
        }
@@ -11929,20 +11929,20 @@
        ],
        "duration": 25,
        "intensity": "Z2",
-       "sets": "Easy conversational run",
-       "notes": "Aerobic base.",
+       "sets": "Short easy run + 4x20s relaxed strides",
+       "notes": "Keep the legs awake. Nothing hard.",
        "together": false,
        "variants": {
         "eric": {
          "duration": 25,
-         "sets": "Easy conversational run",
-         "notes": "Aerobic base.",
+         "sets": "Short easy run + 4x20s relaxed strides",
+         "notes": "Keep the legs awake. Nothing hard.",
          "distanceKm": 3.8
         },
         "ella": {
          "duration": 25,
-         "sets": "Easy conversational run",
-         "notes": "Aerobic base.",
+         "sets": "Short easy run + 4x20s relaxed strides",
+         "notes": "Keep the legs awake. Nothing hard.",
          "distanceKm": 3.8
         }
        },
@@ -12080,7 +12080,7 @@
    "phase": "race_week",
    "phaseName": "Race week",
    "recoveryWeek": false,
-   "focus": "Short, easy, confident. Nothing to gain this week. Heat adaptation: do the long sessions in the warm part of the day when you can, and drink to a schedule.",
+   "focus": "Short, easy, confident. Nothing to gain this week.",
    "targetHours": {
     "eric": 2.5,
     "ella": 2.5
@@ -12099,18 +12099,18 @@
        ],
        "duration": 35,
        "intensity": "Z1-Z2",
-       "sets": "12x50 drill/swim (mix) + 300 easy + 6x50 strong + 100 cool-down",
+       "sets": "6x50 build + 200 easy + 100 cool-down",
        "notes": "Technique focus: drills, short sets, building comfort.",
        "together": true,
        "variants": {
         "eric": {
          "duration": 35,
-         "sets": "12x50 drill/swim (mix) + 300 easy + 6x50 strong + 100 cool-down",
+         "sets": "6x50 build + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort."
         },
         "ella": {
          "duration": 35,
-         "sets": "8x100 aerobic + 6x200 threshold (30s rest) + 200 easy",
+         "sets": "4x100 aerobic + 4x50 build + 200 easy",
          "notes": "Lane leader. Hold form and pace through the set."
         }
        }
@@ -12161,18 +12161,18 @@
        ],
        "duration": 35,
        "intensity": "Z1-Z2",
-       "sets": "12x50 drill/swim (mix) + 300 easy + 6x50 strong + 100 cool-down",
+       "sets": "6x50 build + 200 easy + 100 cool-down",
        "notes": "Technique focus: drills, short sets, building comfort.",
        "together": true,
        "variants": {
         "eric": {
          "duration": 35,
-         "sets": "12x50 drill/swim (mix) + 300 easy + 6x50 strong + 100 cool-down",
+         "sets": "6x50 build + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort."
         },
         "ella": {
          "duration": 35,
-         "sets": "8x100 aerobic + 6x200 threshold (30s rest) + 200 easy",
+         "sets": "4x100 aerobic + 4x50 build + 200 easy",
          "notes": "Lane leader. Hold form and pace through the set."
         }
        }
@@ -12192,20 +12192,20 @@
        ],
        "duration": 35,
        "intensity": "Z2",
-       "sets": "Easy conversational run",
-       "notes": "Aerobic base.",
+       "sets": "Short easy run + 4x20s relaxed strides",
+       "notes": "Keep the legs awake. Nothing hard.",
        "together": false,
        "variants": {
         "eric": {
          "duration": 35,
-         "sets": "Easy conversational run",
-         "notes": "Aerobic base.",
+         "sets": "Short easy run + 4x20s relaxed strides",
+         "notes": "Keep the legs awake. Nothing hard.",
          "distanceKm": 5.4
         },
         "ella": {
          "duration": 35,
-         "sets": "Easy conversational run",
-         "notes": "Aerobic base.",
+         "sets": "Short easy run + 4x20s relaxed strides",
+         "notes": "Keep the legs awake. Nothing hard.",
          "distanceKm": 5.4
         }
        },

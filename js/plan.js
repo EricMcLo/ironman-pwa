@@ -222,6 +222,22 @@ const Plan = (() => {
     return days;
   }
 
+  /* How many *finished* weeks hit at least `threshold` of their sessions.
+     With no time goal, this is a more honest headline than hours. */
+  function weeksAsPlanned(athlete, threshold) {
+    const t = threshold == null ? 0.8 : threshold;
+    const today = todayISO();
+    let done = 0, elapsed = 0;
+
+    for (const w of plan.weeks) {
+      if (w.endDate >= today) break;
+      elapsed += 1;
+      const h = weekHours(w.weekNumber, athlete);
+      if (h.total && h.complete / h.total >= t) done += 1;
+    }
+    return { done, elapsed };
+  }
+
   return {
     load,
     rebuild,
@@ -230,7 +246,7 @@ const Plan = (() => {
     get index() { return index; },
 
     sessionsOn, togetherOn, resolve, weekFor, weekOf, weekNumberFor,
-    phaseForDate, phaseMeta, weekHours, raceCountdown,
+    phaseForDate, phaseMeta, weekHours, weeksAsPlanned, raceCountdown,
 
     parseISO, toISO, isoOf, addDays, todayISO, dayName, dayShort, prettyDate,
     monthLabel, daysBetween, startOfWeek, MONTHS

@@ -464,23 +464,15 @@ const UI = (() => {
     const week = Plan.weekOf(today);
     const hrs = Plan.weekHours(week.weekNumber, a);
     const days = Plan.raceCountdown();
-
-    const totals = Plan.data.weeks.reduce((acc, w) => {
-      const h = Plan.weekHours(w.weekNumber, a);
-      acc.planned += h.plannedHours;
-      acc.done += h.doneHours;
-      acc.sessions += h.total;
-      acc.complete += h.complete;
-      return acc;
-    }, { planned: 0, done: 0, sessions: 0, complete: 0 });
-
-    const pct = totals.planned ? Math.round((totals.done / totals.planned) * 100) : 0;
+    const planned = Plan.weeksAsPlanned(a);
 
     return [
       stat('Days to race', days > 0 ? String(days) : '—', days > 0 ? 'days' : ''),
       stat('This week', `${hrs.complete}<small>/${hrs.total}</small>`, 'sessions'),
       stat('Hours this week', fmtHours(hrs.doneHours), `of ${fmtHours(hrs.target)}`),
-      stat('Season', `${pct}<small>%</small>`, 'of planned hours')
+      stat('Weeks as planned',
+        planned.elapsed ? `${planned.done}<small>/${planned.elapsed}</small>` : '—',
+        planned.elapsed ? '80%+ done' : 'none yet')
     ];
   }
 

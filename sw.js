@@ -1,12 +1,17 @@
 /* ==========================================================================
    sw.js — offline cache so the app works on a plane / in a canyon.
 
-   Strategy: network-first for plan.json (so plan edits show up), cache-first
-   for everything else. Bump CACHE_VERSION when you change css/js and want
-   old copies dropped.
+   Strategy: NETWORK FIRST, cache as fallback.
+
+   This is deliberate. A cache-first service worker is faster but it happily
+   serves last week's JavaScript after you edit a file, which is a miserable
+   way to debug. Network-first means: when you have signal you always get the
+   current version, and when you don't, the cached copy keeps working.
+
+   Bump CACHE_VERSION to throw away the old cache entirely.
    ========================================================================== */
 
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const CACHE = 'ironman703-' + CACHE_VERSION;
 
 const SHELL = [
@@ -17,6 +22,7 @@ const SHELL = [
   './js/plan.js',
   './js/ui.js',
   './js/app.js',
+  './plan.json',
   './manifest.json',
   './icons/icon.svg',
   './icons/icon-192.png',
@@ -25,7 +31,9 @@ const SHELL = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting())
+    caches.open(CACHE)
+      .then((cache) => cache.addAll(SHELL))
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -44,25 +52,23 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
-  // plan.json: try the network first, fall back to cache when offline.
-  if (url.pathname.endsWith('plan.json')) {
-    event.respondWith(
-      fetch(req)
-        .then((res) => {
+  event.respondWith(
+    fetch(req)
+      .then((res) => {
+        // keep a copy of good responses for offline use
+        if (res && res.status === 200 && res.type === 'basic') {
           const copy = res.clone();
           caches.open(CACHE).then((c) => c.put(req, copy));
-          return res;
+        }
+        return res;
+      })
+      .catch(() =>
+        caches.match(req).then((hit) => {
+          if (hit) return hit;
+          // offline and never cached: fall back to the shell for navigations
+          if (req.mode === 'navigate') return caches.match('./index.html');
+          return new Response('Offline', { status: 503, statusText: 'Offline' });
         })
-        .catch(() => caches.match(req))
-    );
-    return;
-  }
-
-  event.respondWith(
-    caches.match(req).then((hit) => hit || fetch(req).then((res) => {
-      const copy = res.clone();
-      caches.open(CACHE).then((c) => c.put(req, copy));
-      return res;
-    }))
+      )
   );
 });
