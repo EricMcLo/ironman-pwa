@@ -885,16 +885,18 @@ main {
 .tpl-day-row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
+  gap: 8px;
+  padding: 10px 14px;
   background: var(--surface-2);
   border: 1px solid var(--line);
   border-radius: var(--r-sm);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  transition: background var(--fast);
 }
+.tpl-day-row:hover { background: var(--surface); }
 .tpl-day-label {
-  width: 52px;
-  font-size: .78rem;
+  width: 60px;
+  font-size: .75rem;
   font-weight: 700;
   color: var(--text-mid);
   letter-spacing: .05em;
@@ -905,13 +907,17 @@ main {
   border: 1px solid var(--line);
   background: var(--surface);
   color: var(--text-soft);
-  font-size: .72rem;
+  font-size: .7rem;
   font-weight: 600;
-  padding: 6px 8px;
-  border-radius: var(--r-sm);
+  padding: 7px 10px;
+  border-radius: var(--r-full);
   flex: none;
   cursor: pointer;
   transition: all var(--fast);
+  min-width: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .tpl-daybtn.sel {
   background: var(--accent);
@@ -924,26 +930,42 @@ main {
   border: 1px solid var(--line);
   border-radius: var(--r-sm);
   padding: 10px 12px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 .tpl-preview-head {
   font-size: .66rem;
   text-transform: uppercase;
   letter-spacing: .1em;
   color: var(--text-soft);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 .tpl-preview-day {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
-  padding: 6px 8px;
-  border-bottom: 1px solid color-mix(in srgb, var(--line) 50%, transparent);
-  font-size: .8rem;
+  gap: 12px;
+  padding: 7px 8px;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 40%, transparent);
+  font-size: .82rem;
 }
 .tpl-preview-day:last-child { border-bottom: none; }
-.tpl-pv-day { font-weight: 600; color: var(--text-mid); }
+.tpl-pv-day { font-weight: 700; color: var(--text-mid); width: 55px; }
 .tpl-pv-disc { color: var(--text); }
+
+/* discipline color swatches in preview */
+.tpl-pv-disc::before {
+  content: "";
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+.tpl-pv-disc.swim::before { background: var(--swim); }
+.tpl-pv-disc.bike::before { background: var(--bike); }
+.tpl-pv-disc.run::before { background: var(--run); }
+.tpl-pv-disc.brick::before { background: var(--brick); }
+.tpl-pv-disc.strength::before { background: var(--strength); }
+.tpl-pv-disc['open-water-swim']::before { background: var(--ows); }
+.tpl-pv-disc.rest::before { background: var(--rest); }
 
 /* ---------------------------------------------------------------- sheets */
 .scrim {

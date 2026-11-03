@@ -1012,7 +1012,7 @@
         const color = d === 'rest' ? 'var(--text-soft)' : 'var(--' + d + ')';
         const p = UI.el('div', { class: 'tpl-preview-day', style: 'color:' + color });
         p.append(UI.el('span', { class: 'tpl-pv-day', text: dayLabels[i] }));
-        p.append(UI.el('span', { class: 'tpl-pv-disc', text: label }));
+        p.append(UI.el('span', { class: 'tpl-pv-disc ' + d, text: label }));
         preview.append(p);
       });
 
