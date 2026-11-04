@@ -269,12 +269,14 @@ main {
    gets pink, Both keeps the neutral green. color-mix keeps each one in
    step with the active theme's --eric / --ella tokens. */
 .hero.who-eric {
+  background: var(--eric); /* solid fallback */
   background: linear-gradient(158deg,
     color-mix(in srgb, var(--eric) 68%, #fff) 0%,
     var(--eric) 50%,
     color-mix(in srgb, var(--eric) 72%, #000) 100%);
 }
 .hero.who-ella {
+  background: var(--ella); /* solid fallback */
   background: linear-gradient(158deg,
     color-mix(in srgb, var(--ella) 62%, #fff) 0%,
     var(--ella) 50%,
@@ -726,6 +728,18 @@ main {
 }
 .session.dragging { opacity: .35; }
 .session.drop-target-day { box-shadow: 0 0 0 2px var(--accent); }
+/* Inline move via ⠿ grip: picked-up session is highlighted */
+.s-grip.sel {
+  background: var(--accent);
+  color: #fff;
+  border-color: transparent;
+}
+/* Day is a drop target while a workout is picked up */
+.day.drop-zone {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+}
+.day.drop-zone .day-head { background: var(--surface-2); }
 .drag-ghost {
   position: fixed;
   z-index: 200;

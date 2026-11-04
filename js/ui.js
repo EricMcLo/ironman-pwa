@@ -139,10 +139,10 @@ const UI = (() => {
 
     if (opts.draggable) {
       checks.append(el('button', {
-        class: 's-grip',
+        class: 's-grip' + (opts.movePendingId === s.id ? ' sel' : ''),
         type: 'button',
         'aria-label': 'Move this workout',
-        title: 'Tap to move, or hold and drag',
+        title: opts.movePendingId === s.id ? 'Tap to cancel move' : 'Tap to pick up, then tap a day',
         onclick: (e) => {
           e.stopPropagation();
           opts.onGrip && opts.onGrip(s);
@@ -283,7 +283,8 @@ const UI = (() => {
     const block = el('section', {
       class: 'day' +
         (iso === today ? ' is-today' : '') +
-        (allRest ? ' is-rest' : ''),
+        (allRest ? ' is-rest' : '') +
+        (opts.movePendingId ? ' drop-zone' : ''),
       dataset: { date: iso }
     });
 

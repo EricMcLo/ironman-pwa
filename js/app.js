@@ -20,6 +20,7 @@
     monthYear: 0,
     monthMonth: 0,
     expanded: new Set(),
+    movePendingId: null,   // session id being moved via the ⠿ grip
     sheets: []   // stack of render functions
   };
 
@@ -396,6 +397,7 @@
   function handlers() {
     return {
       expandedIds: state.expanded,
+      movePendingId: state.movePendingId,
       onToggleExpand: (s) => {
         if (state.expanded.has(s.id)) state.expanded.delete(s.id);
         else state.expanded.add(s.id);
@@ -403,8 +405,30 @@
       },
       onCheck: (s, athlete) => toggleDone(s, athlete),
       onOpen: openSessionSheet,
-      onOpenDay: (iso) => openDaySheet(iso),
-      onGrip: (s) => openWeekBoard(s.id),
+      onOpenDay: (iso) => {
+        // If a workout is being moved via the ⠿ grip, drop it on this day
+        // instead of opening the day sheet.
+        if (state.movePendingId) {
+          const session = [...document.querySelectorAll('.session')]
+            .map(el => el.dataset.id)
+            .includes(state.movePendingId)
+            ? findSessionById(state.movePendingId)
+            : null;
+          // findSessionById is defined below; fallback handled inline
+          movePendingToDay(state.movePendingId, iso);
+          return;
+        }
+        openDaySheet(iso);
+      },
+      onGrip: (s) => {
+        // Tap ⠿ to pick up a workout, then tap any day to place it.
+        if (state.movePendingId === s.id) {
+          state.movePendingId = null;
+        } else {
+          state.movePendingId = s.id;
+        }
+        render();
+      },
       onMove: (s) => openMoveSheet(s),
       onEdit: (s) => openEditSheet(s),
       onEditLog: (s) => openLogActualsSheet(s, state.athlete === 'both' ? 'eric' : state.athlete),
@@ -413,6 +437,34 @@
       onAdd: (iso) => openAddSheet(iso),
       onReset: (s) => resetSession(s)
     };
+  }
+
+  /* Move the selected (grip-picked) workout to a day inline. */
+  function movePendingToDay(sessionId, iso) {
+    let session = null;
+    for (let i = 0; i < 7; i++) {
+      const d = Plan.addDays(Plan.weekFor(state.weekNumber).startDate, i);
+      const found = weekSessionsOn(d).find(x => x.id === sessionId);
+      if (found) { session = found; break; }
+    }
+    if (!session) return;
+    moveSessionTo(session, iso, 'both');
+    state.movePendingId = null;
+    Plan.refresh();
+    render();
+    toast('Moved to ' + Plan.prettyDate(iso), null);
+  }
+
+  /* All sessions on a date for the current athlete view (deduped for Both). */
+  function weekSessionsOn(iso) {
+    if (state.athlete === 'both') {
+      const map = new Map();
+      for (const s of [...Plan.togetherOn(iso), ...Plan.sessionsOn(iso, 'eric'), ...Plan.sessionsOn(iso, 'ella')]) {
+        map.set(s.id, s);
+      }
+      return [...map.values()];
+    }
+    return Plan.sessionsOn(iso, state.athlete);
   }
 
   function toggleDone(s, athleteOverride) {
@@ -1367,6 +1419,14 @@
 
     const existingBoard = Store.getWeekBoard(week.weekNumber);
 
+    // Start every week blank: all non-race workouts go in "To be assigned",
+    // race days stay pinned on their calendar day.
+    if (!existingBoard) {
+      const nonRaceIds = sessions.filter(s => !Plan.isRaceSession(s)).map(s => s.id);
+      Store.poolWholeWeek(week.weekNumber, nonRaceIds);
+      sessions = Plan.boardSessionsForWeek(week.weekNumber, who);
+    }
+
     openSheet(() => {
       const wrap = document.createDocumentFragment();
 
@@ -1377,12 +1437,12 @@
         ]),
         UI.el('p', {
           class: 'sh-text',
-          text: 'Drag (or tap) each workout onto the day that works this week. Workouts left in the pool don’t show on your week until you place them.'
+          text: 'Every workout starts in "To be assigned" (race days stay pinned on their day). Tap a workout, then tap a day — or drag it — to build your schedule for the week.'
         }),
 
-        /* Pool: everything not on a day yet. */
+        /* To be assigned: everything not on a day yet. */
         UI.el('div', { class: 'sh-section' }, [
-          UI.el('div', { class: 'sh-label', text: 'Not scheduled yet' }),
+          UI.el('div', { class: 'sh-label', text: 'To be assigned' }),
           UI.el('div', {
             class: 'board-pool',
             'data-date': 'pool',
@@ -1394,12 +1454,12 @@
               if (moved && !Store.isPooled(week.weekNumber, moved.id)) {
                 Store.poolSession(week.weekNumber, moved.id);
                 Plan.refresh(); render(); paintSheet();
-                toast('Back in the pool', null);
+                toast('Back to to-be-assigned', null);
               }
             }
           }, [
             UI.el('div', { class: 'board-pool-head' }, [
-              UI.el('span', { class: 'board-pool-name', text: 'Pool' }),
+              UI.el('span', { class: 'board-pool-name', text: 'To be assigned' }),
               UI.el('span', { class: 'board-pool-date', text: sessions.filter(s => s.pooled).length + ' waiting' })
             ]),
             UI.el('div', { class: 'planner-chips' }, [
@@ -1465,9 +1525,9 @@
               const ids = sessions.map(s => s.id);
               Store.poolWholeWeek(week.weekNumber, ids);
               Plan.refresh(); render(); paintSheet();
-              toast('Blank board — all workouts in the pool', null);
+              toast('Blank board — everything to be assigned', null);
             }
-          }, ['Clear days → pool']),
+          }, ['Clear days → to be assigned']),
           UI.el('button', {
             class: 'btn ghost block', type: 'button',
             onclick: () => {
@@ -1485,7 +1545,7 @@
 
       function pooledChips() {
         const pool = sessions.filter(s => s.pooled);
-        if (!pool.length) return [elp('Rest — everything is on a day')];
+        if (!pool.length) return [elp('Everything is on a day')];
         return pool.map(s => boardChip(s, 'pool'));
       }
 
