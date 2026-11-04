@@ -11,7 +11,7 @@
    Bump CACHE_VERSION to throw away the old cache entirely.
    ========================================================================== */
 
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';
 const CACHE = 'ironman703-' + CACHE_VERSION;
 
 const SHELL = [

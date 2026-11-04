@@ -75,6 +75,8 @@ def build_session(wn, dow, assigned, durs):
     """Build a session dict for the given day and assignment."""
     fueling = None
     dist_e = dist_l = None
+    title = None
+    discipline = assigned
 
     if assigned == "swim":
         dur = durs["swim"]
@@ -109,6 +111,8 @@ def build_session(wn, dow, assigned, durs):
     elif assigned == "sat_run":
         dur = durs["sat_run"]
         sid = f"w{wn:02d}-sat-run1"
+        discipline = "run"
+        title = "Long run"
         sets_e = sets_l = "Easy long run with run club -- own pace"
         note_e = "Run maintenance. Easy, no racing the group."
         note_l = "Easy long run. Own pace, no racing the group."
@@ -121,6 +125,8 @@ def build_session(wn, dow, assigned, durs):
     elif assigned == "sun_bike":
         dur = durs["sun_bike"]
         sid = f"w{wn:02d}-sun-bike1"
+        discipline = "bike"
+        title = "Long bike"
         sets_e = sets_l = "Long endurance ride"
         note_e = "Your strength. Steady aerobic, no hero efforts."
         note_l = "Steady aerobic ride."
@@ -133,7 +139,7 @@ def build_session(wn, dow, assigned, durs):
 
     session = {
         "id": sid,
-        "discipline": assigned,
+        "discipline": discipline,
         "athletes": ["eric", "ella"],
         "duration": dur,
         "intensity": intensity,
@@ -145,6 +151,10 @@ def build_session(wn, dow, assigned, durs):
             "ella": {"duration": dur, "sets": sets_l, "notes": note_l},
         },
     }
+    if title:
+        session["title"] = title
+        session["variants"]["eric"]["title"] = title
+        session["variants"]["ella"]["title"] = title
     if dist_e is not None:
         session["variants"]["eric"]["distanceKm"] = dist_e
         session["variants"]["ella"]["distanceKm"] = dist_l

@@ -5,6 +5,14 @@
 (() => {
   const $ = (sel) => document.querySelector(sel);
 
+  /* Element.append(null) writes the string "null" into the page. This
+     filters optional sections out instead. */
+  function appendAll(parent, ...nodes) {
+    for (const n of nodes.flat()) {
+      if (n !== null && n !== undefined && n !== false) parent.append(n);
+    }
+  }
+
   const state = {
     athlete: 'eric',
     view: 'week',
@@ -79,8 +87,13 @@
     else document.documentElement.setAttribute('data-theme', t);
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) {
-      meta.setAttribute('content',
-        t === 'dark' ? '#131512' : t === 'vibrant' ? '#0a0a0c' : '#faf9f6');
+      const darkSystem = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      let color = '#faf9f6';
+      if (t === 'dark') color = '#131512';
+      else if (t === 'vibrant') color = '#0a0a0c';
+      else if (t === 'pink') color = darkSystem ? '#1d1218' : '#fdf2f6';
+      else if (t === 'auto' && darkSystem) color = '#131512';
+      meta.setAttribute('content', color);
     }
   }
 
@@ -106,6 +119,129 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') closeSheet();
     });
+
+    wireSessionDrag();
+  }
+
+  /* ------------------------------------------------- drag & drop */
+  /* Hold a workout on the week view, then drag it to another day. Touch and
+     mouse both use Pointer Events, so one code path covers phones + laptops. */
+  function wireSessionDrag() {
+    const weekList = $('#weekList');
+    let pressTimer = null;
+    let drag = null;
+    let suppressClick = false;
+
+    const moveGhost = (x, y) => {
+      if (!drag || !drag.ghost) return;
+      drag.ghost.style.left = (x + 10) + 'px';
+      drag.ghost.style.top = Math.max(8, y - 26) + 'px';
+    };
+
+    weekList.addEventListener('pointerdown', (e) => {
+      if (drag) return;
+      if (e.button !== undefined && e.button !== 0) return;
+      if (e.target.closest('.check, .mini, .day-add, .rest-add, a, input, select, textarea')) return;
+      // On touch, drag from the grip so normal scrolling on the card still works.
+      if (e.pointerType !== 'mouse' && !e.target.closest('.s-grip')) return;
+
+      const sessionEl = e.target.closest('.session');
+      const dayEl = sessionEl && sessionEl.closest('.day');
+      if (!sessionEl || !dayEl) return;
+
+      const id = sessionEl.dataset.id;
+      const sourceDate = dayEl.dataset.date;
+      const startX = e.clientX;
+      const startY = e.clientY;
+      const delay = e.pointerType === 'mouse' ? 140 : 340;
+
+      const cleanup = () => {
+        if (drag) {
+          if (drag.ghost) drag.ghost.remove();
+          if (drag.lastTarget) drag.lastTarget.classList.remove('drop-target');
+          document.querySelectorAll('.session.dragging').forEach(el => el.classList.remove('dragging'));
+        }
+        document.body.classList.remove('is-dragging');
+        drag = null;
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        window.removeEventListener('pointercancel', onUp);
+      };
+
+      const onMove = (ev) => {
+        if (pressTimer) {
+          if (Math.hypot(ev.clientX - startX, ev.clientY - startY) > 12) {
+            clearTimeout(pressTimer);
+            pressTimer = null;
+          }
+          return;
+        }
+        if (!drag) return;
+        ev.preventDefault();
+        moveGhost(ev.clientX, ev.clientY);
+
+        const hit = document.elementFromPoint(ev.clientX, ev.clientY);
+        const day = hit && hit.closest('.day');
+        if (drag.lastTarget && drag.lastTarget !== day) {
+          drag.lastTarget.classList.remove('drop-target');
+        }
+        if (day && day.dataset.date !== sourceDate) {
+          day.classList.add('drop-target');
+          drag.lastTarget = day;
+        } else {
+          drag.lastTarget = null;
+        }
+      };
+
+      const onUp = (ev) => {
+        if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+        if (!drag) { cleanup(); return; }
+
+        ev.preventDefault();
+        const hit = document.elementFromPoint(ev.clientX, ev.clientY);
+        const day = hit && hit.closest('.day');
+        const targetDate = day && day.dataset.date;
+        cleanup();
+
+        if (targetDate && targetDate !== sourceDate) {
+          const moved = plannerSessions(sourceDate).find(x => x.id === id);
+          if (moved && moveSessionTo(moved, targetDate)) {
+            Plan.refresh();
+            render();
+            toast('Moved to ' + Plan.prettyDate(targetDate), null);
+          }
+        }
+        setTimeout(() => { suppressClick = false; }, 60);
+      };
+
+      pressTimer = setTimeout(() => {
+        pressTimer = null;
+        const ghost = document.createElement('div');
+        ghost.className = 'drag-ghost';
+        const line = sessionEl.querySelector('.s-line1');
+        ghost.textContent = line ? line.textContent : 'Workout';
+        document.body.append(ghost);
+        drag = { id, sourceDate, ghost, lastTarget: null };
+        sessionEl.classList.add('dragging');
+        document.body.classList.add('is-dragging');
+        moveGhost(startX, startY);
+        suppressClick = true;
+        if (navigator.vibrate) navigator.vibrate(8);
+      }, delay);
+
+      window.addEventListener('pointermove', onMove, { passive: false });
+      window.addEventListener('pointerup', onUp);
+      window.addEventListener('pointercancel', onUp);
+    });
+
+    // Don't let the release after a drag also count as a tap.
+    weekList.addEventListener('click', (e) => {
+      if (suppressClick) {
+        e.preventDefault();
+        e.stopPropagation();
+        suppressClick = false;
+      }
+    }, true);
   }
 
   function setView(view) {
@@ -169,9 +305,9 @@
           onclick: () => { state.weekNumber = Plan.weekNumberFor(today); render(); }
         }, ['Today']),
         UI.el('button', {
-          class: 'linkbtn', type: 'button',
-          onclick: openTemplateEditor
-        }, ['Template']),
+          class: 'linkbtn', type: 'button', 'aria-label': 'Plan this week',
+          onclick: () => openWeekBoard()
+        }, ['Plan week']),
         UI.el('button', {
           class: 'icon-btn small', type: 'button', 'aria-label': 'Week options',
           onclick: openWeekOptionsSheet
@@ -197,6 +333,22 @@
     }));
 
     const list = document.createDocumentFragment();
+    const pooled = Plan.pooledCount(week.weekNumber, athlete === 'both' ? 'both' : athlete);
+    if (pooled) {
+      list.append(UI.el('button', {
+        class: 'unscheduled-banner', type: 'button',
+        'aria-label': pooled + ' workouts waiting to be scheduled',
+        onclick: () => openWeekBoard()
+      }, [
+        UI.el('span', { class: 'ub-count', text: String(pooled) }),
+        UI.el('span', {
+          text: pooled === 1
+            ? 'workout waiting for a day'
+            : 'workouts waiting for a day'
+        }),
+        UI.el('span', { class: 'ub-arrow', text: '→' })
+      ]));
+    }
     for (let i = 0; i < 7; i++) {
       const iso = Plan.addDays(week.startDate, i);
       list.append(UI.dayBlock(iso, athlete, handlers()));
@@ -223,13 +375,19 @@
     const svg = UI.chart(athlete);
     $('#chartWrap').replaceChildren(svg);
     $('#chartHint').textContent =
-      athlete === 'both' ? 'Eric' : (Plan.data.athletes[athlete] || {}).name || athlete;
+      athlete === 'both' ? 'Eric' : ((Plan.data.athletes || {})[athlete] || {}).name || athlete;
 
     // bring the current week into view inside the scrolling chart
     const wrap = $('#chartWrap');
     const cw = Number(svg.dataset.currentWeek) || 1;
     const barX = 26 + (cw - 1) * 15;
     wrap.scrollLeft = Math.max(0, barX - wrap.clientWidth / 2);
+
+    // "What did this week consist of?" card
+    const weekNumber = Plan.weekNumberFor(Plan.todayISO());
+    const bd = UI.breakdown(athlete, weekNumber);
+    $('#breakdownTitle').textContent = 'Week ' + weekNumber + ' breakdown';
+    $('#breakdownWrap').replaceChildren(bd.node);
 
     $('#phaseList').replaceChildren(...UI.phaseList().childNodes);
   }
@@ -245,28 +403,88 @@
       },
       onCheck: (s, athlete) => toggleDone(s, athlete),
       onOpen: openSessionSheet,
+      onOpenDay: (iso) => openDaySheet(iso),
+      onGrip: (s) => openWeekBoard(s.id),
       onMove: (s) => openMoveSheet(s),
       onEdit: (s) => openEditSheet(s),
+      onEditLog: (s) => openLogActualsSheet(s, state.athlete === 'both' ? 'eric' : state.athlete),
+      onDelete: (s) => deleteExtraSession(s),
+      onQuickAdd: (iso, discipline) => quickAdd(iso, discipline),
       onAdd: (iso) => openAddSheet(iso),
       onReset: (s) => resetSession(s)
     };
   }
 
   function toggleDone(s, athleteOverride) {
-    const athlete = athleteOverride || state.athlete;
+    const athlete = athleteOverride || (state.athlete === 'both' ? 'eric' : state.athlete);
     if (!Store.isDone(s.id, athlete)) {
       // Marking as done → open log actuals sheet
       openLogActualsSheet(s, athlete);
     } else {
-      // Already done → uncheck
-      Store.toggleDone(s.id, athlete);
+      // Already done → let them fix the minutes instead of forcing an
+      // uncheck/recheck dance. The sheet has a "Remove completion" button.
+      openLogActualsSheet(s, athlete);
     }
+  }
+
+  function quickAdd(iso, discipline) {
+    const athletes = state.athlete === 'both' ? ['eric', 'ella'] : [state.athlete];
+    const presets = {
+      run: { title: 'Easy run', duration: 40, intensity: 'Z2', sets: 'Easy conversational pace' },
+      bike: { title: 'Easy spin', duration: 60, intensity: 'Z2', sets: 'Steady aerobic spin' },
+      swim: { title: 'Swim', duration: 40, intensity: 'Z1', sets: 'Technique + easy aerobic laps' },
+      strength: { title: 'Gym / lift', duration: 45, intensity: 'RPE3', sets: 'Whatever you feel like doing' },
+      cross: { title: 'Ski / climb / other', duration: 90, intensity: 'RPE3', sets: 'Time outside counts.' }
+    };
+    const p = presets[discipline] || presets.cross;
+    const id = Store.addExtra({
+      date: iso,
+      athletes,
+      discipline,
+      title: p.title,
+      duration: p.duration,
+      intensity: p.intensity,
+      sets: p.sets,
+      notes: '',
+      together: athletes.length > 1
+    });
+    // Avoid a rest placeholder showing next to the new workout.
+    Plan.refresh();
+    render();
+    paintSheet(); // keep an open day sheet in sync
+    toast('Added ' + p.title, 'Undo', () => {
+      Store.removeExtra(id);
+      Plan.refresh();
+      render();
+      paintSheet();
+    });
+  }
+
+  function deleteExtraSession(s) {
+    if (!confirm('Delete this added workout?')) return;
+    Store.removeExtra(s.id);
+    closeSheet();
+    toast('Workout deleted', null);
   }
 
   function resetSession(s) {
     Store.clearOverride(s.id);
     closeSheet();
     toast('Reset to the original plan', null);
+  }
+
+  /* One place to move a workout. If its week has a board, the board is the
+     authority; otherwise a normal date override is enough. */
+  function moveSessionTo(s, iso, scope) {
+    if (!s || !iso || s.date === iso) return false;
+    const week = Plan.weekFor(s.weekNumber || Plan.weekNumberFor(iso));
+    const shared = !scope || scope === 'both';
+    if (shared && Store.getWeekBoard(week.weekNumber)) {
+      Store.assignWeekBoardSession(week.weekNumber, s.id, iso);
+    } else {
+      Store.move(s.id, iso, scope || 'both');
+    }
+    return true;
   }
 
   /* ---------------------------------------------------------- sheets */
@@ -324,6 +542,8 @@
       onCheck: (sess) => toggleDone(sess),
       onMove: (sess) => openMoveSheet(sess),
       onEdit: (sess) => openEditSheet(sess),
+      onEditLog: (sess) => openLogActualsSheet(sess, state.athlete === 'both' ? 'eric' : state.athlete),
+      onDelete: (sess) => deleteExtraSession(sess),
       onReset: (sess) => resetSession(sess)
     }));
   }
@@ -373,7 +593,7 @@
 
       const scopePicker = isShared ? scopeSeg(scope, (v) => { scope = v; }) : null;
 
-      wrap.append(
+      appendAll(wrap,
         sheetHead(Plan.prettyDate(s.date, true), 'Move session', true),
         UI.el('p', { class: 'sh-text', text: 'Pick the day this should happen instead. The plan itself is not changed — you can always reset it.' }),
         UI.el('div', { class: 'sh-section' }, [
@@ -392,7 +612,7 @@
           UI.el('button', {
             class: 'btn primary block', type: 'button',
             onclick: () => {
-              Store.move(s.id, picked, scope);
+              moveSessionTo(s, picked, scope);
               closeSheet();
               toast('Moved to ' + Plan.prettyDate(picked), null);
             }
@@ -414,7 +634,7 @@
     const wrap = UI.el('div', { class: 'segmented' });
     const options = [['both', 'Both'], ['eric', 'Eric'], ['ella', 'Ella']];
     for (const [val, label] of options) {
-      wrap.append(UI.el('button', {
+      appendAll(wrap,UI.el('button', {
         type: 'button',
         'aria-pressed': String(val === initial),
         onclick: () => {
@@ -471,7 +691,7 @@
 
       const scopePicker = isShared ? scopeSeg(scope, (v) => { scope = v; }) : null;
 
-      wrap.append(
+      appendAll(wrap,
         sheetHead('Edit', 'Adjust this session', true),
         UI.el('p', { class: 'sh-text', text: 'This changes the plan for real. Use Move if you only want to shift the day.' }),
 
@@ -528,15 +748,15 @@
   }
 
   /* ---- add ---- */
-  function openAddSheet(iso) {
+  function openAddSheet(iso, presetDiscipline) {
     pushSheet(() => {
-      let discipline = 'run';
+      let discipline = presetDiscipline || 'run';
       let athlete = state.athlete === 'both' ? 'both' : state.athlete;
 
       const wrap = document.createDocumentFragment();
 
       const discRow = UI.el('div', { class: 'segmented' });
-      const discs = [['run', 'Run'], ['bike', 'Bike'], ['swim', 'Swim'], ['strength', 'Mobility'], ['rest', 'Rest']];
+      const discs = [['run', 'Run'], ['bike', 'Bike'], ['swim', 'Swim'], ['strength', 'Gym'], ['cross', 'Other'], ['rest', 'Rest']];
       for (const [val, label] of discs) {
         discRow.append(UI.el('button', {
           type: 'button', 'aria-pressed': String(val === discipline),
@@ -566,7 +786,7 @@
       const sets = UI.el('textarea', { rows: '3', placeholder: 'What exactly are you doing?' });
       const notes = UI.el('textarea', { rows: '2', placeholder: 'Anything worth remembering' });
 
-      wrap.append(
+      appendAll(wrap,
         sheetHead(Plan.prettyDate(iso, true), 'Add a session', true),
         UI.el('div', { class: 'sh-section' }, [
           UI.el('div', { class: 'sh-label', text: 'Discipline' }), discRow
@@ -639,7 +859,7 @@
         }, [f === 1 ? '100%' : `${Math.round(f * 100)}%`]));
       }
 
-      wrap.append(
+      appendAll(wrap,
         sheetHead(`Week ${week.weekNumber}`, 'Adjust the whole week', null),
         UI.el('p', {
           class: 'sh-text',
@@ -675,7 +895,7 @@
       const wrap = document.createDocumentFragment();
 
       const discRow = UI.el('div', { class: 'segmented' });
-      const discs = [['run', 'Run'], ['bike', 'Bike'], ['swim', 'Swim'], ['strength', 'Mobility'], ['rest', 'Rest']];
+      const discs = [['run', 'Run'], ['bike', 'Bike'], ['swim', 'Swim'], ['strength', 'Gym'], ['cross', 'Other'], ['rest', 'Rest']];
       for (const [val, label] of discs) {
         discRow.append(UI.el('button', {
           type: 'button',
@@ -717,7 +937,7 @@
       const selectedDays = Object.keys(daySelection).filter(k => daySelection[k]);
       const info = el('p', { class: 'sh-text', text: `Will add ${selectedDays.length} session(s) per week for ${weeks} week(s). Starting ${Plan.prettyDate(startDate)}.` });
 
-      wrap.append(
+      appendAll(wrap,
         sheetHead('Bulk Add', 'Add multiple sessions', true),
         UI.el('div', { class: 'sh-section' }, [
           UI.el('div', { class: 'sh-label', text: 'Discipline' }), discRow
@@ -790,7 +1010,7 @@
         value: current
       });
 
-      wrap.append(
+      appendAll(wrap,
         sheetHead(`Week ${week.weekNumber}`, 'Week note', true),
         UI.el('div', { class: 'sh-section' }, [
           UI.el('div', { class: 'sh-label', text: 'Note' }),
@@ -823,6 +1043,7 @@
   /* ---- log actuals ---- */
   function openLogActualsSheet(s, athlete) {
     const current = Store.getLog(s.id, athlete) || {};
+    const alreadyDone = Store.isDone(s.id, athlete);
 
     openSheet(() => {
       const wrap = document.createDocumentFragment();
@@ -842,8 +1063,9 @@
         value: current.note || ''
       });
 
-      wrap.append(
-        sheetHead(Plan.prettyDate(s.date, true), 'Log workout', true),
+      appendAll(wrap,
+        sheetHead(Plan.prettyDate(s.date, true),
+          alreadyDone ? 'Edit logged workout' : 'Log workout', true),
         UI.el('div', { class: 'sh-section' }, [
           UI.el('div', { class: 'sh-label', text: 'Actual minutes' }),
           UI.el('div', { class: 'field' }, [actualMin])
@@ -867,12 +1089,22 @@
               closeSheet();
               toast('Logged', null);
             }
-          }, ['Save']),
+          }, [alreadyDone ? 'Save changes' : 'Save']),
           UI.el('button', {
             class: 'btn ghost block', type: 'button',
             onclick: () => closeSheet()
-          }, ['Skip'])
-        ])
+          }, ['Cancel'])
+        ]),
+        alreadyDone ? UI.el('div', { class: 'btnrow' }, [
+          UI.el('button', {
+            class: 'btn danger block', type: 'button',
+            onclick: () => {
+              Store.setDone(s.id, athlete, false);
+              closeSheet();
+              toast('Unchecked', null);
+            }
+          }, ['Remove completion'])
+        ]) : null
       );
 
       return wrap;
@@ -887,7 +1119,7 @@
     openSheet(() => {
       const wrap = document.createDocumentFragment();
 
-      wrap.append(
+      appendAll(wrap,
         sheetHead(`Week ${week.weekNumber}`, 'Week options', true),
 
         UI.el('div', { class: 'sh-section' }, [
@@ -915,6 +1147,24 @@
         ]),
 
         UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Plan' }),
+          UI.el('div', { class: 'btnrow' }, [
+            UI.el('button', {
+              class: 'btn block', type: 'button',
+              onclick: () => { closeSheet(); openWeekBoard(); }
+            }, ['Week board (drag to days)']),
+            UI.el('button', {
+              class: 'btn block', type: 'button',
+              onclick: () => { closeSheet(); openWeekPlanner(); }
+            }, ['Quick move']),
+            UI.el('button', {
+              class: 'btn block', type: 'button',
+              onclick: () => { closeSheet(); openTemplateEditor(); }
+            }, ['Weekly layout'])
+          ])
+        ]),
+
+        UI.el('div', { class: 'sh-section' }, [
           UI.el('div', { class: 'sh-label', text: 'Add sessions' }),
           UI.el('div', { class: 'btnrow' }, [
             UI.el('button', {
@@ -932,11 +1182,356 @@
               onclick: () => { closeSheet(); openScaleSheet(); }
             }, ['Scale volume'])
           ])
+        ]),
+
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Calendar' }),
+          UI.el('div', { class: 'btnrow' }, [
+            UI.el('button', {
+              class: 'btn block', type: 'button',
+              onclick: () => exportWeekToCalendar()
+            }, ['Add this week to Google Calendar'])
+          ])
         ])
       );
 
       return wrap;
     });
+  }
+
+  /* ---- week planner: tap or drag workouts between days ---- */
+  function plannerSessions(iso) {
+    if (state.athlete !== 'both') return Plan.sessionsOn(iso, state.athlete);
+    const map = new Map();
+    for (const s of [...Plan.togetherOn(iso), ...Plan.sessionsOn(iso, 'eric'), ...Plan.sessionsOn(iso, 'ella')]) {
+      map.set(s.id, s);
+    }
+    return [...map.values()];
+  }
+
+  function openWeekPlanner(preselectId) {
+    const week = Plan.weekFor(state.weekNumber);
+    let selected = null;
+
+    if (preselectId) {
+      for (let i = 0; i < 7; i++) {
+        const iso = Plan.addDays(week.startDate, i);
+        const found = plannerSessions(iso).find(x => x.id === preselectId);
+        if (found) { selected = found; break; }
+      }
+    }
+
+    const moveTo = (session, iso) => {
+      if (!session || session.date === iso) return;
+      moveSessionTo(session, iso, 'both');
+      Plan.refresh();
+      render();
+      selected = null;
+      paintSheet();
+      toast('Moved to ' + Plan.prettyDate(iso), null);
+    };
+
+    openSheet(() => {
+      const wrap = document.createDocumentFragment();
+
+      appendAll(wrap,
+        UI.el('div', { class: 'sh-head' }, [
+          UI.el('p', { class: 'sh-eyebrow', text: 'Week ' + week.weekNumber }),
+          UI.el('h2', { class: 'sh-title', id: 'sheetTitle', text: 'Plan your week' })
+        ]),
+        UI.el('p', {
+          class: 'sh-text',
+          text: 'Tap a workout, then tap a day to move it. Or hold the ⠿ handle on the week view and drag. The original plan is never changed — you can reset any moved workout.'
+        })
+      );
+
+      const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+      const dayLabels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+      days.forEach((dayKey, i) => {
+        const iso = Plan.addDays(week.startDate, i);
+        const sessions = plannerSessions(iso);
+        const real = sessions.filter(s => s.discipline !== 'rest');
+        const total = real.reduce((sum, s) => sum + (s.duration || 0), 0);
+
+        const row = UI.el('div', {
+          class: 'planner-day' + (selected ? ' can-drop' : ''),
+          dataset: { date: iso },
+          onclick: () => {
+            if (selected) moveTo(selected, iso);
+          },
+          ondragover: (e) => { e.preventDefault(); row.classList.add('drag-over'); },
+          ondragleave: () => row.classList.remove('drag-over'),
+          ondrop: (e) => {
+            e.preventDefault();
+            row.classList.remove('drag-over');
+            const id = e.dataTransfer.getData('text/plain');
+            const s = plannerSessions(iso).find(x => x.id === id) ||
+              (weekObjSessions(id));
+            if (s) moveTo(s, iso);
+          }
+        });
+
+        row.append(UI.el('div', { class: 'planner-day-head' }, [
+          UI.el('span', { class: 'planner-day-name', text: dayLabels[i] }),
+          UI.el('span', { class: 'planner-day-date', text: Plan.prettyDate(iso) }),
+          UI.el('span', { class: 'planner-day-total', text: total ? UI.fmtDur(total) : 'Rest' })
+        ]));
+
+        const chips = UI.el('div', { class: 'planner-chips' });
+        if (!real.length) {
+          chips.append(UI.el('span', { class: 'planner-rest', text: 'Rest day' }));
+        }
+        for (const s of sessions) {
+          if (s.discipline === 'rest') continue;
+          const chip = UI.el('button', {
+            class: 'planner-chip ' + s.discipline + (selected && selected.id === s.id ? ' sel' : ''),
+            type: 'button',
+            draggable: 'true',
+            'aria-pressed': String(!!(selected && selected.id === s.id)),
+            onclick: (e) => {
+              e.stopPropagation();
+              const already = selected && selected.id === s.id;
+              selected = already ? null : s;
+              paintSheet();
+            },
+            ondragstart: (e) => {
+              e.dataTransfer.setData('text/plain', s.id);
+              e.dataTransfer.effectAllowed = 'move';
+            }
+          }, [
+            UI.icon(s.discipline, 14),
+            UI.el('span', { class: 'planner-chip-title', text: s.title || UI.LABELS[s.discipline] || s.discipline }),
+            UI.el('span', { class: 'planner-chip-dur', text: UI.fmtDur(s.duration) })
+          ]);
+          chips.append(chip);
+        }
+
+        if (!selected) {
+          chips.append(UI.el('button', {
+            class: 'planner-add',
+            type: 'button',
+            'aria-label': 'Add a workout to ' + dayLabels[i],
+            onclick: (e) => {
+              e.stopPropagation();
+              openAddSheet(iso);
+            }
+          }, ['+']));
+        }
+        row.append(chips);
+        wrap.append(row);
+      });
+
+      if (selected) {
+        wrap.append(UI.el('p', {
+          class: 'planner-hint',
+          text: 'Now tap the day you want "' +
+            (selected.title || UI.LABELS[selected.discipline] || selected.discipline) + '" on.'
+        }));
+      }
+
+      wrap.append(UI.el('div', { class: 'btnrow' }, [
+        UI.el('button', {
+          class: 'btn', type: 'button',
+          onclick: () => { closeSheet(); openTemplateEditor(); }
+        }, ['Weekly layout']),
+        UI.el('button', {
+          class: 'btn', type: 'button',
+          onclick: () => { closeSheet(); exportWeekToCalendar(); }
+        }, ['Add week to Calendar'])
+      ]));
+
+      return wrap;
+    });
+
+    /* Find a session anywhere in this week by id (for drag/drop). */
+    function weekObjSessions(id) {
+      for (let i = 0; i < 7; i++) {
+        const iso = Plan.addDays(week.startDate, i);
+        const found = plannerSessions(iso).find(x => x.id === id);
+        if (found) return found;
+      }
+      return null;
+    }
+  }
+
+  /* ---- week board: pool + days, drag workouts onto days ---- */
+  function openWeekBoard(preselectId) {
+    const week = Plan.weekFor(state.weekNumber);
+    const who = state.athlete === 'both' ? 'both' : state.athlete;
+    const sessions = Plan.boardSessionsForWeek(week.weekNumber, who);
+    const days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+    const dayLabels = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+
+    const selectedId = preselectId || null;
+
+    const existingBoard = Store.getWeekBoard(week.weekNumber);
+
+    openSheet(() => {
+      const wrap = document.createDocumentFragment();
+
+      appendAll(wrap,
+        UI.el('div', { class: 'sh-head' }, [
+          UI.el('p', { class: 'sh-eyebrow', text: 'Week ' + week.weekNumber }),
+          UI.el('h2', { class: 'sh-title', id: 'sheetTitle', text: 'Week board' })
+        ]),
+        UI.el('p', {
+          class: 'sh-text',
+          text: 'Drag (or tap) each workout onto the day that works this week. Workouts left in the pool don’t show on your week until you place them.'
+        }),
+
+        /* Pool: everything not on a day yet. */
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Not scheduled yet' }),
+          UI.el('div', {
+            class: 'board-pool',
+            'data-date': 'pool',
+            ondragover: (e) => { e.preventDefault(); },
+            ondrop: (e) => {
+              e.preventDefault();
+              const id = e.dataTransfer.getData('text/plain');
+              const moved = findSession(id);
+              if (moved && !Store.isPooled(week.weekNumber, moved.id)) {
+                Store.poolSession(week.weekNumber, moved.id);
+                Plan.refresh(); render(); paintSheet();
+                toast('Back in the pool', null);
+              }
+            }
+          }, [
+            UI.el('div', { class: 'board-pool-head' }, [
+              UI.el('span', { class: 'board-pool-name', text: 'Pool' }),
+              UI.el('span', { class: 'board-pool-date', text: sessions.filter(s => s.pooled).length + ' waiting' })
+            ]),
+            UI.el('div', { class: 'planner-chips' }, [
+              ...pooledChips()
+            ])
+          ])
+        ]),
+
+        /* The seven days. */
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Days' }),
+          ...days.map((dayKey, i) => {
+            const iso = Plan.addDays(week.startDate, i);
+            const today = Plan.todayISO();
+            const assigned = sessions.filter(s => !s.pooled && s.date === iso);
+            const total = assigned.reduce((sum, s) => sum + (s.duration || 0), 0);
+
+            const row = UI.el('div', {
+              class: 'board-day' + (assigned.length ? '' : ' is-empty') + (iso === today ? ' is-today' : ''),
+              'data-date': iso,
+              ondragover: (e) => { e.preventDefault(); row.classList.add('drag-over'); },
+              ondragleave: () => row.classList.remove('drag-over'),
+              ondrop: (e) => {
+                e.preventDefault();
+                row.classList.remove('drag-over');
+                const id = e.dataTransfer.getData('text/plain');
+                const moved = findSession(id);
+                if (moved) {
+                  Store.assignWeekBoardSession(week.weekNumber, moved.id, iso);
+                  Plan.refresh(); render(); paintSheet();
+                  toast('Placed on ' + Plan.prettyDate(iso), null);
+                }
+              },
+              onclick: () => {
+                if (selectedId) {
+                  const moved = findSession(selectedId);
+                  if (moved && !moved.pooled && moved.date === iso) return;
+                  if (moved) {
+                    Store.assignWeekBoardSession(week.weekNumber, moved.id, iso);
+                    Plan.refresh(); render(); paintSheet();
+                    selectedId = null;
+                    toast('Placed on ' + Plan.prettyDate(iso), null);
+                  }
+                }
+              }
+            }, [
+              UI.el('div', { class: 'board-pool-head' }, [
+                UI.el('span', { class: 'board-pool-name', text: dayLabels[i] }),
+                UI.el('span', { class: 'board-pool-date', text: Plan.prettyDate(iso) + (iso === today ? ' · today' : '') }),
+                UI.el('span', { class: 'board-pool-total', text: total ? UI.fmtDur(total) : 'Rest' })
+              ]),
+              UI.el('div', { class: 'planner-chips' }, [
+                ...assigned.map(s => boardChip(s, iso))
+              ])
+            ])
+          })
+        ]),
+
+        UI.el('div', { class: 'board-actions btnrow' }, [
+          UI.el('button', {
+            class: 'btn block', type: 'button',
+            onclick: () => {
+              const ids = sessions.map(s => s.id);
+              Store.poolWholeWeek(week.weekNumber, ids);
+              Plan.refresh(); render(); paintSheet();
+              toast('Blank board — all workouts in the pool', null);
+            }
+          }, ['Clear days → pool']),
+          UI.el('button', {
+            class: 'btn ghost block', type: 'button',
+            onclick: () => {
+              Store.clearWeekBoard(week.weekNumber);
+              Plan.refresh(); render(); paintSheet();
+              toast('Back to plan days', null);
+            }
+          }, ['Use plan days'])
+        ]),
+
+        UI.el('div', { class: 'planner-hint', text: existingBoard ? 'Board saved for this week.' : '' })
+      );
+
+      return wrap;
+
+      function pooledChips() {
+        const pool = sessions.filter(s => s.pooled);
+        if (!pool.length) return [elp('Rest — everything is on a day')];
+        return pool.map(s => boardChip(s, 'pool'));
+      }
+
+      function boardChip(s, ownerDate) {
+        const selected = selectedId === s.id;
+        const isPool = ownerDate === 'pool';
+        return UI.el('button', {
+          class: 'planner-chip ' + s.discipline + (selected ? ' sel' : ''),
+          type: 'button',
+          draggable: 'true',
+          'aria-pressed': String(selected),
+          title: (s.title || UI.LABELS[s.discipline] || s.discipline) + ' · ' + UI.fmtDur(s.duration),
+          onclick: (e) => {
+            e.stopPropagation();
+            selectedId = selectedId === s.id ? null : s.id;
+            paintSheet();
+          },
+          ondragstart: (e) => {
+            e.dataTransfer.setData('text/plain', s.id);
+            e.dataTransfer.effectAllowed = 'move';
+          }
+        }, [
+          UI.icon(s.discipline, 14),
+          UI.el('span', { class: 'planner-chip-title', text: s.title || UI.LABELS[s.discipline] || s.discipline }),
+          UI.el('span', { class: 'planner-chip-dur', text: UI.fmtDur(s.duration) })
+        ]);
+      }
+
+      function findSession(id) {
+        return sessions.find(s => s.id === id);
+      }
+      function elp(text) { return UI.el('p', { class: 'board-empty', text: text }); }
+    });
+  }
+
+  function exportWeekToCalendar() {
+    const who = state.athlete === 'both' ? 'eric' : state.athlete;
+    const sessions = Plan.sessionsForWeek(state.weekNumber, who)
+      .filter(s => s.discipline !== 'rest');
+    if (!sessions.length) {
+      toast('No workouts this week', null);
+      return;
+    }
+    Cal.exportSessions(sessions, `week-${state.weekNumber}-workouts.ics`,
+      'Week ' + state.weekNumber + ' workouts');
+    toast('Calendar file downloaded', null);
   }
 
   /* ---- weekly template editor ---- */
@@ -952,6 +1547,7 @@
       ['run', 'Run'],
       ['brick', 'Brick'],
       ['strength', 'Mobility'],
+      ['cross', 'Other'],
       ['open-water-swim', 'Open Water']
     ];
 
@@ -1009,15 +1605,22 @@
       days.forEach((dayKey, i) => {
         const d = dayValues[dayKey] || 'rest';
         const label = disciplines.find(([k]) => k === d)[1];
-        const color = d === 'rest' ? 'var(--text-soft)' : 'var(--' + d + ')';
+        const color = d === 'rest'
+          ? 'var(--text-soft)'
+          : d === 'open-water-swim' ? 'var(--ows)' : 'var(--' + d + ')';
         const p = UI.el('div', { class: 'tpl-preview-day', style: 'color:' + color });
         p.append(UI.el('span', { class: 'tpl-pv-day', text: dayLabels[i] }));
         p.append(UI.el('span', { class: 'tpl-pv-disc ' + d, text: label }));
         preview.append(p);
       });
 
-      wrap.append(
-        sheetHead(`Week ${week.weekNumber}`, 'Weekly Template', true),
+      appendAll(wrap,
+        sheetHead(`Week ${week.weekNumber}`, 'Weekly layout', true),
+
+        UI.el('p', {
+          class: 'sh-text',
+          text: 'This is a filter: pick the sport you want to see on each day, or Rest to hide that day. If a sport is missing that day, add it with + in Plan week.'
+        }),
 
         UI.el('div', { class: 'sh-section' }, [
           UI.el('div', { class: 'sh-label', text: 'Apply to' }),
@@ -1062,8 +1665,8 @@
     openSheet(() => {
       const wrap = document.createDocumentFragment();
 
-      const themeRow = UI.el('div', { class: 'segmented' });
-      for (const [val, label] of [['auto', 'Auto'], ['light', 'Light'], ['dark', 'Dark'], ['vibrant', 'Vibrant']]) {
+      const themeRow = UI.el('div', { class: 'segmented segmented-wrap' });
+      for (const [val, label] of [['auto', 'Auto'], ['light', 'Light'], ['dark', 'Dark'], ['vibrant', 'Vibrant'], ['pink', 'Bloom 🌷']]) {
         themeRow.append(UI.el('button', {
           type: 'button',
           'aria-pressed': String(Store.state.theme === val),
@@ -1113,11 +1716,52 @@
         }
       });
 
-      wrap.append(
+      const planInput = UI.el('input', {
+        type: 'file', accept: '.json,application/json',
+        style: 'display:none',
+        onchange: (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = async () => {
+            try {
+              const parsed = JSON.parse(reader.result);
+              if (!parsed || !Array.isArray(parsed.weeks) || !parsed.weeks.length) {
+                throw new Error('This file has no weeks');
+              }
+              if (!parsed.startDate) throw new Error('This file has no startDate');
+              if (!parsed.weeks.every(w => w && Array.isArray(w.days))) {
+                throw new Error('Every week needs a days array');
+              }
+              for (const w of parsed.weeks) {
+                if (!w.weekNumber || !w.startDate || !w.endDate) {
+                  throw new Error('Every week needs weekNumber, startDate and endDate');
+                }
+                for (const d of w.days) {
+                  if (!d || !d.date || !Array.isArray(d.sessions)) {
+                    throw new Error('Every day needs a date and a sessions array');
+                  }
+                }
+              }
+              Store.setCustomPlan(parsed);
+              await Plan.load();
+              render();
+              closeSheet();
+              toast('Your plan is loaded', null);
+            } catch (err) {
+              toast(err.message || 'That plan did not look right', null);
+            }
+          };
+          reader.readAsText(file);
+        }
+      });
+
+      appendAll(wrap,
         sheetHead('Settings', 'Preferences', null),
 
         UI.el('div', { class: 'sh-section' }, [
-          UI.el('div', { class: 'sh-label', text: 'Appearance' }), themeRow
+          UI.el('div', { class: 'sh-label', text: 'Appearance' }), themeRow,
+          UI.el('p', { class: 'note-line', text: 'Bloom is the pink theme. Themes stay on this phone — Ella can keep Bloom even if Eric picks something else.' })
         ]),
         UI.el('div', { class: 'sh-section' }, [
           UI.el('div', { class: 'sh-label', text: 'This phone belongs to' }),
@@ -1127,7 +1771,7 @@
 
         UI.el('div', { class: 'sh-section' }, [
           UI.el('div', { class: 'sh-label', text: 'Your data' }),
-          UI.el('p', { class: 'sh-text', text: 'Checkmarks and edits live on this phone only for now. Export to move them to another device.' }),
+          UI.el('p', { class: 'sh-text', text: 'Checkmarks, moves and templates sync between your phones through Turso. Export is a backup, or for moving to a new phone.' }),
           UI.el('div', { class: 'btnrow' }, [
             UI.el('button', {
               class: 'btn', type: 'button',
@@ -1150,21 +1794,108 @@
         ]),
 
         UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Your plan' }),
+          UI.el('p', {
+            class: 'sh-text',
+            text: Store.state.customPlan
+              ? 'You are using an imported plan. Download it as a backup, or switch back to the built-in 70.3 plan.'
+              : 'Import a plan.json file to use your own schedule. It needs startDate and a weeks array; everything else is optional.'
+          }),
+          UI.el('div', { class: 'btnrow' }, [
+            UI.el('button', {
+              class: 'btn', type: 'button',
+              onclick: () => planInput.click()
+            }, ['Import plan']),
+            UI.el('button', {
+              class: 'btn', type: 'button',
+              onclick: () => {
+                const blob = new Blob([JSON.stringify(Plan.data, null, 1)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = UI.el('a', { href: url, download: 'plan.json' });
+                document.body.append(a);
+                a.click();
+                a.remove();
+                URL.revokeObjectURL(url);
+              }
+            }, ['Download plan']),
+            planInput
+          ]),
+          Store.state.customPlan ? UI.el('div', { class: 'btnrow' }, [
+            UI.el('button', {
+              class: 'btn ghost block', type: 'button',
+              onclick: async () => {
+                if (!confirm('Switch back to the built-in plan? Your checkmarks and moves stay.')) return;
+                Store.clearCustomPlan();
+                await Plan.load();
+                render();
+                closeSheet();
+                toast('Built-in plan restored', null);
+              }
+            }, ['Use built-in plan'])
+          ]) : null
+        ]),
+
+        UI.el('div', { class: 'sh-section' }, [
           UI.el('div', { class: 'sh-label', text: 'Calendar' }),
-          UI.el('p', { class: 'sh-text', text: 'Download race and milestone events as an .ics file, then import into Google Calendar or Apple Calendar.' }),
+          UI.el('p', { class: 'sh-text', text: 'Download .ics files, then import them into Google Calendar or Apple Calendar. Workouts are all-day events with the sets in the description.' }),
           UI.el('div', { class: 'btnrow' }, [
             UI.el('button', {
               class: 'btn', type: 'button',
               onclick: () => {
                 try {
                   Cal.exportCalendar(Plan.data);
-                  toast('Calendar file downloaded', null);
+                  toast('Events downloaded', null);
                 } catch (err) {
                   toast(err.message || 'Export failed', null);
                 }
               }
-            }, ['Export to Calendar'])
+            }, ['Race dates']),
+            UI.el('button', {
+              class: 'btn', type: 'button',
+              onclick: () => exportWeekToCalendar()
+            }, ['This week']),
+            UI.el('button', {
+              class: 'btn', type: 'button',
+              onclick: () => {
+                const who = state.athlete === 'both' ? 'eric' : state.athlete;
+                const all = [];
+                for (const w of Plan.data.weeks) {
+                  all.push(...Plan.sessionsForWeek(w.weekNumber, who));
+                }
+                const workouts = all.filter(s => s.discipline !== 'rest');
+                if (!workouts.length) { toast('No workouts to export', null); return; }
+                Cal.exportSessions(workouts, 'all-workouts.ics', 'All workouts');
+                toast('All workouts downloaded', null);
+              }
+            }, ['All workouts'])
           ])
+        ]),
+
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Weekly layouts' }),
+          UI.el('p', { class: 'sh-text', text: 'Layouts choose which sport shows on each day. They sync between phones.' }),
+          UI.el('div', { class: 'btnrow' }, [
+            UI.el('button', {
+              class: 'btn', type: 'button',
+              onclick: () => { closeSheet(); openTemplateEditor(); }
+            }, ['Edit this week']),
+            Object.keys(Store.state.weeklyTemplates || {}).length ? UI.el('button', {
+              class: 'btn danger', type: 'button',
+              onclick: () => {
+                if (!confirm('Clear every weekly template?')) return;
+                Store.clearWeekTemplates();
+                toast('Templates cleared', null);
+              }
+            }, ['Clear all']) : null
+          ])
+        ]),
+
+        UI.el('div', { class: 'sh-section' }, [
+          UI.el('div', { class: 'sh-label', text: 'Watches & apps' }),
+          UI.el('p', {
+            class: 'note-line',
+            text: 'Strava, Garmin, COROS and Apple Health are on the someday list. For now, log minutes here — it takes about five seconds.'
+          })
         ]),
 
         UI.el('div', { class: 'sh-section' }, [
@@ -1188,7 +1919,7 @@
           style: 'margin-top:22px',
           text: 'Plan v' + (Plan.data.planVersion || '1') +
             ' · ' + Plan.data.weeks.length + ' weeks · ' +
-            Plan.data.goal
+            (Plan.data.goal || 'Finish comfortably')
         })
       );
 

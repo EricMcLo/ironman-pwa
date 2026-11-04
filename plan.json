@@ -409,7 +409,7 @@
      "sessions": [
       {
        "id": "w01-sat-run1",
-       "discipline": "sat_run",
+       "discipline": "run",
        "athletes": [
         "eric",
         "ella"
@@ -424,16 +424,19 @@
          "duration": 55,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Run maintenance. Easy, no racing the group.",
-         "distanceKm": 8.5
+         "distanceKm": 8.5,
+         "title": "Long run"
         },
         "ella": {
          "duration": 55,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Easy long run. Own pace, no racing the group.",
-         "distanceKm": 8.5
+         "distanceKm": 8.5,
+         "title": "Long run"
         }
        },
-       "distanceKm": 8.5
+       "distanceKm": 8.5,
+       "title": "Long run"
       }
      ]
     },
@@ -443,7 +446,7 @@
      "sessions": [
       {
        "id": "w01-sun-bike1",
-       "discipline": "sun_bike",
+       "discipline": "bike",
        "athletes": [
         "eric",
         "ella"
@@ -457,14 +460,17 @@
         "eric": {
          "duration": 65,
          "sets": "Long endurance ride",
-         "notes": "Your strength. Steady aerobic, no hero efforts."
+         "notes": "Your strength. Steady aerobic, no hero efforts.",
+         "title": "Long bike"
         },
         "ella": {
          "duration": 65,
          "sets": "Long endurance ride",
-         "notes": "Steady aerobic ride."
+         "notes": "Steady aerobic ride.",
+         "title": "Long bike"
         }
-       }
+       },
+       "title": "Long bike"
       }
      ]
     }
@@ -650,7 +656,7 @@
      "sessions": [
       {
        "id": "w02-sat-run1",
-       "discipline": "sat_run",
+       "discipline": "run",
        "athletes": [
         "eric",
         "ella"
@@ -665,16 +671,19 @@
          "duration": 60,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Run maintenance. Easy, no racing the group.",
-         "distanceKm": 9.2
+         "distanceKm": 9.2,
+         "title": "Long run"
         },
         "ella": {
          "duration": 60,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Easy long run. Own pace, no racing the group.",
-         "distanceKm": 9.2
+         "distanceKm": 9.2,
+         "title": "Long run"
         }
        },
-       "distanceKm": 9.2
+       "distanceKm": 9.2,
+       "title": "Long run"
       }
      ]
     },
@@ -684,7 +693,7 @@
      "sessions": [
       {
        "id": "w02-sun-bike1",
-       "discipline": "sun_bike",
+       "discipline": "bike",
        "athletes": [
         "eric",
         "ella"
@@ -698,14 +707,17 @@
         "eric": {
          "duration": 70,
          "sets": "Long endurance ride",
-         "notes": "Your strength. Steady aerobic, no hero efforts."
+         "notes": "Your strength. Steady aerobic, no hero efforts.",
+         "title": "Long bike"
         },
         "ella": {
          "duration": 70,
          "sets": "Long endurance ride",
-         "notes": "Steady aerobic ride."
+         "notes": "Steady aerobic ride.",
+         "title": "Long bike"
         }
-       }
+       },
+       "title": "Long bike"
       }
      ]
     }
@@ -891,7 +903,7 @@
      "sessions": [
       {
        "id": "w03-sat-run1",
-       "discipline": "sat_run",
+       "discipline": "run",
        "athletes": [
         "eric",
         "ella"
@@ -906,16 +918,19 @@
          "duration": 65,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Run maintenance. Easy, no racing the group.",
-         "distanceKm": 10.0
+         "distanceKm": 10.0,
+         "title": "Long run"
         },
         "ella": {
          "duration": 65,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Easy long run. Own pace, no racing the group.",
-         "distanceKm": 10.0
+         "distanceKm": 10.0,
+         "title": "Long run"
         }
        },
-       "distanceKm": 10.0
+       "distanceKm": 10.0,
+       "title": "Long run"
       }
      ]
     },
@@ -925,7 +940,7 @@
      "sessions": [
       {
        "id": "w03-sun-bike1",
-       "discipline": "sun_bike",
+       "discipline": "bike",
        "athletes": [
         "eric",
         "ella"
@@ -939,14 +954,17 @@
         "eric": {
          "duration": 75,
          "sets": "Long endurance ride",
-         "notes": "Your strength. Steady aerobic, no hero efforts."
+         "notes": "Your strength. Steady aerobic, no hero efforts.",
+         "title": "Long bike"
         },
         "ella": {
          "duration": 75,
          "sets": "Long endurance ride",
-         "notes": "Steady aerobic ride."
+         "notes": "Steady aerobic ride.",
+         "title": "Long bike"
         }
-       }
+       },
+       "title": "Long bike"
       }
      ]
     }
@@ -1132,7 +1150,7 @@
      "sessions": [
       {
        "id": "w04-sat-run1",
-       "discipline": "sat_run",
+       "discipline": "run",
        "athletes": [
         "eric",
         "ella"
@@ -1147,16 +1165,19 @@
          "duration": 45,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Run maintenance. Easy, no racing the group.",
-         "distanceKm": 6.9
+         "distanceKm": 6.9,
+         "title": "Long run"
         },
         "ella": {
          "duration": 45,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Easy long run. Own pace, no racing the group.",
-         "distanceKm": 6.9
+         "distanceKm": 6.9,
+         "title": "Long run"
         }
        },
-       "distanceKm": 6.9
+       "distanceKm": 6.9,
+       "title": "Long run"
       }
      ]
     },
@@ -1166,7 +1187,7 @@
      "sessions": [
       {
        "id": "w04-sun-bike1",
-       "discipline": "sun_bike",
+       "discipline": "bike",
        "athletes": [
         "eric",
         "ella"
@@ -1180,14 +1201,17 @@
         "eric": {
          "duration": 55,
          "sets": "Long endurance ride",
-         "notes": "Your strength. Steady aerobic, no hero efforts."
+         "notes": "Your strength. Steady aerobic, no hero efforts.",
+         "title": "Long bike"
         },
         "ella": {
          "duration": 55,
          "sets": "Long endurance ride",
-         "notes": "Steady aerobic ride."
+         "notes": "Steady aerobic ride.",
+         "title": "Long bike"
         }
-       }
+       },
+       "title": "Long bike"
       }
      ]
     }
@@ -1373,7 +1397,7 @@
      "sessions": [
       {
        "id": "w05-sat-run1",
-       "discipline": "sat_run",
+       "discipline": "run",
        "athletes": [
         "eric",
         "ella"
@@ -1388,16 +1412,19 @@
          "duration": 65,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Run maintenance. Easy, no racing the group.",
-         "distanceKm": 10.0
+         "distanceKm": 10.0,
+         "title": "Long run"
         },
         "ella": {
          "duration": 65,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Easy long run. Own pace, no racing the group.",
-         "distanceKm": 10.0
+         "distanceKm": 10.0,
+         "title": "Long run"
         }
        },
-       "distanceKm": 10.0
+       "distanceKm": 10.0,
+       "title": "Long run"
       }
      ]
     },
@@ -1407,7 +1434,7 @@
      "sessions": [
       {
        "id": "w05-sun-bike1",
-       "discipline": "sun_bike",
+       "discipline": "bike",
        "athletes": [
         "eric",
         "ella"
@@ -1421,14 +1448,17 @@
         "eric": {
          "duration": 70,
          "sets": "Long endurance ride",
-         "notes": "Your strength. Steady aerobic, no hero efforts."
+         "notes": "Your strength. Steady aerobic, no hero efforts.",
+         "title": "Long bike"
         },
         "ella": {
          "duration": 70,
          "sets": "Long endurance ride",
-         "notes": "Steady aerobic ride."
+         "notes": "Steady aerobic ride.",
+         "title": "Long bike"
         }
-       }
+       },
+       "title": "Long bike"
       }
      ]
     }
@@ -1614,7 +1644,7 @@
      "sessions": [
       {
        "id": "w06-sat-run1",
-       "discipline": "sat_run",
+       "discipline": "run",
        "athletes": [
         "eric",
         "ella"
@@ -1629,16 +1659,19 @@
          "duration": 70,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Run maintenance. Easy, no racing the group.",
-         "distanceKm": 10.8
+         "distanceKm": 10.8,
+         "title": "Long run"
         },
         "ella": {
          "duration": 70,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Easy long run. Own pace, no racing the group.",
-         "distanceKm": 10.8
+         "distanceKm": 10.8,
+         "title": "Long run"
         }
        },
-       "distanceKm": 10.8
+       "distanceKm": 10.8,
+       "title": "Long run"
       }
      ]
     },
@@ -1648,7 +1681,7 @@
      "sessions": [
       {
        "id": "w06-sun-bike1",
-       "discipline": "sun_bike",
+       "discipline": "bike",
        "athletes": [
         "eric",
         "ella"
@@ -1662,14 +1695,17 @@
         "eric": {
          "duration": 75,
          "sets": "Long endurance ride",
-         "notes": "Your strength. Steady aerobic, no hero efforts."
+         "notes": "Your strength. Steady aerobic, no hero efforts.",
+         "title": "Long bike"
         },
         "ella": {
          "duration": 75,
          "sets": "Long endurance ride",
-         "notes": "Steady aerobic ride."
+         "notes": "Steady aerobic ride.",
+         "title": "Long bike"
         }
-       }
+       },
+       "title": "Long bike"
       }
      ]
     }
@@ -1855,7 +1891,7 @@
      "sessions": [
       {
        "id": "w07-sat-run1",
-       "discipline": "sat_run",
+       "discipline": "run",
        "athletes": [
         "eric",
         "ella"
@@ -1870,16 +1906,19 @@
          "duration": 50,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Run maintenance. Easy, no racing the group.",
-         "distanceKm": 7.7
+         "distanceKm": 7.7,
+         "title": "Long run"
         },
         "ella": {
          "duration": 50,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Easy long run. Own pace, no racing the group.",
-         "distanceKm": 7.7
+         "distanceKm": 7.7,
+         "title": "Long run"
         }
        },
-       "distanceKm": 7.7
+       "distanceKm": 7.7,
+       "title": "Long run"
       }
      ]
     },
@@ -1889,7 +1928,7 @@
      "sessions": [
       {
        "id": "w07-sun-bike1",
-       "discipline": "sun_bike",
+       "discipline": "bike",
        "athletes": [
         "eric",
         "ella"
@@ -1903,14 +1942,17 @@
         "eric": {
          "duration": 65,
          "sets": "Long endurance ride",
-         "notes": "Your strength. Steady aerobic, no hero efforts."
+         "notes": "Your strength. Steady aerobic, no hero efforts.",
+         "title": "Long bike"
         },
         "ella": {
          "duration": 65,
          "sets": "Long endurance ride",
-         "notes": "Steady aerobic ride."
+         "notes": "Steady aerobic ride.",
+         "title": "Long bike"
         }
-       }
+       },
+       "title": "Long bike"
       }
      ]
     }
@@ -2096,7 +2138,7 @@
      "sessions": [
       {
        "id": "w08-sat-run1",
-       "discipline": "sat_run",
+       "discipline": "run",
        "athletes": [
         "eric",
         "ella"
@@ -2111,16 +2153,19 @@
          "duration": 60,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Run maintenance. Easy, no racing the group.",
-         "distanceKm": 9.2
+         "distanceKm": 9.2,
+         "title": "Long run"
         },
         "ella": {
          "duration": 60,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Easy long run. Own pace, no racing the group.",
-         "distanceKm": 9.2
+         "distanceKm": 9.2,
+         "title": "Long run"
         }
        },
-       "distanceKm": 9.2
+       "distanceKm": 9.2,
+       "title": "Long run"
       }
      ]
     },
@@ -2130,7 +2175,7 @@
      "sessions": [
       {
        "id": "w08-sun-bike1",
-       "discipline": "sun_bike",
+       "discipline": "bike",
        "athletes": [
         "eric",
         "ella"
@@ -2144,14 +2189,17 @@
         "eric": {
          "duration": 70,
          "sets": "Long endurance ride",
-         "notes": "Your strength. Steady aerobic, no hero efforts."
+         "notes": "Your strength. Steady aerobic, no hero efforts.",
+         "title": "Long bike"
         },
         "ella": {
          "duration": 70,
          "sets": "Long endurance ride",
-         "notes": "Steady aerobic ride."
+         "notes": "Steady aerobic ride.",
+         "title": "Long bike"
         }
-       }
+       },
+       "title": "Long bike"
       }
      ]
     }
@@ -7031,16 +7079,19 @@
         "eric": {
          "duration": 45,
          "sets": "Easy 45 min run",
-         "notes": "Support crew. Easy run only."
+         "notes": "Support crew. Easy run only.",
+         "title": "Support: easy run"
         },
         "ella": {
          "duration": 270,
-         "sets": "SLC Marathon",
-         "notes": "Even effort. Fuel early, walk aid stations if needed.",
-         "race": true
+         "sets": "26.2 miles — even effort, walk aid stations if needed",
+         "notes": "Fuel early. No time goal — finish comfortably.",
+         "race": true,
+         "title": "SLC Marathon"
         }
        },
-       "race": true
+       "race": true,
+       "title": "SLC Marathon"
       }
      ]
     },

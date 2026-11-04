@@ -1,14 +1,15 @@
 # Ironman 70.3 Utah — Eric & Ella
 
-A 42-week training plan for **Ironman 70.3 Utah, Saturday Aug 21 2027**, with a
+A 51-week training plan for **Ironman 70.3 Utah, Saturday Aug 21 2027**, with a
 mobile-first web app to read it, check things off, and move sessions around.
 
 No time goal. The goal is to **finish comfortably**.
 
 ```
 Start:  Mon Nov 2 2026
-Race:   Sat Aug 21 2027   (42 weeks)
-Also:   Sat Apr 24 2027   — Ella runs the SLC Marathon
+70.3:   Sat Aug 21 2027
+Also:   Sat Apr 24 2027  — Ella runs the SLC Marathon
+CIM:    Sun Oct 24 2027  — "B" race for both
 ```
 
 ---
@@ -33,6 +34,7 @@ Then open <http://localhost:8080>.
 4. Safari → Share → **Add to Home Screen**. Chrome → menu → **Install app**.
 
 It then runs full-screen and works offline (service worker caches everything).
+The live copy is also deployed from GitHub `main` through Cloudflare Pages.
 
 ---
 
@@ -40,59 +42,57 @@ It then runs full-screen and works offline (service worker caches everything).
 
 | File | What it is |
 |---|---|
-| `plan.json` | **The plan.** 42 weeks × 7 days × 2 athletes. Source of truth. |
-| `index.html` | Page shell. |
-| `css/style.css` | All styling. Design tokens live at the top. |
-| `js/store.js` | **Persistence.** Everything saved lives here. Swap this for a backend later. |
-| `js/plan.js` | Loads `plan.json`, applies your edits, answers "what's on today?". |
+| `plan.json` | **The plan.** 51 weeks × 7 days × 2 athletes. Source of truth. |
+| `index.html` | Page shell + Turso config. |
+| `css/style.css` | All styling and themes (Auto / Light / Dark / Vibrant / Bloom). |
+| `js/store.js` | **Persistence.** localStorage + Turso sync. |
+| `js/plan.js` | Loads the plan, applies moves/edits, answers "what's on today?". |
 | `js/ui.js` | Rendering. Pure functions that return DOM nodes. |
-| `js/app.js` | State, view switching, sheets, event handlers. |
-| `manifest.json` | PWA metadata (name, icons, colours). |
+| `js/cal.js` | `.ics` export for races and workouts. |
+| `js/app.js` | State, views, sheets, drag-and-drop, event handlers. |
 | `sw.js` | Service worker — offline cache. |
-| `tools/build_plan.py` | Generated the original `plan.json`. See warning below. |
+| `tools/build_plan.py` | Generated the original plan. **Do not run it now.** |
 
 ### ⚠️ About `tools/build_plan.py`
 
 It generated the first version of `plan.json`. **`plan.json` is now the source
-of truth.** If you run the script again it will overwrite any hand edits.
-
-Run it only if you want to regenerate the whole season from scratch:
-
-```bash
-python3 tools/build_plan.py
-```
-
-It prints a table proving every week's scheduled minutes match its target hours.
+of truth.** Running the script again overwrites hand edits. `extend_plan.py`
+generated weeks 43–51 and aborts if those weeks already exist.
 
 ---
 
 ## How the data model works
 
-Three layers, kept separate on purpose:
+Four layers, kept separate on purpose:
 
 ```
-1. TEMPLATE      plan.json              never changes while you use the app
-2. YOUR EDITS    localStorage           moves, edits, added sessions, week scaling
-3. COMPLETIONS   localStorage           checkmarks + optional log (time, RPE, note)
+1. TEMPLATE      plan.json or an imported plan    never changed by normal use
+2. YOUR EDITS    localStorage + Turso             moves, edits, extras, week scaling
+3. COMPLETIONS   localStorage + Turso             checkmarks + optional log
+4. DEVICE PREFS  localStorage only                theme, "this phone belongs to"
 ```
 
-Layer 2 and 3 are **overrides**, not rewrites. That means:
+Layers 2 and 3 are **overrides**, not rewrites:
 
 - "Reset to original plan" always works.
-- You can see what the plan originally said.
+- You can move a workout and still see where it started.
 - Nothing is destroyed by accident.
+
+Themes and the `me` setting stay on each phone on purpose. Everything about the
+plan (checkmarks, moves, added workouts, weekly layouts, notes) syncs through
+Turso.
 
 ### `plan.json` shape
 
 ```jsonc
 {
-  "planVersion": "2.0",
+  "planVersion": "3.0",
   "startDate": "2026-11-02",
   "raceDate": "2027-08-21",
   "athletes": { "eric": {...}, "ella": {...} },
-  "zones":    { "Z1": {...}, ... },      // what each zone means
+  "zones":    { "Z1": {...}, ... },
   "events":   [ {...} ],                 // races + milestones
-  "phases":   [ {...} ],                 // base → marathon block → 70.3 build → peak → taper
+  "phases":   [ {...} ],
   "weeks": [
     {
       "weekNumber": 1,
@@ -100,8 +100,8 @@ Layer 2 and 3 are **overrides**, not rewrites. That means:
       "endDate": "2026-11-08",
       "phase": "base",
       "recoveryWeek": false,
-      "targetHours": { "eric": 5.5, "ella": 5.5 },
-      "focus": "Six weeks of pure aerobic base…",
+      "targetHours": { "eric": 4, "ella": 4 },
+      "focus": "Easy aerobic only",
       "days": [
         {
           "date": "2026-11-02",
@@ -109,13 +109,13 @@ Layer 2 and 3 are **overrides**, not rewrites. That means:
           "sessions": [
             {
               "id": "w01-mon-swim1",          // stable — checkmarks key off this
-              "discipline": "swim",           // swim | bike | run | brick | strength | rest | race
+              "discipline": "swim",           // swim | bike | run | brick | strength | cross | rest | race
               "athletes": ["eric", "ella"],
               "duration": 35,                 // minutes
               "intensity": "Z1",
               "sets": "8x50 drill/swim …",
               "notes": "Technique focus…",
-              "together": true,               // do you do it side by side?
+              "together": true,
               "variants": {
                 "eric": { "duration": 35, "sets": "…", "notes": "…" },
                 "ella": { "duration": 40, "sets": "…", "notes": "…" }
@@ -130,49 +130,68 @@ Layer 2 and 3 are **overrides**, not rewrites. That means:
 ```
 
 A **shared session is one object** with one `id`, plus a `variants` block for
-whatever differs per athlete. That keeps "we're doing this together" honest and
-means one checkmark row in the app, not two.
+whatever differs per athlete. That keeps "we're doing this together" honest.
 
-### What the app writes to localStorage
+### Importing your own plan
 
-```js
-{
-  version: 1,
-  me: "eric",              // whose phone this is (tags edits)
-  theme: "auto",           // auto | light | dark
-  view: "week",
-  log: {
-    "w01-mon-swim1|eric": { done: true, at: "2026-11-02T…" }
-  },
-  overrides: {
-    "w01-thu-run1": { date: "2026-11-06" },          // moved for both
-    "w01-tue-bike1": { "ella": { duration: 75 } }    // changed for Ella only
-  },
-  weekScale: { "7": 0.8 },  // week 7 at 80%
-  extras: [ { id: "x…", date: "…", discipline: "run", duration: 30, … } ],
-  meta: { by: "eric", at: "…" }
-}
-```
-
-Every record carries an `id` and a timestamp. That is exactly what a sync
-backend needs, which is why `js/store.js` is the only file you'd rewrite to add
-one.
+Settings → **Your plan** → **Import plan**. It accepts a `plan.json` with a
+`startDate` and a `weeks` array. The built-in plan stays one tap away under
+**Use built-in plan**, and **Download plan** gives you the current file to edit.
 
 ---
 
 ## Moving training days around
 
-This was the big ask, so it's built in three levels:
+There are now four levels, from quick to permanent:
 
 | You want | Where |
 |---|---|
+| Reshuffle this week | Week header → **Plan week** → tap a workout, then tap a day. |
+| Drag one workout | Hold the **⠿** handle on a week card and drag it onto another day. |
 | Shift one session | Session → **Move** → tap a day. Choose *Both / Eric / Ella*. |
 | Change one session | Session → **Edit** → duration, zone, sets, notes. |
-| Ease off a whole week | Week header → **Adjust week** → 70 / 80 / 90 / 100 / 110%. |
-| Add something | **+** in any day header. |
+| Add something | **+** in a day header, or tap a rest day and use **Quick add**. |
+| Hide a sport for a day | **Plan week → Weekly layout** |
+| Ease off a whole week | Week options → **Scale volume** (70–110%). |
 
-Moving a shared session moves it for both by default, because you're doing it
-together. Switch the scope to one person if only one of you is shifting.
+Moving a shared session moves it for both by default. Switch the scope to one
+person if only one of you is shifting.
+
+The original plan never changes. Every move is an override you can reset from
+the session sheet.
+
+### Logging what actually happened
+
+Tap the check circle → enter actual minutes, RPE and a note. To change the
+minutes later, tap the same check again; the log sheet reopens with your numbers
+filled in. There is also an **Edit log** button on a completed session, and a
+**Remove completion** button if you unchecked by mistake.
+
+---
+
+## Calendar export
+
+Settings → **Calendar**:
+
+- **Race dates** — races, phases and milestones as all-day events.
+- **This week** — the current week's workouts.
+- **All workouts** — the whole season.
+
+The planner and week options also have **Add this week to Google Calendar**.
+The file is a normal `.ics`; import it into Google Calendar, Apple Calendar or
+Outlook. Workouts are all-day events with the sets in the description.
+
+---
+
+## Themes
+
+Settings → **Appearance**:
+
+- **Auto** follows the phone.
+- **Light / Dark / Vibrant**.
+- **Bloom 🌷** is the pink theme adapted from Ella's adventure-app palette.
+
+Themes are per phone, so Ella can keep Bloom even if Eric picks something else.
 
 ---
 
@@ -181,11 +200,10 @@ together. Switch the scope to one person if only one of you is shifting.
 - **Mobile first.** 390 px is the design width. Bottom tab bar, bottom sheets,
   44 px tap targets.
 - **No build step.** No npm, no bundler. Edit a file, refresh.
-- **No external requests.** System fonts only, so it loads instantly and works
-  offline.
-- **Dark mode** follows the system, and can be pinned in Settings.
+- **No external requests** except the Turso sync client. System fonts only.
 - **Dates are parsed as local time** (`new Date(y, m-1, d)`), never UTC — that's
   what stops a workout showing up on the wrong day.
+- **Drag on a phone** comes from the ⠿ handle so normal scrolling still works.
 
 ---
 
@@ -193,12 +211,8 @@ together. Switch the scope to one person if only one of you is shifting.
 
 Deliberately not built yet:
 
-1. **Shared sync (Turso).** Right now checkmarks live on one phone. The seam is
-   `js/store.js` — replace `load()` / `save()` with HTTP calls and the rest of
-   the app doesn't change.
-2. **Editing UI for the plan itself.** Right now "editing" means per-session
-   overrides. Restructuring the season still means editing `plan.json`.
-3. **Notifications.** A 7 am nudge on training days.
-
-The plan is to use this for ~2 weeks first and see what actually annoys you
-before adding any of it.
+1. **Watch imports** — Strava, Garmin, COROS, Apple Health. For now, log minutes
+   by hand; it takes about five seconds.
+2. **A real in-app plan builder** — import/export covers custom plans today.
+3. **Notifications** — a 7 am nudge on training days.
+4. **Apply a weekly layout to a range of weeks** — currently one week at a time.

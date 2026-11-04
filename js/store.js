@@ -23,14 +23,17 @@ const Store = (() => {
     return {
       version: 1,
       me: 'eric',        // who is holding this phone (for "edited by")
-      theme: 'auto',     // auto | light | dark
+      theme: 'auto',     // auto | light | dark | vibrant | pink
       view: 'week',
       log: {},           // "sessionId|athlete" -> {done, at, actualMin, rpe, note}
       overrides: {},     // sessionId -> {date?, duration?, intensity?, sets?, notes?, eric:{}, ella:{}}
       weekScale: {},     // weekNumber -> factor (0.8 = 80%)
       skippedWeeks: [],  // weekNumbers the user has marked as skipped
       weekNotes: {},     // weekNumber (string) -> free-text note
+      weeklyTemplates: {}, // weekNumber -> {days:{monday:'swim',...}, scope}
+      weekBoards: {},    // weekNumber -> {pool:[sessionId]} — workouts waiting for a day
       extras: [],        // added sessions: {id, date, athlete, discipline, duration, ...}
+      customPlan: null,  // imported plan.json, wins over the built-in plan
       meta: { by: null, at: null }
     };
   }
@@ -47,18 +50,30 @@ const Store = (() => {
     }
   }
 
+  function notify() {
+    listeners.forEach(fn => fn(state));
+  }
+
   function save(state) {
     try {
       localStorage.setItem(KEY, JSON.stringify(state));
     } catch (err) {
       console.warn('Could not save (storage full or blocked).', err);
     }
-    listeners.forEach(fn => fn(state));
   }
 
   /* Stamp every write so a future sync layer can resolve conflicts. */
   function touch(state) {
     state.meta = { by: state.me, at: new Date().toISOString() };
+  }
+
+  /* Remove a workout from every week-board waiting room. */
+  function unpool(state, id) {
+    for (const [key, board] of Object.entries(state.weekBoards || {})) {
+      if (!board || !Array.isArray(board.pool)) continue;
+      board.pool = board.pool.filter(x => x !== id);
+      if (!board.pool.length) delete state.weekBoards[key];
+    }
   }
 
   /* ---------------------------------------------------------------- turso */
@@ -171,13 +186,17 @@ const Store = (() => {
         together: Boolean(r.together)
       }));
 
-      // --- meta ---
+      // --- weekly templates + week boards (stored as JSON values in meta) ---
+      let weeklyTemplates = current.weeklyTemplates || {};
+      let weekBoards = current.weekBoards || {};
       const metaRes = await tursoClient.execute('SELECT key, value FROM meta');
-      const meta = { by: null, at: null };
       for (const row of metaRes.rows) {
-        if (row.key === 'theme') meta.theme = row.value;
-        if (row.key === 'view') meta.view = row.value;
-        if (row.key === 'me') meta.me = row.value;
+        if (row.key === 'weekly_templates') {
+          try { weeklyTemplates = JSON.parse(row.value) || {}; } catch (err) { /* ignore */ }
+        }
+        if (row.key === 'week_boards') {
+          try { weekBoards = JSON.parse(row.value) || {}; } catch (err) { /* ignore */ }
+        }
       }
 
       const merged = Object.assign({}, current, {
@@ -186,11 +205,13 @@ const Store = (() => {
         weekScale,
         skippedWeeks,
         weekNotes,
-        extras,
-        meta: Object.assign({}, current.meta, meta)
+        weeklyTemplates,
+        weekBoards,
+        extras
       });
 
       save(merged);
+      notify();
     } catch (err) {
       console.warn('Turso pull failed:', err.message);
     }
@@ -273,18 +294,15 @@ const Store = (() => {
         );
       }
 
-      // Insert meta
+      // Insert meta. Theme/view/me are deliberately NOT synced — Ella's
+      // phone should keep its own pink theme even when Eric changes his.
       await tursoClient.execute(
         'INSERT INTO meta (key, value) VALUES (?, ?)',
-        ['theme', state.meta.theme || 'auto']
+        ['weekly_templates', JSON.stringify(state.weeklyTemplates || {})]
       );
       await tursoClient.execute(
         'INSERT INTO meta (key, value) VALUES (?, ?)',
-        ['view', state.meta.view || 'week']
-      );
-      await tursoClient.execute(
-        'INSERT INTO meta (key, value) VALUES (?, ?)',
-        ['me', state.meta.me || 'eric']
+        ['week_boards', JSON.stringify(state.weekBoards || {})]
       );
     } catch (err) {
       console.warn('Turso push failed:', err.message);
@@ -335,7 +353,7 @@ const Store = (() => {
       fn(state);
       touch(state);
       save(state);
-      listeners.forEach(listener => listener(state));
+      notify();
       enqueueTursoWrite();
     },
 
@@ -403,20 +421,34 @@ const Store = (() => {
     clearOverride(id, field, scope) {
       api.update(s => {
         const rec = s.overrides[id];
-        if (!rec) return;
-        if (!field) { delete s.overrides[id]; return; }
+        if (!rec) {
+          if (!field || field === 'date') unpool(s, id);
+          return;
+        }
+        if (!field) { delete s.overrides[id]; unpool(s, id); return; }
         if (scope === 'both') delete rec[field];
         else if (rec[scope]) {
           delete rec[scope][field];
           if (!Object.keys(rec[scope]).length) delete rec[scope];
         }
+        if (field === 'date') unpool(s, id);
         if (!Object.keys(rec).length) delete s.overrides[id];
       });
     },
 
-    /* Move a session to another ISO date. */
+    /* Move a session to another ISO date. Moving also takes it out of any
+       week-board pool, so the workout reappears on a day. */
     move(id, date, scope) {
-      api.setOverride(id, { date }, scope);
+      api.update(s => {
+        unpool(s, id);
+        const rec = s.overrides[id] || {};
+        if (scope === 'both') {
+          rec.date = date;
+        } else {
+          rec[scope] = Object.assign({}, rec[scope], { date });
+        }
+        s.overrides[id] = rec;
+      });
     },
 
     /* ---- week scaling --------------------------------------------- */
@@ -433,13 +465,14 @@ const Store = (() => {
 
     /* ---- extras (sessions you add yourself) ------------------------ */
     addExtra(session) {
+      const id = 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
       api.update(s => {
-        const id = 'x' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
         s.extras.push(Object.assign({
           id,
           createdAt: new Date().toISOString()
         }, session));
       });
+      return id;
     },
 
     removeExtra(id) {
@@ -469,7 +502,7 @@ const Store = (() => {
 
     setWeekTemplate(weekNumber, template) {
       api.update(s => {
-        if (!template || Object.values(template.days || {}).every(d => d === 'rest' || !d)) {
+        if (!template || !template.days || Object.keys(template.days).length === 0) {
           delete s.weeklyTemplates[String(weekNumber)];
         } else {
           s.weeklyTemplates[String(weekNumber)] = template;
@@ -479,6 +512,90 @@ const Store = (() => {
 
     clearWeekTemplates() {
       api.update(s => { s.weeklyTemplates = {}; });
+    },
+
+    /* ---- week board ----------------------------------------------- */
+    /* A week board is just a "waiting room" of session IDs. Workouts in the
+       pool are hidden from the normal week view until you drop them on a day.
+       Day placement itself still uses the normal `date` override, so moving a
+       workout later from the session sheet keeps working. */
+    getWeekBoard(weekNumber) {
+      return (state.weekBoards || {})[String(weekNumber)] || null;
+    },
+
+    isPooled(weekNumber, id) {
+      const b = api.getWeekBoard(weekNumber);
+      return !!(b && Array.isArray(b.pool) && b.pool.includes(id));
+    },
+
+    /* Pooled anywhere means "not scheduled yet", even if it was moved into a
+       different week before being dropped in the pool. */
+    isPooledAnywhere(id) {
+      return Object.values(state.weekBoards || {}).some(b =>
+        b && Array.isArray(b.pool) && b.pool.includes(id));
+    },
+
+    setWeekBoard(weekNumber, ids) {
+      api.update(s => {
+        const key = String(weekNumber);
+        const pool = [...new Set(ids || [])];
+        if (!pool.length) delete s.weekBoards[key];
+        else s.weekBoards[key] = { pool };
+      });
+    },
+
+    poolSession(weekNumber, id) {
+      api.update(s => {
+        const key = String(weekNumber);
+        const board = s.weekBoards[key] || { pool: [] };
+        board.pool = board.pool || [];
+        if (!board.pool.includes(id)) board.pool.push(id);
+        s.weekBoards[key] = board;
+      });
+    },
+
+    /* Drop a pooled workout onto a day. Removing it from the pool and setting
+       the date happen in one write, so the UI only redraws once. */
+    assignWeekBoardSession(weekNumber, id, date) {
+      api.update(s => {
+        const key = String(weekNumber);
+        const board = s.weekBoards[key];
+        if (board && Array.isArray(board.pool)) {
+          board.pool = board.pool.filter(x => x !== id);
+          if (!board.pool.length) delete s.weekBoards[key];
+        }
+        const rec = s.overrides[id] || {};
+        rec.date = date;
+        s.overrides[id] = rec;
+      });
+    },
+
+    clearWeekBoard(weekNumber) {
+      api.update(s => { delete s.weekBoards[String(weekNumber)]; });
+    },
+
+    /* Restore the original plan for a week: remove the board's pool and the
+       date moves for these sessions (duration/intensity edits stay). */
+    resetWeekBoardToPlan(weekNumber, ids) {
+      api.update(s => {
+        delete s.weekBoards[String(weekNumber)];
+        for (const id of ids || []) {
+          const rec = s.overrides[id];
+          if (!rec) continue;
+          delete rec.date;
+          for (const who of ['eric', 'ella']) {
+            if (!rec[who]) continue;
+            delete rec[who].date;
+            if (!Object.keys(rec[who]).length) delete rec[who];
+          }
+          if (!Object.keys(rec).length) delete s.overrides[id];
+        }
+      });
+    },
+
+    /* Put every workout in a week back in the pool. */
+    poolWholeWeek(weekNumber, ids) {
+      api.setWeekBoard(weekNumber, ids);
     },
 
     /* ---- week notes ----------------------------------------------- */
@@ -500,7 +617,7 @@ const Store = (() => {
     resetAll() {
       state = defaults();
       save(state);
-      listeners.forEach(listener => listener(state));
+      notify();
       enqueueTursoWrite();
     },
 
@@ -515,8 +632,17 @@ const Store = (() => {
       if (parsed.weeks && !Array.isArray(parsed.weeks)) throw new Error('Invalid weeks data');
       state = Object.assign(defaults(), parsed);
       save(state);
-      listeners.forEach(listener => listener(state));
+      notify();
       enqueueTursoWrite();
+    },
+
+    /* ---- custom plan (import your own plan.json) ------------------ */
+    setCustomPlan(plan) {
+      api.update(s => { s.customPlan = plan; });
+    },
+
+    clearCustomPlan() {
+      api.update(s => { s.customPlan = null; });
     },
 
     /* Expose turso status for debugging */
