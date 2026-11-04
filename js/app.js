@@ -1413,6 +1413,7 @@
     const who = state.athlete === 'both' ? 'both' : state.athlete;
     const days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
     const dayLabels = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+    const dayShort = ['M','T','W','T','F','S','S'];
 
     let selectedId = preselectId || null;
 
@@ -1430,7 +1431,16 @@
       // Re-compute from store each render so drops/taps always see fresh state.
       const sessions = Plan.boardSessionsForWeek(week.weekNumber, who);
 
-      const wrap = document.createDocumentFragment();
+      // Selected-workout hint banner (tap-tap fallback)
+      const selectedSession = selectedId ? sessions.find(s => s.id === selectedId) : null;
+      const hintBar = selectedSession ? UI.el('div', { class: 'board-hint' }, [
+        UI.el('span', { class: 'board-hint-dot', style: 'background:' + (selectedSession.discipline === 'open-water-swim' ? 'var(--ows)' : 'var(--' + selectedSession.discipline + ')') }),
+        UI.el('span', { text: (selectedSession.title || UI.LABELS[selectedSession.discipline] || selectedSession.discipline) + ' selected — tap a day to place it' }),
+        UI.el('button', {
+          class: 'board-hint-clear', type: 'button',
+          onclick: (e) => { e.stopPropagation(); selectedId = null; paintSheet(); }
+        }, ['✕'])
+      ]) : null;
 
       appendAll(wrap,
         UI.el('div', { class: 'sh-head' }, [
@@ -1439,8 +1449,9 @@
         ]),
         UI.el('p', {
           class: 'sh-text',
-          text: 'Every workout starts in "To be assigned" (race days stay pinned on their day). Tap a workout, then tap a day — or drag it — to build your schedule for the week.'
+          text: 'Every workout starts in "To be assigned" (race days stay pinned on their day). Tap a day letter on a workout, or tap a workout then tap a day, to build your schedule.'
         }),
+        hintBar,
 
         /* To be assigned: everything not on a day yet. */
         UI.el('div', { class: 'sh-section' }, [
@@ -1480,7 +1491,7 @@
             const total = assigned.reduce((sum, s) => sum + (s.duration || 0), 0);
 
             const row = UI.el('div', {
-              class: 'board-day' + (assigned.length ? '' : ' is-empty') + (iso === today ? ' is-today' : ''),
+              class: 'board-day' + (assigned.length ? '' : ' is-empty') + (iso === today ? ' is-today' : '') + (selectedId ? ' drop-zone' : ''),
               'data-date': iso,
               ondragover: (e) => { e.preventDefault(); row.classList.add('drag-over'); },
               ondragleave: () => row.classList.remove('drag-over'),
@@ -1547,6 +1558,10 @@
 
       function boardChip(s, ownerDate) {
         const selected = selectedId === s.id;
+        const isPool = ownerDate === 'pool';
+        const dayIdx = isPool ? -1 : days.indexOf(Plan.dayOfWeekName(s.date || ownerDate));
+        const dayShortLabel = dayIdx >= 0 ? dayShort[dayIdx] : '';
+
         return UI.el('button', {
           class: 'planner-chip ' + s.discipline + (selected ? ' sel' : ''),
           type: 'button',
@@ -1555,7 +1570,13 @@
           title: (s.title || UI.LABELS[s.discipline] || s.discipline) + ' · ' + UI.fmtDur(s.duration),
           onclick: (e) => {
             e.stopPropagation();
-            selectedId = selectedId === s.id ? null : s.id;
+            if (isPool) {
+              selectedId = selectedId === s.id ? null : s.id;
+            } else {
+              Store.poolSession(week.weekNumber, s.id);
+              Plan.refresh(); render(); paintSheet();
+              toast('Back to to-be-assigned', null);
+            }
             paintSheet();
           },
           ondragstart: (e) => {
@@ -1565,7 +1586,26 @@
         }, [
           UI.icon(s.discipline, 14),
           UI.el('span', { class: 'planner-chip-title', text: s.title || UI.LABELS[s.discipline] || s.discipline }),
-          UI.el('span', { class: 'planner-chip-dur', text: UI.fmtDur(s.duration) })
+          UI.el('span', { class: 'planner-chip-dur', text: UI.fmtDur(s.duration) }),
+          /* Day shortcut letters for pool chips — one-tap assign */
+          isPool ? UI.el('div', { class: 'chip-days' }, [
+            ...days.map((d, di) => {
+              const iso = Plan.addDays(week.startDate, di);
+              const isToday = iso === Plan.todayISO();
+              return UI.el('button', {
+                type: 'button',
+                class: 'chip-day' + (isToday ? ' today' : ''),
+                'aria-label': 'Assign to ' + dayLabels[di],
+                onclick: (ev) => {
+                  ev.stopPropagation();
+                  Store.assignWeekBoardSession(week.weekNumber, s.id, iso);
+                  Plan.refresh(); render(); paintSheet();
+                  toast('Placed on ' + dayLabels[di], null);
+                }
+              }, [dayShort[di]]);
+            })
+          ]) : null,
+          dayShortLabel ? UI.el('span', { class: 'chip-day-label', text: dayShortLabel }) : null
         ]);
       }
 
@@ -1600,7 +1640,7 @@
       ['brick', 'Brick'],
       ['strength', 'Mobility'],
       ['cross', 'Other'],
-      ['open-water-swim', 'Open Water']
+      ['open-water-swim', 'OW']
     ];
 
     let scope = existing.scope || 'both';
