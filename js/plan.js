@@ -287,6 +287,9 @@ const Plan = (() => {
       const onThisWeek = s.date >= week.startDate && s.date <= week.endDate;
       const inThisPool = Store.isPooled(weekNumber, s.id);
 
+      // Rest is a placeholder, not a real workout to assign.
+      if (s.discipline === 'rest') continue;
+
       if (!inThisPool && !onThisWeek) continue;
 
       map.set(s.id, Object.assign({}, s, { pooled: inThisPool }));

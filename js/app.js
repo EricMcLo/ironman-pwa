@@ -1411,23 +1411,25 @@
   function openWeekBoard(preselectId) {
     const week = Plan.weekFor(state.weekNumber);
     const who = state.athlete === 'both' ? 'both' : state.athlete;
-    const sessions = Plan.boardSessionsForWeek(week.weekNumber, who);
     const days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
     const dayLabels = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 
-    const selectedId = preselectId || null;
+    let selectedId = preselectId || null;
 
     const existingBoard = Store.getWeekBoard(week.weekNumber);
 
     // Start every week blank: all non-race workouts go in "To be assigned",
     // race days stay pinned on their calendar day.
     if (!existingBoard) {
-      const nonRaceIds = sessions.filter(s => !Plan.isRaceSession(s)).map(s => s.id);
+      const all = Plan.boardSessionsForWeek(week.weekNumber, who);
+      const nonRaceIds = all.filter(s => !Plan.isRaceSession(s)).map(s => s.id);
       Store.poolWholeWeek(week.weekNumber, nonRaceIds);
-      sessions = Plan.boardSessionsForWeek(week.weekNumber, who);
     }
 
     openSheet(() => {
+      // Re-compute from store each render so drops/taps always see fresh state.
+      const sessions = Plan.boardSessionsForWeek(week.weekNumber, who);
+
       const wrap = document.createDocumentFragment();
 
       appendAll(wrap,
@@ -1450,7 +1452,7 @@
             ondrop: (e) => {
               e.preventDefault();
               const id = e.dataTransfer.getData('text/plain');
-              const moved = findSession(id);
+              const moved = sessions.find(s => s.id === id);
               if (moved && !Store.isPooled(week.weekNumber, moved.id)) {
                 Store.poolSession(week.weekNumber, moved.id);
                 Plan.refresh(); render(); paintSheet();
@@ -1463,7 +1465,7 @@
               UI.el('span', { class: 'board-pool-date', text: sessions.filter(s => s.pooled).length + ' waiting' })
             ]),
             UI.el('div', { class: 'planner-chips' }, [
-              ...pooledChips()
+              ...sessions.filter(s => s.pooled).map(s => boardChip(s, 'pool'))
             ])
           ])
         ]),
@@ -1486,7 +1488,7 @@
                 e.preventDefault();
                 row.classList.remove('drag-over');
                 const id = e.dataTransfer.getData('text/plain');
-                const moved = findSession(id);
+                const moved = sessions.find(s => s.id === id);
                 if (moved) {
                   Store.assignWeekBoardSession(week.weekNumber, moved.id, iso);
                   Plan.refresh(); render(); paintSheet();
@@ -1495,7 +1497,7 @@
               },
               onclick: () => {
                 if (selectedId) {
-                  const moved = findSession(selectedId);
+                  const moved = sessions.find(s => s.id === selectedId);
                   if (moved && !moved.pooled && moved.date === iso) return;
                   if (moved) {
                     Store.assignWeekBoardSession(week.weekNumber, moved.id, iso);
@@ -1543,15 +1545,8 @@
 
       return wrap;
 
-      function pooledChips() {
-        const pool = sessions.filter(s => s.pooled);
-        if (!pool.length) return [elp('Everything is on a day')];
-        return pool.map(s => boardChip(s, 'pool'));
-      }
-
       function boardChip(s, ownerDate) {
         const selected = selectedId === s.id;
-        const isPool = ownerDate === 'pool';
         return UI.el('button', {
           class: 'planner-chip ' + s.discipline + (selected ? ' sel' : ''),
           type: 'button',
@@ -1574,9 +1569,6 @@
         ]);
       }
 
-      function findSession(id) {
-        return sessions.find(s => s.id === id);
-      }
       function elp(text) { return UI.el('p', { class: 'board-empty', text: text }); }
     });
   }
