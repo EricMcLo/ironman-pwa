@@ -528,13 +528,6 @@ const Store = (() => {
       return !!(b && Array.isArray(b.pool) && b.pool.includes(id));
     },
 
-    /* Pooled anywhere means "not scheduled yet", even if it was moved into a
-       different week before being dropped in the pool. */
-    isPooledAnywhere(id) {
-      return Object.values(state.weekBoards || {}).some(b =>
-        b && Array.isArray(b.pool) && b.pool.includes(id));
-    },
-
     setWeekBoard(weekNumber, ids) {
       api.update(s => {
         const key = String(weekNumber);

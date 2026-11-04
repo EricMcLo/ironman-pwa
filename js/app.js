@@ -432,12 +432,6 @@
         // If a workout is being moved via the ⠿ grip, drop it on this day
         // instead of opening the day sheet.
         if (state.movePendingId) {
-          const session = [...document.querySelectorAll('.session')]
-            .map(el => el.dataset.id)
-            .includes(state.movePendingId)
-            ? findSessionById(state.movePendingId)
-            : null;
-          // findSessionById is defined below; fallback handled inline
           movePendingToDay(state.movePendingId, iso);
           return;
         }
