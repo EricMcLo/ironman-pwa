@@ -156,7 +156,7 @@ const Plan = (() => {
       phase: entry.phase,
       templateDate: entry.templateDate,
       date: scoped.date || ov.date || entry.templateDate,
-      pooled: Store.isPooledAnywhere(s.id),
+      pooled: Store.isPooled(entry.weekNumber, s.id),
       isExtra: !!s.isExtra,
       overridden: Object.keys(ov).length > 0
     });

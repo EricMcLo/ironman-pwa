@@ -333,6 +333,29 @@
       render();
     }));
 
+    /* Pending inline move hint — shows when a workout is picked up via ⠿ */
+    if (state.movePendingId) {
+      const session = weekSessionsOn(Plan.todayISO()).find(s => s.id === state.movePendingId) ||
+        (() => {
+          for (let i = 0; i < 7; i++) {
+            const d = Plan.addDays(week.startDate, i);
+            const f = weekSessionsOn(d).find(s => s.id === state.movePendingId);
+            if (f) return f;
+          }
+          return null;
+        })();
+      if (session) {
+        $('#weekHead').after(UI.el('div', { class: 'board-hint', style: 'margin:0 16px' }, [
+          UI.el('span', { class: 'board-hint-dot', style: 'background:' + (session.discipline === 'open-water-swim' ? 'var(--ows)' : 'var(--' + session.discipline + ')') }),
+          UI.el('span', { text: (session.title || UI.LABELS[session.discipline] || session.discipline) + ' picked up — tap a day to place it' }),
+          UI.el('button', {
+            class: 'board-hint-clear', type: 'button',
+            onclick: (e) => { e.stopPropagation(); state.movePendingId = null; render(); }
+          }, ['✕'])
+        ]));
+      }
+    }
+
     const list = document.createDocumentFragment();
     const pooled = Plan.pooledCount(week.weekNumber, athlete === 'both' ? 'both' : athlete);
     if (pooled) {

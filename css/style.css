@@ -305,6 +305,10 @@ main {
 .hero.phase-peak::before { background: var(--brick); }
 .hero.phase-taper_2wk::before { background: var(--strength); }
 .hero.phase-race_week::before { background: var(--accent); }
+/* Athlete tint overrides the phase left bar so Eric always sees blue,
+   Ella always sees pink, Both keeps the phase color. */
+.hero.who-eric::before { background: var(--eric); }
+.hero.who-ella::before { background: var(--ella); }
 .hero-eyebrow {
   position: relative;
   font-size: .66rem;
@@ -1957,5 +1961,4 @@ body.is-dragging .session-main { touch-action: none; }
   border-color: var(--accent);
   background: color-mix(in srgb, var(--accent) 6%, var(--surface));
 }
-.day.drop-zone .day-head { background: var(--surface-2); }
 
