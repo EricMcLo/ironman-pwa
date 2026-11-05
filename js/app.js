@@ -327,7 +327,7 @@
       ])
     );
 
-    document.querySelectorAll('.tstrip').forEach(el => el.remove());
+    document.querySelectorAll('.tstrip, .move-hint').forEach(el => el.remove());
     $('#weekHead').after(UI.todayStrip((iso) => {
       state.weekNumber = Plan.weekNumberFor(iso);
       render();
@@ -345,7 +345,7 @@
           return null;
         })();
       if (session) {
-        $('#weekHead').after(UI.el('div', { class: 'board-hint', style: 'margin:0 16px' }, [
+        $('#weekHead').after(UI.el('div', { class: 'board-hint move-hint', style: 'margin:0 16px' }, [
           UI.el('span', { class: 'board-hint-dot', style: 'background:' + (session.discipline === 'open-water-swim' ? 'var(--ows)' : 'var(--' + session.discipline + ')') }),
           UI.el('span', { text: (session.title || UI.LABELS[session.discipline] || session.discipline) + ' picked up — tap a day to place it' }),
           UI.el('button', {
@@ -439,6 +439,7 @@
       },
       onGrip: (s) => {
         // Tap ⠿ to pick up a workout, then tap any day to place it.
+        if (s.discipline === 'rest') return;
         if (state.movePendingId === s.id) {
           state.movePendingId = null;
         } else {
@@ -542,13 +543,13 @@
     toast('Reset to the original plan', null);
   }
 
-  /* One place to move a workout. If its week has a board, the board is the
-     authority; otherwise a normal date override is enough. */
+  /* One place to move a workout. A pooled workout ("to be assigned") has no
+     day yet, so placing it must go through the board; that also removes it
+     from the pool. Everything else is a normal date override. */
   function moveSessionTo(s, iso, scope) {
     if (!s || !iso || s.date === iso) return false;
     const week = Plan.weekFor(s.weekNumber || Plan.weekNumberFor(iso));
-    const shared = !scope || scope === 'both';
-    if (shared && Store.getWeekBoard(week.weekNumber)) {
+    if (Store.isPooled(week.weekNumber, s.id)) {
       Store.assignWeekBoardSession(week.weekNumber, s.id, iso);
     } else {
       Store.move(s.id, iso, scope || 'both');
@@ -1445,6 +1446,7 @@
     }
 
     openSheet(() => {
+      const wrap = document.createDocumentFragment();
       // Re-compute from store each render so drops/taps always see fresh state.
       const sessions = Plan.boardSessionsForWeek(week.weekNumber, who);
 
@@ -1544,7 +1546,9 @@
               UI.el('div', { class: 'planner-chips' }, [
                 ...assigned.map(s => boardChip(s, iso))
               ])
-            ])
+            ]);
+
+            return row;
           })
         ]),
 
@@ -1561,7 +1565,7 @@
           UI.el('button', {
             class: 'btn ghost block', type: 'button',
             onclick: () => {
-              Store.clearWeekBoard(week.weekNumber);
+              Store.clearWeekBoard(week.weekNumber, sessions.map(s => s.id));
               Plan.refresh(); render(); paintSheet();
               toast('Back to plan days', null);
             }

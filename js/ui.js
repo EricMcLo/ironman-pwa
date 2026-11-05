@@ -137,7 +137,7 @@ const UI = (() => {
 
     const checks = el('div', { class: 'checks' });
 
-    if (opts.draggable) {
+    if (opts.draggable && s.discipline !== 'rest') {
       checks.append(el('button', {
         class: 's-grip' + (opts.movePendingId === s.id ? ' sel' : ''),
         type: 'button',

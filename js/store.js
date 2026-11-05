@@ -67,12 +67,14 @@ const Store = (() => {
     state.meta = { by: state.me, at: new Date().toISOString() };
   }
 
-  /* Remove a workout from every week-board waiting room. */
+  /* Remove a workout from every week-board waiting room. The board entry
+     itself stays (an empty pool means "all on days"), so the week does not
+     re-pool the next time the board is opened. */
   function unpool(state, id) {
     for (const [key, board] of Object.entries(state.weekBoards || {})) {
       if (!board || !Array.isArray(board.pool)) continue;
       board.pool = board.pool.filter(x => x !== id);
-      if (!board.pool.length) delete state.weekBoards[key];
+      state.weekBoards[key] = { pool: board.pool };
     }
   }
 
@@ -531,15 +533,18 @@ const Store = (() => {
     setWeekBoard(weekNumber, ids) {
       api.update(s => {
         const key = String(weekNumber);
+        s.weekBoards = s.weekBoards || {};
         const pool = [...new Set(ids || [])];
-        if (!pool.length) delete s.weekBoards[key];
-        else s.weekBoards[key] = { pool };
+        // Keep the entry even when the pool is empty: "board exists" is what
+        // stops the board from re-pooling every week when you open it again.
+        s.weekBoards[key] = { pool };
       });
     },
 
     poolSession(weekNumber, id) {
       api.update(s => {
         const key = String(weekNumber);
+        s.weekBoards = s.weekBoards || {};
         const board = s.weekBoards[key] || { pool: [] };
         board.pool = board.pool || [];
         if (!board.pool.includes(id)) board.pool.push(id);
@@ -552,26 +557,25 @@ const Store = (() => {
     assignWeekBoardSession(weekNumber, id, date) {
       api.update(s => {
         const key = String(weekNumber);
-        const board = s.weekBoards[key];
-        if (board && Array.isArray(board.pool)) {
-          board.pool = board.pool.filter(x => x !== id);
-          if (!board.pool.length) delete s.weekBoards[key];
-        }
+        s.weekBoards = s.weekBoards || {};
+        const board = s.weekBoards[key] || { pool: [] };
+        board.pool = Array.isArray(board.pool) ? board.pool.filter(x => x !== id) : [];
+        // Never delete the board here: an empty pool means "every workout is
+        // on a day", not "this week has no board yet".
+        s.weekBoards[key] = board;
         const rec = s.overrides[id] || {};
         rec.date = date;
         s.overrides[id] = rec;
       });
     },
 
-    clearWeekBoard(weekNumber) {
-      api.update(s => { delete s.weekBoards[String(weekNumber)]; });
-    },
-
-    /* Restore the original plan for a week: remove the board's pool and the
-       date moves for these sessions (duration/intensity edits stay). */
-    resetWeekBoardToPlan(weekNumber, ids) {
+    /* "Use plan days": drop the pool and undo the date moves made for these
+       sessions, so every workout goes back to its template day. Duration,
+       intensity and note edits are kept. */
+    clearWeekBoard(weekNumber, ids) {
       api.update(s => {
-        delete s.weekBoards[String(weekNumber)];
+        s.weekBoards = s.weekBoards || {};
+        s.weekBoards[String(weekNumber)] = { pool: [] };
         for (const id of ids || []) {
           const rec = s.overrides[id];
           if (!rec) continue;
