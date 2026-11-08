@@ -52,12 +52,30 @@ The live copy is also deployed from GitHub `main` through Cloudflare Pages.
 | `js/app.js` | State, views, sheets, drag-and-drop, event handlers. |
 | `sw.js` | Service worker — offline cache. |
 | `tools/build_plan.py` | Generated the original plan. **Do not run it now.** |
+| `tools/smoke_test.mjs` | Headless-browser check that the app still works. |
 
 ### ⚠️ About `tools/build_plan.py`
 
 It generated the first version of `plan.json`. **`plan.json` is now the source
 of truth.** Running the script again overwrites hand edits. `extend_plan.py`
 generated weeks 43–51 and aborts if those weeks already exist.
+
+### Checking nothing broke
+
+There is no build step, so a typo can quietly kill a button. Run:
+
+```sh
+node tools/smoke_test.mjs
+```
+
+It opens the app in headless Chrome, clicks Plan week, assigns workouts, moves
+them with the ⠿ grip, restores plan days, and switches athletes — 33 checks,
+about 15 seconds. It uses a throwaway browser profile and blocks Turso, so it
+never touches your real data.
+
+Use it before you push, and after pulling someone else's changes. Add
+`SMOKE_URL=https://your-site` to point it at a deployed copy instead of local
+files (best effort — the live site has real saved state).
 
 ---
 
