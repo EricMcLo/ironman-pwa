@@ -11959,7 +11959,8 @@
          "race": true
         }
        },
-       "race": true
+       "race": true,
+       "title": "Ironman 70.3 Utah"
       }
      ]
     },
@@ -14497,7 +14498,8 @@
          "race": true
         }
        },
-       "race": true
+       "race": true,
+       "title": "CIM Marathon"
       }
      ]
     }

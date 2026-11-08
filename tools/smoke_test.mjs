@@ -286,7 +286,11 @@ async function main() {
     const waitFor = async (expression, timeoutMs = 6000) => {
       const deadline = Date.now() + timeoutMs;
       while (Date.now() < deadline) {
-        if (await ev(expression)) return true;
+        try {
+          if (await ev(expression)) return true;
+        } catch {
+          // The page may be mid-navigation; try again.
+        }
         await sleep(150);
       }
       return false;
@@ -401,6 +405,27 @@ async function main() {
     check('Both view is applied', (await ev(`document.querySelector('.hero')?.className || ''`)).includes('who-both'), await ev(`document.querySelector('.hero')?.className`));
     check('Both board opens with 7 days', (await openBoard()) && (await ev(`document.querySelectorAll('.board-day').length`)) === 7);
     await closeSheet();
+
+    /* ------------------------------------------------------- race names */
+    /* The two goal races used to render as just "Race" because plan.json
+       had no title on them. Keep them named. */
+    note('Race days are named');
+    const goToWeek = async (week) => {
+      await cdp.send('Page.navigate', { url: `${baseUrl}?view=week&athlete=eric&week=${week}` });
+      return waitFor(`document.querySelector('#weekHead h2')?.textContent.trim() === 'Week ${week}'`, 8000);
+    };
+    const raceTitle = () => ev(`
+      document.querySelector('.session .disc.race')
+        ?.closest('.session')
+        ?.querySelector('.s-title')
+        ?.textContent || null
+    `);
+
+    check('week 42 loads', await goToWeek(42));
+    check('70.3 Utah race card is named', (await raceTitle()) === 'Ironman 70.3 Utah', String(await raceTitle()));
+
+    check('week 51 loads', await goToWeek(51));
+    check('CIM Marathon race card is named', (await raceTitle()) === 'CIM Marathon', String(await raceTitle()));
 
     /* --------------------------------------------------------- wrap up */
     check('no uncaught JavaScript errors', jsErrors.length === 0, jsErrors.join('\n      '));
