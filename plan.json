@@ -263,16 +263,16 @@
          "duration": 35,
          "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort.",
-         "distanceKm": 5.4
+         "distanceKm": 0.7
         },
         "ella": {
          "duration": 35,
          "sets": "4x100 aerobic w/ paddles + 200 easy + 4x50 drill + 100 cool-down",
          "notes": "Lane leader. Hold form and pace through the set.",
-         "distanceKm": 5.4
+         "distanceKm": 0.9
         }
        },
-       "distanceKm": 5.4
+       "distanceKm": 0.7
       }
      ]
     },
@@ -510,16 +510,16 @@
          "duration": 40,
          "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort.",
-         "distanceKm": 6.2
+         "distanceKm": 0.7
         },
         "ella": {
          "duration": 40,
          "sets": "4x100 aerobic w/ paddles + 200 easy + 4x50 drill + 100 cool-down",
          "notes": "Lane leader. Hold form and pace through the set.",
-         "distanceKm": 6.2
+         "distanceKm": 0.9
         }
        },
-       "distanceKm": 6.2
+       "distanceKm": 0.7
       }
      ]
     },
@@ -757,16 +757,16 @@
          "duration": 40,
          "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort.",
-         "distanceKm": 6.2
+         "distanceKm": 0.7
         },
         "ella": {
          "duration": 40,
          "sets": "4x100 aerobic w/ paddles + 200 easy + 4x50 drill + 100 cool-down",
          "notes": "Lane leader. Hold form and pace through the set.",
-         "distanceKm": 6.2
+         "distanceKm": 0.9
         }
        },
-       "distanceKm": 6.2
+       "distanceKm": 0.7
       }
      ]
     },
@@ -1004,16 +1004,16 @@
          "duration": 30,
          "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort.",
-         "distanceKm": 4.6
+         "distanceKm": 0.7
         },
         "ella": {
          "duration": 30,
          "sets": "4x100 aerobic w/ paddles + 200 easy + 4x50 drill + 100 cool-down",
          "notes": "Lane leader. Hold form and pace through the set.",
-         "distanceKm": 4.6
+         "distanceKm": 0.9
         }
        },
-       "distanceKm": 4.6
+       "distanceKm": 0.7
       }
      ]
     },
@@ -1251,16 +1251,16 @@
          "duration": 40,
          "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort.",
-         "distanceKm": 6.2
+         "distanceKm": 0.7
         },
         "ella": {
          "duration": 40,
          "sets": "4x100 aerobic w/ paddles + 200 easy + 4x50 drill + 100 cool-down",
          "notes": "Lane leader. Hold form and pace through the set.",
-         "distanceKm": 6.2
+         "distanceKm": 0.9
         }
        },
-       "distanceKm": 6.2
+       "distanceKm": 0.7
       }
      ]
     },
@@ -1498,16 +1498,16 @@
          "duration": 40,
          "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort.",
-         "distanceKm": 6.2
+         "distanceKm": 0.7
         },
         "ella": {
          "duration": 40,
          "sets": "4x100 aerobic w/ paddles + 200 easy + 4x50 drill + 100 cool-down",
          "notes": "Lane leader. Hold form and pace through the set.",
-         "distanceKm": 6.2
+         "distanceKm": 0.9
         }
        },
-       "distanceKm": 6.2
+       "distanceKm": 0.7
       }
      ]
     },
@@ -1717,11 +1717,11 @@
    "endDate": "2026-12-20",
    "phase": "marathon_block",
    "phaseName": "Ella run-led / Eric swim-bike",
-   "recoveryWeek": false,
+   "recoveryWeek": true,
    "focus": "Ella builds toward the SLC Marathon. Eric holds run maintenance and builds swim and bike volume.",
    "targetHours": {
-    "eric": 4.5,
-    "ella": 4.5
+    "eric": 3.3,
+    "ella": 3.3
    },
    "days": [
     {
@@ -1735,26 +1735,26 @@
         "eric",
         "ella"
        ],
-       "duration": 35,
+       "duration": 40,
        "intensity": "Z1",
        "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
        "notes": "Technique focus: drills, short sets, building comfort.",
        "together": true,
        "variants": {
         "eric": {
-         "duration": 35,
+         "duration": 40,
          "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort.",
-         "distanceKm": 5.4
+         "distanceKm": 0.7
         },
         "ella": {
-         "duration": 35,
+         "duration": 40,
          "sets": "4x100 aerobic w/ paddles + 200 easy + 4x50 drill + 100 cool-down",
          "notes": "Lane leader. Hold form and pace through the set.",
-         "distanceKm": 5.4
+         "distanceKm": 0.9
         }
        },
-       "distanceKm": 5.4
+       "distanceKm": 0.7
       }
      ]
     },
@@ -1831,20 +1831,20 @@
         "eric",
         "ella"
        ],
-       "duration": 30,
+       "duration": 35,
        "intensity": "Z2",
        "sets": "Easy conversational run",
        "notes": "Aerobic base.",
        "together": true,
        "variants": {
         "eric": {
-         "duration": 30,
+         "duration": 35,
          "sets": "Easy conversational run",
          "notes": "Aerobic base.",
          "distanceKm": 4.6
         },
         "ella": {
-         "duration": 30,
+         "duration": 35,
          "sets": "Easy conversational run",
          "notes": "Aerobic base.",
          "distanceKm": 4.6
@@ -1896,21 +1896,21 @@
         "eric",
         "ella"
        ],
-       "duration": 50,
+       "duration": 55,
        "intensity": "Z1-Z2",
        "sets": "Easy long run with run club -- own pace",
        "notes": "Run maintenance. Easy, no racing the group.",
        "together": true,
        "variants": {
         "eric": {
-         "duration": 50,
+         "duration": 55,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Run maintenance. Easy, no racing the group.",
          "distanceKm": 7.7,
          "title": "Long run"
         },
         "ella": {
-         "duration": 50,
+         "duration": 55,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Easy long run. Own pace, no racing the group.",
          "distanceKm": 7.7,
@@ -1933,20 +1933,20 @@
         "eric",
         "ella"
        ],
-       "duration": 65,
+       "duration": 70,
        "intensity": "Z2",
        "sets": "Long endurance ride",
        "notes": "Your strength. Steady aerobic, no hero efforts.",
        "together": true,
        "variants": {
         "eric": {
-         "duration": 65,
+         "duration": 70,
          "sets": "Long endurance ride",
          "notes": "Your strength. Steady aerobic, no hero efforts.",
          "title": "Long bike"
         },
         "ella": {
-         "duration": 65,
+         "duration": 70,
          "sets": "Long endurance ride",
          "notes": "Steady aerobic ride.",
          "title": "Long bike"
@@ -1992,16 +1992,16 @@
          "duration": 40,
          "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort.",
-         "distanceKm": 6.2
+         "distanceKm": 0.7
         },
         "ella": {
          "duration": 40,
          "sets": "4x100 aerobic w/ paddles + 200 easy + 4x50 drill + 100 cool-down",
          "notes": "Lane leader. Hold form and pace through the set.",
-         "distanceKm": 6.2
+         "distanceKm": 0.9
         }
        },
-       "distanceKm": 6.2
+       "distanceKm": 0.7
       }
      ]
     },
