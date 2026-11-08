@@ -2214,8 +2214,8 @@
    "recoveryWeek": false,
    "focus": "Ella builds toward the SLC Marathon. Eric holds run maintenance and builds swim and bike volume.",
    "targetHours": {
-    "eric": 6.5,
-    "ella": 8.0
+    "eric": 5.8,
+    "ella": 6.1
    },
    "days": [
     {
@@ -2229,19 +2229,19 @@
         "eric",
         "ella"
        ],
-       "duration": 60,
+       "duration": 40,
        "intensity": "Z1",
        "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
        "notes": "Technique focus: drills, short sets, building comfort.",
        "together": true,
        "variants": {
         "eric": {
-         "duration": 40,
+         "duration": 35,
          "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort."
         },
         "ella": {
-         "duration": 60,
+         "duration": 40,
          "sets": "4x100 aerobic w/ paddles + 200 easy + 4x50 drill + 100 cool-down",
          "notes": "Lane leader. Hold form and pace through the set."
         }
@@ -2260,19 +2260,19 @@
         "eric",
         "ella"
        ],
-       "duration": 60,
+       "duration": 50,
        "intensity": "Z2",
        "sets": "Steady aerobic spin",
        "notes": "Aerobic base.",
        "together": false,
        "variants": {
         "eric": {
-         "duration": 40,
+         "duration": 45,
          "sets": "Steady aerobic spin",
          "notes": "Aerobic base."
         },
         "ella": {
-         "duration": 60,
+         "duration": 50,
          "sets": "Steady aerobic spin",
          "notes": "Aerobic base."
         }
@@ -2316,19 +2316,19 @@
         "eric",
         "ella"
        ],
-       "duration": 60,
+       "duration": 40,
        "intensity": "Z1",
        "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
        "notes": "Technique focus: drills, short sets, building comfort.",
        "together": true,
        "variants": {
         "eric": {
-         "duration": 40,
+         "duration": 35,
          "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort."
         },
         "ella": {
-         "duration": 60,
+         "duration": 40,
          "sets": "4x100 aerobic w/ paddles + 200 easy + 4x50 drill + 100 cool-down",
          "notes": "Lane leader. Hold form and pace through the set."
         }
@@ -2347,20 +2347,20 @@
         "eric",
         "ella"
        ],
-       "duration": 60,
+       "duration": 45,
        "intensity": "Z2",
        "sets": "Easy run, conservation mode",
        "notes": "Holding run volume while swim and bike build.",
        "together": false,
        "variants": {
         "eric": {
-         "duration": 35,
+         "duration": 40,
          "sets": "Easy run, conservation mode",
          "notes": "Holding run volume while swim and bike build.",
          "distanceKm": 5.4
         },
         "ella": {
-         "duration": 60,
+         "duration": 45,
          "sets": "Steady aerobic run, relaxed",
          "notes": "Marathon block: aerobic volume, not speed.",
          "distanceKm": 9.2
@@ -2437,20 +2437,20 @@
         "eric",
         "ella"
        ],
-       "duration": 95,
+       "duration": 75,
        "intensity": "Z1-Z2",
        "sets": "Easy long run with run club -- own pace",
        "notes": "Run maintenance. Easy, no racing the group.",
        "together": true,
        "variants": {
         "eric": {
-         "duration": 70,
+         "duration": 65,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Run maintenance. Easy, no racing the group.",
          "distanceKm": 10.8
         },
         "ella": {
-         "duration": 95,
+         "duration": 75,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Marathon long run. Own pace, fueling practice.",
          "distanceKm": 14.6
@@ -2472,19 +2472,19 @@
         "eric",
         "ella"
        ],
-       "duration": 125,
+       "duration": 75,
        "intensity": "Z2",
        "sets": "Long endurance ride",
        "notes": "Your strength. Steady aerobic, no hero efforts.",
        "together": true,
        "variants": {
         "eric": {
-         "duration": 125,
+         "duration": 85,
          "sets": "Long endurance ride",
          "notes": "Your strength. Steady aerobic, no hero efforts."
         },
         "ella": {
-         "duration": 105,
+         "duration": 75,
          "sets": "Long endurance ride",
          "notes": "Bike maintenance during the marathon block."
         }
@@ -2504,8 +2504,8 @@
    "recoveryWeek": true,
    "focus": "Ella builds toward the SLC Marathon. Eric holds run maintenance and builds swim and bike volume.",
    "targetHours": {
-    "eric": 5.0,
-    "ella": 6.5
+    "eric": 4.6,
+    "ella": 5.0
    },
    "days": [
     {
@@ -2519,19 +2519,19 @@
         "eric",
         "ella"
        ],
-       "duration": 55,
+       "duration": 30,
        "intensity": "Z1",
        "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
        "notes": "Technique focus: drills, short sets, building comfort.",
        "together": true,
        "variants": {
         "eric": {
-         "duration": 25,
+         "duration": 20,
          "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort."
         },
         "ella": {
-         "duration": 55,
+         "duration": 30,
          "sets": "4x100 aerobic w/ paddles + 200 easy + 4x50 drill + 100 cool-down",
          "notes": "Lane leader. Hold form and pace through the set."
         }
@@ -2550,19 +2550,19 @@
         "eric",
         "ella"
        ],
-       "duration": 55,
+       "duration": 35,
        "intensity": "Z2",
        "sets": "Easy recovery spin",
        "notes": "Recovery week -- gentle.",
        "together": false,
        "variants": {
         "eric": {
-         "duration": 35,
+         "duration": 30,
          "sets": "Easy recovery spin",
          "notes": "Recovery week -- gentle."
         },
         "ella": {
-         "duration": 55,
+         "duration": 35,
          "sets": "Easy recovery spin",
          "notes": "Recovery week -- gentle."
         }
@@ -2606,19 +2606,19 @@
         "eric",
         "ella"
        ],
-       "duration": 55,
+       "duration": 30,
        "intensity": "Z1",
        "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
        "notes": "Technique focus: drills, short sets, building comfort.",
        "together": true,
        "variants": {
         "eric": {
-         "duration": 25,
+         "duration": 20,
          "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort."
         },
         "ella": {
-         "duration": 55,
+         "duration": 30,
          "sets": "4x100 aerobic w/ paddles + 200 easy + 4x50 drill + 100 cool-down",
          "notes": "Lane leader. Hold form and pace through the set."
         }
@@ -2637,20 +2637,20 @@
         "eric",
         "ella"
        ],
-       "duration": 35,
+       "duration": 25,
        "intensity": "Z2",
        "sets": "Easy recovery run",
        "notes": "Recovery week -- truly easy.",
        "together": false,
        "variants": {
         "eric": {
-         "duration": 25,
+         "duration": 30,
          "sets": "Easy recovery run",
          "notes": "Recovery week -- truly easy.",
          "distanceKm": 3.8
         },
         "ella": {
-         "duration": 35,
+         "duration": 25,
          "sets": "Easy recovery run",
          "notes": "Recovery week -- truly easy.",
          "distanceKm": 5.4
@@ -2734,7 +2734,7 @@
        "together": true,
        "variants": {
         "eric": {
-         "duration": 55,
+         "duration": 50,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Run maintenance. Easy, no racing the group.",
          "distanceKm": 8.5
@@ -2761,19 +2761,19 @@
         "eric",
         "ella"
        ],
-       "duration": 95,
+       "duration": 70,
        "intensity": "Z2",
        "sets": "Long endurance ride",
        "notes": "Your strength. Steady aerobic, no hero efforts.",
        "together": true,
        "variants": {
         "eric": {
-         "duration": 95,
+         "duration": 85,
          "sets": "Long endurance ride",
          "notes": "Your strength. Steady aerobic, no hero efforts."
         },
         "ella": {
-         "duration": 80,
+         "duration": 70,
          "sets": "Long endurance ride",
          "notes": "Bike maintenance during the marathon block."
         }
@@ -2792,8 +2792,8 @@
    "recoveryWeek": false,
    "focus": "Ella builds toward the SLC Marathon. Eric holds run maintenance and builds swim and bike volume.",
    "targetHours": {
-    "eric": 6.5,
-    "ella": 8.5
+    "eric": 6.2,
+    "ella": 6.9
    },
    "days": [
     {
@@ -2807,7 +2807,7 @@
         "eric",
         "ella"
        ],
-       "duration": 60,
+       "duration": 40,
        "intensity": "Z1",
        "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
        "notes": "Technique focus: drills, short sets, building comfort.",
@@ -2819,7 +2819,7 @@
          "notes": "Technique focus: drills, short sets, building comfort."
         },
         "ella": {
-         "duration": 60,
+         "duration": 40,
          "sets": "4x100 aerobic w/ paddles + 200 easy + 4x50 drill + 100 cool-down",
          "notes": "Lane leader. Hold form and pace through the set."
         }
@@ -2838,7 +2838,7 @@
         "eric",
         "ella"
        ],
-       "duration": 65,
+       "duration": 45,
        "intensity": "Z2",
        "sets": "Steady aerobic spin",
        "notes": "Aerobic base.",
@@ -2850,7 +2850,7 @@
          "notes": "Aerobic base."
         },
         "ella": {
-         "duration": 65,
+         "duration": 45,
          "sets": "Steady aerobic spin",
          "notes": "Aerobic base."
         }
@@ -2894,7 +2894,7 @@
         "eric",
         "ella"
        ],
-       "duration": 60,
+       "duration": 40,
        "intensity": "Z1",
        "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
        "notes": "Technique focus: drills, short sets, building comfort.",
@@ -2906,7 +2906,7 @@
          "notes": "Technique focus: drills, short sets, building comfort."
         },
         "ella": {
-         "duration": 60,
+         "duration": 40,
          "sets": "4x100 aerobic w/ paddles + 200 easy + 4x50 drill + 100 cool-down",
          "notes": "Lane leader. Hold form and pace through the set."
         }
@@ -2925,20 +2925,20 @@
         "eric",
         "ella"
        ],
-       "duration": 70,
+       "duration": 45,
        "intensity": "Z2",
        "sets": "Easy run, conservation mode",
        "notes": "Holding run volume while swim and bike build.",
        "together": false,
        "variants": {
         "eric": {
-         "duration": 35,
+         "duration": 40,
          "sets": "Easy run, conservation mode",
          "notes": "Holding run volume while swim and bike build.",
          "distanceKm": 5.4
         },
         "ella": {
-         "duration": 70,
+         "duration": 45,
          "sets": "Steady aerobic run, relaxed",
          "notes": "Marathon block: aerobic volume, not speed.",
          "distanceKm": 10.8
@@ -3050,19 +3050,19 @@
         "eric",
         "ella"
        ],
-       "duration": 130,
+       "duration": 100,
        "intensity": "Z2",
        "sets": "Long endurance ride",
        "notes": "Your strength. Steady aerobic, no hero efforts.",
        "together": true,
        "variants": {
         "eric": {
-         "duration": 130,
+         "duration": 110,
          "sets": "Long endurance ride",
          "notes": "Your strength. Steady aerobic, no hero efforts."
         },
         "ella": {
-         "duration": 110,
+         "duration": 100,
          "sets": "Long endurance ride",
          "notes": "Bike maintenance during the marathon block."
         }
