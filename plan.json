@@ -979,8 +979,8 @@
    "recoveryWeek": true,
    "focus": "Six weeks of pure aerobic base and swim technique. No intensity. The goal is rhythm, not fitness.",
    "targetHours": {
-    "eric": 3.5,
-    "ella": 3.5
+    "eric": 3.1,
+    "ella": 3.1
    },
    "days": [
     {
@@ -994,20 +994,20 @@
         "eric",
         "ella"
        ],
-       "duration": 30,
+       "duration": 40,
        "intensity": "Z1",
        "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
        "notes": "Technique focus: drills, short sets, building comfort.",
        "together": true,
        "variants": {
         "eric": {
-         "duration": 30,
+         "duration": 40,
          "sets": "8x50 drill/swim (catch-up, fingertip drag) + 200 easy + 100 cool-down",
          "notes": "Technique focus: drills, short sets, building comfort.",
          "distanceKm": 0.7
         },
         "ella": {
-         "duration": 30,
+         "duration": 40,
          "sets": "4x100 aerobic w/ paddles + 200 easy + 4x50 drill + 100 cool-down",
          "notes": "Lane leader. Hold form and pace through the set.",
          "distanceKm": 0.9
@@ -1090,20 +1090,20 @@
         "eric",
         "ella"
        ],
-       "duration": 25,
+       "duration": 30,
        "intensity": "Z2",
        "sets": "Easy conversational run",
        "notes": "Aerobic base.",
        "together": true,
        "variants": {
         "eric": {
-         "duration": 25,
+         "duration": 30,
          "sets": "Easy conversational run",
          "notes": "Aerobic base.",
          "distanceKm": 3.8
         },
         "ella": {
-         "duration": 25,
+         "duration": 30,
          "sets": "Easy conversational run",
          "notes": "Aerobic base.",
          "distanceKm": 3.8
@@ -1155,21 +1155,21 @@
         "eric",
         "ella"
        ],
-       "duration": 45,
+       "duration": 55,
        "intensity": "Z1-Z2",
        "sets": "Easy long run with run club -- own pace",
        "notes": "Run maintenance. Easy, no racing the group.",
        "together": true,
        "variants": {
         "eric": {
-         "duration": 45,
+         "duration": 55,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Run maintenance. Easy, no racing the group.",
          "distanceKm": 6.9,
          "title": "Long run"
         },
         "ella": {
-         "duration": 45,
+         "duration": 55,
          "sets": "Easy long run with run club -- own pace",
          "notes": "Easy long run. Own pace, no racing the group.",
          "distanceKm": 6.9,
@@ -1192,20 +1192,20 @@
         "eric",
         "ella"
        ],
-       "duration": 55,
+       "duration": 60,
        "intensity": "Z2",
        "sets": "Long endurance ride",
        "notes": "Your strength. Steady aerobic, no hero efforts.",
        "together": true,
        "variants": {
         "eric": {
-         "duration": 55,
+         "duration": 60,
          "sets": "Long endurance ride",
          "notes": "Your strength. Steady aerobic, no hero efforts.",
          "title": "Long bike"
         },
         "ella": {
-         "duration": 55,
+         "duration": 60,
          "sets": "Long endurance ride",
          "notes": "Steady aerobic ride.",
          "title": "Long bike"
