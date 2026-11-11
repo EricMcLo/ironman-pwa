@@ -12,6 +12,24 @@ Also:   Sat Apr 24 2027  — Ella runs the SLC Marathon
 CIM:    Sun Oct 24 2027  — "B" race for both
 ```
 
+**Tech:** vanilla JavaScript, no framework and no build step · offline-first
+service worker · localStorage persistence · mobile-first at 390 px ·
+drag-and-drop week planning · `.ics` calendar export · optional Turso sync.
+
+## Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/week-light.png" width="30%" alt="Week view">
+  <img src="docs/screenshots/month-light.png" width="30%" alt="Month view">
+  <img src="docs/screenshots/progress-light.png" width="30%" alt="Progress view">
+</p>
+
+<p align="center"><em>Week, Month and Progress views at 390 px. Dark theme below.</em></p>
+
+<p align="center">
+  <img src="docs/screenshots/week-dark.png" width="30%" alt="Week view in dark theme">
+</p>
+
 ---
 
 ## Run it
@@ -36,6 +54,11 @@ Then open <http://localhost:8080>.
 It then runs full-screen and works offline (service worker caches everything).
 The live copy is also deployed from GitHub `main` through Cloudflare Pages.
 
+> **This public build is local-only.** Each device keeps its own checkmarks,
+> moves and notes in `localStorage`. There is no server and no account. Optional
+> cross-device sync is configured outside this repo — see
+> [Optional sync](#optional-sync-private).
+
 ---
 
 ## What's in here
@@ -43,9 +66,9 @@ The live copy is also deployed from GitHub `main` through Cloudflare Pages.
 | File | What it is |
 |---|---|
 | `plan.json` | **The plan.** 51 weeks × 7 days × 2 athletes. Source of truth. |
-| `index.html` | Page shell + Turso config. |
+| `index.html` | Page shell. No secrets — the public build is local-only. |
 | `css/style.css` | All styling and themes (Auto / Light / Dark / Vibrant / Bloom). |
-| `js/store.js` | **Persistence.** localStorage + Turso sync. |
+| `js/store.js` | **Persistence.** localStorage, with optional Turso sync. |
 | `js/plan.js` | Loads the plan, applies moves/edits, answers "what's on today?". |
 | `js/ui.js` | Rendering. Pure functions that return DOM nodes. |
 | `js/cal.js` | `.ics` export for races and workouts. |
@@ -85,8 +108,8 @@ Four layers, kept separate on purpose:
 
 ```
 1. TEMPLATE      plan.json or an imported plan    never changed by normal use
-2. YOUR EDITS    localStorage + Turso             moves, edits, extras, week scaling
-3. COMPLETIONS   localStorage + Turso             checkmarks + optional log
+2. YOUR EDITS    localStorage (+ optional sync)   moves, edits, extras, week scaling
+3. COMPLETIONS   localStorage (+ optional sync)   checkmarks + optional log
 4. DEVICE PREFS  localStorage only                theme, "this phone belongs to"
 ```
 
@@ -97,8 +120,9 @@ Layers 2 and 3 are **overrides**, not rewrites:
 - Nothing is destroyed by accident.
 
 Themes and the `me` setting stay on each phone on purpose. Everything about the
-plan (checkmarks, moves, added workouts, weekly layouts, notes) syncs through
-Turso.
+plan (checkmarks, moves, added workouts, weekly layouts, notes) lives in
+`localStorage`; if you enable optional sync, those layers also travel between
+devices.
 
 ### `plan.json` shape
 
@@ -213,12 +237,38 @@ Themes are per phone, so Ella can keep Bloom even if Eric picks something else.
 
 ---
 
+## Optional sync (private)
+
+The public repo is deliberately local-only. If you want two phones to share
+checkmarks and moves, `js/store.js` already supports Turso — but the token must
+never live in this repo.
+
+To enable it in a **private** copy:
+
+1. Create a Turso database and a token with read/write access.
+2. Add the libsql client script and config to `index.html` **on a private
+   branch or a private fork**, before `js/store.js` loads:
+
+   ```html
+   <script src="https://libsql-client.turso.tech/libsql-client.wasm.js"></script>
+   <script>
+     window.TURSO_AUTH_TOKEN = '...';       // never commit this
+     window.TURSO_DATABASE_URL = 'libsql://...';
+   </script>
+   ```
+
+3. Do not push that branch to a public remote.
+
+If the token is ever exposed, revoke it in the Turso dashboard immediately.
+Revoking is enough — the old token becomes useless even if it remains in git
+history.
+
 ## Design notes
 
 - **Mobile first.** 390 px is the design width. Bottom tab bar, bottom sheets,
   44 px tap targets.
 - **No build step.** No npm, no bundler. Edit a file, refresh.
-- **No external requests** except the Turso sync client. System fonts only.
+- **No external requests** in the public build. System fonts only.
 - **Dates are parsed as local time** (`new Date(y, m-1, d)`), never UTC — that's
   what stops a workout showing up on the wrong day.
 - **Drag on a phone** comes from the ⠿ handle so normal scrolling still works.
