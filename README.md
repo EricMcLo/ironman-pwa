@@ -38,7 +38,8 @@ The app loads `plan.json` with `fetch()`, which browsers block on `file://`.
 So serve the folder over HTTP:
 
 ```bash
-cd ~/Documents/ironman
+git clone https://github.com/EricMcLo/ironman-pwa.git
+cd ironman-pwa
 python3 -m http.server 8080
 ```
 
@@ -52,7 +53,7 @@ Then open <http://localhost:8080>.
 4. Safari → Share → **Add to Home Screen**. Chrome → menu → **Install app**.
 
 It then runs full-screen and works offline (service worker caches everything).
-The live copy is also deployed from GitHub `main` through Cloudflare Pages.
+There is no public live demo — the personal synced copy is deployed privately.
 
 > **This public build is local-only.** Each device keeps its own checkmarks,
 > moves and notes in `localStorage`. There is no server and no account. Optional
